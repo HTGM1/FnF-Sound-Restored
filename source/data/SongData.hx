@@ -81,12 +81,7 @@ class SongData
 		},
 		{
 			songs: [
-				["blam", 			"pico"],
 				["-debug", 			"bf-pixel"],
-				["useless",			"dad"],
-				["collision", 		"gemamugen"], // CU PINTO BOSTA
-				["lunar-odyssey",	"luano-day"],
-				["beep-power", 		"dad"],
 			],
 			freeplayOnly: true,
 		},

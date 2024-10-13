@@ -26,13 +26,6 @@
 	<!--Mobile-specific-->
 	<window if="mobile" orientation="landscape" fullscreen="true" resizable="false" />
 
-	<!-- _____________________________ Custom Defines ___________________________ -->
-
-	<define name="DISCORD_RPC" 			if="desktop" unless="web || neko || air" />
-	<define name="PRELOAD_SONG" 		if="desktop" unless="debug" />
-	<define name="RENAME_UNDERSCORE" 	if="html5 || android"/>
-
-
 	<!-- _____________________________ Path Settings ____________________________ -->
 
 	<set name="BUILD_DIR" value="export" />
@@ -42,18 +35,18 @@
 	<source path="source" />
 	<assets path="assets" />
 
-	<!-- RENAME UNDERSCORE FOLDERS -->
-	<section if="RENAME_UNDERSCORE">
-		<assets path="assets/images/characters/_offsets" 	rename="assets/images/characters/offsets"/>
-		<assets path="assets/images/notes/_other" 		rename="assets/images/notes/other"/>
-	</section>
+	<!-- _____________________________ Custom Defines ___________________________ -->
+
+	<define name="DISCORD_RPC" if="desktop" unless="web || neko || air" />
+	<define name="PRELOAD_SONG" if="desktop" unless="debug" />
+	
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
 	<haxelib name="flixel-ui" />
 	<haxelib name="hxdiscord_rpc" if="DISCORD_RPC" />
-	<haxelib name="flxanimate-doido"/>
+	<haxelib name="flxanimate"/>
 
 	<!--Used only for flixel's debugger!-->
 	<haxelib name="hscript" if="debug" />

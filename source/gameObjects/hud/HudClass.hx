@@ -51,14 +51,12 @@ class HudClass extends FlxGroup
 		badScoreTxt = new FlxText(0,0,0,"SCORE WILL NOT BE SAVED");
 		badScoreTxt.setFormat(Main.gFont, 26, 0xFFFF0000, CENTER);
 		badScoreTxt.setBorderStyle(OUTLINE, FlxColor.BLACK, 1.5);
-		badScoreTxt.screenCenter(X);
 		badScoreTxt.visible = false;
 		add(badScoreTxt);
 		
 		botplayTxt = new FlxText(0,0,0,"[BOTPLAY]");
 		botplayTxt.setFormat(Main.gFont, 40, 0xFFFFFFFF, CENTER);
 		botplayTxt.setBorderStyle(OUTLINE, FlxColor.BLACK, 1.5);
-		botplayTxt.screenCenter();
 		botplayTxt.visible = false;
 		add(botplayTxt);
 
@@ -68,15 +66,13 @@ class HudClass extends FlxGroup
 
 	public final separator:String = " | ";
 
-	public function updateText()
+	public function updateText(downscroll:Bool = false)
 	{
 		infoTxt.text = "";
 		
 		infoTxt.text += 			'Score: '		+ Timings.score;
 		infoTxt.text += separator + 'Accuracy: '	+ Timings.accuracy + "%" + ' [${Timings.getRank()}]';
 		infoTxt.text += separator + 'Misses: '		+ Timings.misses;
-
-		infoTxt.screenCenter(X);
 	}
 	
 	public function updateTimeTxt()
@@ -89,23 +85,27 @@ class HudClass extends FlxGroup
 		= CoolUtil.posToTimer(displayedTime)
 		+ ' / '
 		+ CoolUtil.posToTimer(PlayState.songLength);
-		timeTxt.screenCenter(X);
 	}
 
 	public function updateHitbox(downscroll:Bool = false)
 	{
-		healthBar.bg.x = (FlxG.width / 2) - (healthBar.bg.width / 2);
+		healthBar.bg.x = (downscroll ? 120 : 560);
 		healthBar.bg.y = (downscroll ? 70 : FlxG.height - healthBar.bg.height - 50);
+		infoTxt.x = (downscroll ? 130 : 560);
 		healthBar.updatePos();
 		
 		updateText();
-		infoTxt.screenCenter(X);
+
 		infoTxt.y = healthBar.bg.y + healthBar.bg.height + 4;
 		
 		badScoreTxt.y = healthBar.bg.y - badScoreTxt.height - 4;
 		
 		updateTimeTxt();
 		timeTxt.y = downscroll ? (FlxG.height - timeTxt.height - 8) : (8);
+		timeTxt.x = (downscroll ? 1000 : 70);
+		badScoreTxt.x = (downscroll ? 700 : 160);
+		botplayTxt.x = 850;
+		botplayTxt.y = (downscroll ? 500 : 100);
 	}
 	
 	public function setAlpha(hudAlpha:Float = 1, ?tweenTime:Float = 0, ?ease:String = "cubeout")
@@ -163,7 +163,7 @@ class HudClass extends FlxGroup
 		{
 			for(icon in healthBar.icons)
 			{
-				icon.scale.set(1.3,1.3);
+				icon.scale.set(.65,.65);
 				icon.updateHitbox();
 				healthBar.updateIconPos();
 			}

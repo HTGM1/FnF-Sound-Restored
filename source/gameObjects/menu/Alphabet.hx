@@ -27,7 +27,6 @@ class Alphabet extends FlxSpriteGroup
 	public var text(default, set):String = "";
 	public var textArray:Array<String> = [];
 	public var bold:Bool = false;
-	public var fieldWidth:Float = 0;
 
 	public final boxHeight:Float = 70;
 
@@ -73,6 +72,7 @@ class Alphabet extends FlxSpriteGroup
 
 			var letter = new AlphaLetter();
 			letter.row = daRow;
+			add(letter);
 
 			letter.ID = i; // using this for typing
 
@@ -99,8 +99,6 @@ class Alphabet extends FlxSpriteGroup
 			letter.lastWidth = lastWidth;
 			lastWidth += letter.width;
 			lineWidth[daRow] = lastWidth;
-
-			add(letter);
 		}
 
 		updateHitbox();

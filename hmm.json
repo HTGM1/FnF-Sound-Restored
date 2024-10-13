@@ -6,11 +6,11 @@
         "version": "8.1.2"
       },
       {
-        "name": "flxanimate-doido",
+        "name": "flxanimate",
         "type": "git",
         "dir": null,
         "ref": "master",
-        "url": "https://github.com/DoidoTeam/flxanimate-doido"
+        "url": "https://github.com/DoidoTeam/flxanimate"
       },
       {
         "name": "openfl",
@@ -34,10 +34,8 @@
       },
       {
         "name": "hscript-iris",
-        "type": "git",
-        "dir": null,
-        "ref": "master",
-        "url": "https://github.com/crowplexus/hscript-iris"
+        "type": "haxelib",
+        "version": "1.1.0"
       },
       {
         "name": "hxdiscord_rpc",

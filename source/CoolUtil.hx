@@ -36,13 +36,9 @@ class CoolUtil
 			"gf-pixel",
 			"spooky",
 			"spooky-player",
-			"luano-day",
-			"luano-night",
 			"senpai",
 			"senpai-angry",
 			"spirit",
-			"gemamugen",
-			"zero"
 		];
 	}
 	
@@ -109,7 +105,7 @@ class CoolUtil
 		return ["left", "down", "up", "right"][i];
 	
 	inline public static function noteWidth()
-		return (160 * 0.7); // 112
+		return (160 * 0.6); // 112
 	
 	public static function setNotePos(note:FlxSprite, target:FlxSprite, angle:Float, offsetX:Float, offsetY:Float, usesLerp:Bool = false)
 	{

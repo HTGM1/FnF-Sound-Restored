@@ -32,7 +32,7 @@ class Stage extends FlxGroup
 		{
 			default: ["stage"];
 			
-			case "collision": ["mugen"];
+			case "dadbattle-nm": ["stageErect"];
 			
 			case "senpai"|"roses": 	["school"];
 			case "thorns": 			["school-evil"];
@@ -71,8 +71,8 @@ class Stage extends FlxGroup
 				this.curStage = "stage";
 				PlayState.defaultCamZoom = 0.9;
 				
-				var bg = new FlxSprite(-600, -600).loadGraphic(Paths.image("backgrounds/stage/stageback"));
-				bg.scrollFactor.set(0.6,0.6);
+				var bg = new FlxSprite(-600, -200).loadGraphic(Paths.image("backgrounds/stage/stageback"));
+				bg.scrollFactor.set(0.75,0.75);
 				add(bg);
 				
 				var front = new FlxSprite(-580, 440);
@@ -83,14 +83,19 @@ class Stage extends FlxGroup
 				curtains.scrollFactor.set(1.4,1.4);
 				foreground.add(curtains);
 				
-			case "mugen":
-				PlayState.defaultCamZoom = 0.7;
-				//gfPos.y += 80;
-				dadPos.x -= 100;
-				
-				var bg = new FlxSprite(-640, -1000).loadGraphic(Paths.image("backgrounds/mugen/mugen"));
+			case "stageErect":
+				var bg = new FlxSprite(-600, -600).loadGraphic(Paths.image('backgrounds/stage/erect/bg'));
+				bg.scrollFactor.set(0.6, 0);
+				bg.scale.set(0.5, 0.5);
 				add(bg);
-				
+
+
+
+
+
+
+
+
 			case "school":
 				bfPos.x -= 70;
 				dadPos.x += 50;
@@ -186,7 +191,6 @@ class Stage extends FlxGroup
 	{
 		return switch(curStage)
 		{
-			case "mugen": "no-gf";
 			case "school"|"school-evil": "gf-pixel";
 			default: "gf";
 		}
