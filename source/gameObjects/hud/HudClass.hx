@@ -68,15 +68,13 @@ class HudClass extends FlxGroup
 
 	public final separator:String = " | ";
 
-	public function updateText()
+	public function updateText(downscroll:Bool = false)
 	{
 		infoTxt.text = "";
 		
 		infoTxt.text += 			'Score: '		+ Timings.score;
 		infoTxt.text += separator + 'Accuracy: '	+ Timings.accuracy + "%" + ' [${Timings.getRank()}]';
 		infoTxt.text += separator + 'Misses: '		+ Timings.misses;
-
-		infoTxt.screenCenter(X);
 	}
 	
 	public function updateTimeTxt()
@@ -89,17 +87,18 @@ class HudClass extends FlxGroup
 		= CoolUtil.posToTimer(displayedTime)
 		+ ' / '
 		+ CoolUtil.posToTimer(PlayState.songLength);
-		timeTxt.screenCenter(X);
+		timeTxt.x = -200;
 	}
 
 	public function updateHitbox(downscroll:Bool = false)
 	{
-		healthBar.bg.x = (FlxG.width / 2) - (healthBar.bg.width / 2);
+		healthBar.bg.x = (downscroll ? 120 : 550);
 		healthBar.bg.y = (downscroll ? 70 : FlxG.height - healthBar.bg.height - 50);
+		infoTxt.x = (downscroll ? 130 : 560);
 		healthBar.updatePos();
 		
 		updateText();
-		infoTxt.screenCenter(X);
+
 		infoTxt.y = healthBar.bg.y + healthBar.bg.height + 4;
 		
 		badScoreTxt.y = healthBar.bg.y - badScoreTxt.height - 4;
@@ -163,7 +162,7 @@ class HudClass extends FlxGroup
 		{
 			for(icon in healthBar.icons)
 			{
-				icon.scale.set(1.3,1.3);
+				icon.scale.set(.75,.75);
 				icon.updateHitbox();
 				healthBar.updateIconPos();
 			}

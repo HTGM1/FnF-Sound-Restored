@@ -22,8 +22,7 @@ class HealthBar extends FlxGroup
 	public function new()
 	{
 		super();
-		bg = new FlxSprite().loadGraphic(Paths.image("hud/base/healthBar"));
-		bg.screenCenter();
+		bg = new FlxSprite(200, 0).loadGraphic(Paths.image("hud/base/healthBar"));
 		add(bg);
 		
 		var barSize:Array<Int> = [
@@ -36,6 +35,8 @@ class HealthBar extends FlxGroup
 		sideR = new FlxSprite();
 		sideR.makeGraphic(barSize[0], barSize[1], 0xFFFFFFFF);
 		
+	
+
 		add(sideR);
 		add(sideL);
 		

@@ -322,10 +322,6 @@ class StoryChar extends FlxSprite
 		
 		switch(char)
 		{
-			case "senpai":
-				animation.addByPrefix("idle", "idle", 24, true);
-				globalOffset.x -= 35;
-				
 			case "dad":
 				animation.addByPrefix("idle", "idle", 24, true);
 				scale.set(0.45,0.45);

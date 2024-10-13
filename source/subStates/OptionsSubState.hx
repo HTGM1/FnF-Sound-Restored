@@ -113,7 +113,7 @@ class OptionsSubState extends MusicBeatSubState
         }
 
         #if !html5
-        CoolUtil.playMusic('lilBitBack');
+        CoolUtil.playMusic('Picky Friday');
         #end
 		DiscordIO.changePresence("Options - Tweakin' the Settings");
 
