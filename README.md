@@ -1,8 +1,14 @@
-# FNF: Sound Restored (EDGE Branch)
+# FNF: Sound Restored (Main Branch)
+
+## Branch Info
+
+EDGE is the bleeding edge Branch, changes are done almost as they are made, meaning alot of bugs and issues if you try to compile from these commits, as a example if im testing a stage the default stage may have changed and make week 1 a diffrent stage type thing
+
+### everything involed with this branch is subjected to change, meaning the way some songs are EQed are not final as im always taking notes and feedback with playtesters!
 
 ## What is FnF: Sound Restored?
 
-This is a sound remaster project that aims to provide the definitive way to play base game before V-Slive with a few V-Slice extras already included in the Engine Were Currently Using which is Doido Engine:
+This is a sound remaster project that aims to provide the definitive way to play base game before V-Slice with a few V-Slice extras already included in the Engine Were Currently Using which is Doido Engine:
 [Doido Engine's Repository](https://github.com/DoidoTeam/FNF-Doido-Engine)
 
 ## Why Not Use Psych Engine or another engine?
@@ -23,7 +29,6 @@ the main plan for me with this project is too better understand Doido so i can u
 
 ## Current Project Credits
 ### [HuntertronGames&Music](https://bsky.app/profile/htgm.bsky.social) - Main Director, Audio Designer, and Coder
-
 ### [Ava_LavCat](https://github.com/AvaLavenderCat) - PlayTester, Audio Feedback, Ideas
-### Kaze_DT - PlayTester, Audio Feedback
+### [Kaze_DT](https://bsky.app/profile/klonoadt.bsky.social) - PlayTester, Audio Feedback
 ### [ACM240](https://linktr.ee/acm240) - PlayTester, Audio Feedback
