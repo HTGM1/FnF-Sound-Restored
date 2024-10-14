@@ -22,7 +22,8 @@ the reason why this project doesnt use Psych Engine or other engines is because 
 the main plan for me with this project is too better understand Doido so i can use it for one off mods on my own and with friends in the future, my hopes are too make sure to use this as my little source playground and see what this engine is capable of as compared to other engines, this one is one i can actually read :3
 
 ## Current Project Credits
-[HuntertronGames&Music](https://bsky.app/profile/htgm.bsky.social) - Main Director, Audio Designer, and Coder
-[Ava_LavCat](https://github.com/AvaLavenderCat) - PlayTester, Audio Feedback, Ideas
-Kaze_DT - PlayTester, Audio Feedback
-[ACM240](https://linktr.ee/acm240) - PlayTester, Audio Feedback
+### [HuntertronGames&Music](https://bsky.app/profile/htgm.bsky.social) - Main Director, Audio Designer, and Coder
+
+### [Ava_LavCat](https://github.com/AvaLavenderCat) - PlayTester, Audio Feedback, Ideas
+### Kaze_DT - PlayTester, Audio Feedback
+### [ACM240](https://linktr.ee/acm240) - PlayTester, Audio Feedback
