@@ -19,6 +19,7 @@ class HudClass extends FlxGroup
 	public var timeTxt:FlxText;
 	
 	var botplaySin:Float = 0;
+	var badScoreSin:Float = 0;
 	var botplayTxt:FlxText;
 	var badScoreTxt:FlxText;
 
@@ -96,16 +97,16 @@ class HudClass extends FlxGroup
 		
 		updateText();
 
-		infoTxt.y = healthBar.bg.y + healthBar.bg.height + 4;
+		infoTxt.y = (downscroll ? 40 : healthBar.bg.y + healthBar.bg.height + 4);
 		
 		badScoreTxt.y = healthBar.bg.y - badScoreTxt.height - 4;
 		
 		updateTimeTxt();
-		timeTxt.y = downscroll ? (FlxG.height - timeTxt.height - 8) : (8);
-		timeTxt.x = (downscroll ? 1000 : 70);
-		badScoreTxt.x = (downscroll ? 700 : 160);
+		timeTxt.y = (downscroll ? 90 : 610);
+		timeTxt.x = (downscroll ? 280 : 775);
+		badScoreTxt.x = (downscroll ? 735 : 95);
 		botplayTxt.x = 850;
-		botplayTxt.y = (downscroll ? 500 : 100);
+		botplayTxt.y = (downscroll ? 525 : 150);
 	}
 	
 	public function setAlpha(hudAlpha:Float = 1, ?tweenTime:Float = 0, ?ease:String = "cubeout")
@@ -146,6 +147,12 @@ class HudClass extends FlxGroup
 		{
 			botplaySin += elapsed * Math.PI;
 			botplayTxt.alpha = 0.5 + Math.sin(botplaySin) * 0.8;
+		}
+
+		if(badScoreTxt.visible)
+		{
+			badScoreSin += elapsed * Math.PI;
+			badScoreTxt.alpha = 0.5 + Math.sin(botplaySin) * 0.8;
 		}
 
 		healthBar.updateIconPos();
