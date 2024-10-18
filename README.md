@@ -1,4 +1,4 @@
-# FNF: Sound Restored (Main Branch)
+# FNF: Sound Restored (EDGE Branch)
 
 ## Branch Info
 
