@@ -1,20 +1,55 @@
 package data;
 
 import flixel.text.FlxText.FlxTextBorderStyle;
-import gameObjects.Dialogue.DialogueData;
-import gameObjects.Dialogue.DialoguePage;
+
+typedef DialogueData = {
+	var pages:Array<DialoguePage>;
+}
+typedef DialoguePage = {
+	// box
+	var ?boxSkin:String;
+	// character
+	var ?char:String;
+	var ?charAnim:String;
+	// dialogue text
+	var ?text:String;
+	// text settings
+	var ?textSpeed:Float;
+	var ?fontFamily:String;
+	var ?fontScale:Float;
+	var ?fontColor:Int;
+	var ?fontBold:Bool;
+	// text border
+	var ?fontBorderType:FlxTextBorderStyle;
+	var ?fontBorderColor:Int;
+	var ?fontBorderSize:Float;
+	// music and sound
+	var ?music:String;
+	var ?clickSfx:String;
+	var ?scrollSfx:Array<String>;
+}
 
 class DialogueUtil
 {
-	public static function loadFromJson(jsonPath:String):DialogueData
+	public static function loadDialogue(song:String):DialogueData
 	{
-		return cast Paths.json('images/dialogue/data/' + jsonPath);
+		switch(song)
+		{
+			case 'senpai' | 'roses' | 'thorns':
+				return loadCode(song);
+			default:
+				if(Paths.fileExists('images/dialogue/data/$song.json'))
+					return cast Paths.json('images/dialogue/data/$song');
+				else
+					return defaultDialogue();
+		};
 	}
-	
-	/*
-	*	senpai week stuff
-	*/
-	public static function loadFromSong(song:String):DialogueData
+
+	inline public static function defaultDialogue():DialogueData
+		return{pages: []};
+
+	// Hardcoded DialogueData
+	public static function loadCode(song:String):DialogueData
 	{
 		return switch(song)
 		{
@@ -30,14 +65,18 @@ class DialogueUtil
 							fontBorderType: SHADOW,
 							fontBorderColor: 0xFFD89494,
 							fontBorderSize: 4,
+
+							music: 'dialogue/lunchbox',
+							clickSfx: 'dialogue/clickText',
+							scrollSfx: ['dialogue/talking'],
 							
 							// character
 							char: 'senpai',
 							
-							text: 'Ah, a new fair maiden has come in\nsearch of true love!',
+							text: 'Ah, a new fair maiden has come in search of true love!',
 						},
 						{
-							text: 'A serenade between gentlemen shall\ndecide where her beautiful heart shall\nreside.'
+							text: 'A serenade between gentlemen shall decide where her beautiful heart shall reside.'
 						},
 						{
 							char: 'bf-pixel',
@@ -58,13 +97,18 @@ class DialogueUtil
 							fontBorderType: SHADOW,
 							fontBorderColor: 0xFFD89494,
 							fontBorderSize: 4,
+
+							music: 'dialogue/lunchbox',
+							clickSfx: 'dialogue/clickText',
+							scrollSfx: ['dialogue/talking'],
+
 							// character
 							char: 'senpai-angry',
 							
 							text: 'Not bad for an ugly worm.',
 						},
 						{
-							text: "But this time I'll rip your nuts off\nright after your girlfriend finishes\ngargling mine."
+							text: "But this time I'll rip your nuts off right after your girlfriend finishes gargling mine."
 						},
 						{
 							char: 'bf-pixel',
@@ -82,35 +126,40 @@ class DialogueUtil
 							fontColor: 0xFFFFFFFF,
 							fontScale: 0.8,
 							fontBorderSize: 0,
+
+							clickSfx: 'dialogue/clickText',
+							scrollSfx: ['dialogue/talking'],
+
 							// character
-							char:  'spirit',
+							char: 'spirit',
 							
-							text: 'Direct contact with real humans, after\nbeing trapped in here for so long...',
+							text: 'Direct contact with real humans, after being trapped in here for so long...',
+							textSpeed: 5
 						},
 						{
 							text: "and HER of all people."
 						},
 						{
-							text: "I'll make her father pay for what he's done\nto me and all the others...."
+							text: "I'll make her father pay for what he's done to me and all the others...."
 						},
 						{
 							text: "I'll beat you and make you take my place."
 						},
 						{
 							fontColor: 0xFFFF0000,
-							text: "You don't mind your bodies being borrowed\nright?"
+							text: "You don't mind your bodies being borrowed right?",
+							textSpeed: 3.4
 						},
 						{
 							fontScale: 2.5,
-							text: "It's only fair..."
+							text: "It's only fair...",
+							textSpeed: 16
 						},
 					]
 				}
 			
 			default:
-				{
-					pages: [],
-				}
+				defaultDialogue();
 		}
 	}
 }

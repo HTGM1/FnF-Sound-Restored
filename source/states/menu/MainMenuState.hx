@@ -186,7 +186,7 @@ class MainMenuState extends MusicBeatState
 					for(item in grpOptions.members)
 					{
 						if(item.ID != curSelected)
-							FlxTween.tween(item, {alpha: 0}, 0.4, {ease: FlxEase.cubeOut});
+							FlxTween.tween(item, {alpha: 0}, 0.75, {ease: FlxEase.cubeOut});
 					}
 					
 					new FlxTimer().start(1.5, function(tmr:FlxTimer)

@@ -3,7 +3,7 @@
 
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="FNF: Doido Engine" file="Funkin Doido" main="Main" version="3.3.0" company="DiogoTV" />
+	<app title="FNF: Doido Engine" file="Funkin Doido" main="Main" version="3.3.1beta" company="DiogoTV" />
 	
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
@@ -26,6 +26,13 @@
 	<!--Mobile-specific-->
 	<window if="mobile" orientation="landscape" fullscreen="true" resizable="false" />
 
+	<!-- _____________________________ Custom Defines ___________________________ -->
+
+	<define name="DISCORD_RPC" 			if="cpp" unless="android" />
+	<define name="PRELOAD_SONG" 		if="cpp" unless="debug" />
+	<define name="RENAME_UNDERSCORE" 	if="html5 || android"/>
+
+
 	<!-- _____________________________ Path Settings ____________________________ -->
 
 	<set name="BUILD_DIR" value="export" />
@@ -35,23 +42,26 @@
 	<source path="source" />
 	<assets path="assets" />
 
-	<!-- _____________________________ Custom Defines ___________________________ -->
-
-	<define name="DISCORD_RPC" if="desktop" unless="web || neko || air" />
-	<define name="PRELOAD_SONG" if="desktop" unless="debug" />
-	
+	<!-- RENAME UNDERSCORE FOLDERS -->
+	<section if="RENAME_UNDERSCORE">
+		<assets path="assets/images/characters/_offsets" 	rename="assets/images/characters/offsets"/>
+		<assets path="assets/images/notes/_other" 		rename="assets/images/notes/other"/>
+	</section>
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
 	<haxelib name="flixel-ui" />
+
+	<haxelib name="flxanimate-doido"/>
+	<haxelib name="tjson"/>
 	<haxelib name="hxdiscord_rpc" if="DISCORD_RPC" />
-	<haxelib name="flxanimate"/>
+
+	<haxelib name="hscript-iris" />
+	<haxedef name="hscriptPos" />
 
 	<!--Used only for flixel's debugger!-->
 	<haxelib name="hscript" if="debug" />
-	<haxelib name="hscript-iris" />
-	<haxedef name="hscriptPos" />
 
 	<!--In case you want to use nape with flixel-->
 	<!--<haxelib name="nape-haxe4" />-->

@@ -30,7 +30,7 @@ class Stage extends FlxGroup
 		
 		stageList = switch(song)
 		{
-			default: ["stage"];
+			default: ["halloween"];
 			
 			case "dadbattle-nm": ["stageErect"];
 			
@@ -82,19 +82,18 @@ class Stage extends FlxGroup
 				var curtains = new FlxSprite(-600, -400).loadGraphic(Paths.image("backgrounds/stage/stagecurtains"));
 				curtains.scrollFactor.set(1.4,1.4);
 				foreground.add(curtains);
-				
-			case "stageErect":
-				var bg = new FlxSprite(-600, -600).loadGraphic(Paths.image('backgrounds/stage/erect/bg'));
-				bg.scrollFactor.set(0.6, 0);
-				bg.scale.set(0.5, 0.5);
-				add(bg);
 
+			case "halloween":
+				var weenbg = new FlxSprite(-600, -200);
+				weenbg.frames = Paths.getPackerAtlas('backgrounds/halloween/halloween_bg');
+				weenbg.animation.addByPrefix('bg', 'halloweem bg', 12);
+				weenbg.animation.addByPrefix('flash', 'halloweem bg lightning strike', 12);
 
+				weenbg.scrollFactor.set(0.45,0.45);
+				weenbg.animation.play('bg');
+				weenbg.scale.set(6,6);
 
-
-
-
-
+				add(weenbg);
 
 			case "school":
 				bfPos.x -= 70;
@@ -183,6 +182,13 @@ class Stage extends FlxGroup
 				bg.scrollFactor.set(0.8, 0.9);
 				bg.antialiasing = false;
 				bg.scale.set(6,6);
+				add(bg);
+
+
+			case "stageErect":
+				var bg = new FlxSprite(-600, -600).loadGraphic(Paths.image('backgrounds/stage/erect/bg'));
+				bg.scrollFactor.set(0.6, 0);
+				bg.scale.set(0.5, 0.5);
 				add(bg);
 		}
 	}
