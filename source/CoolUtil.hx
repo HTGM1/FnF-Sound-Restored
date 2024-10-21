@@ -1,5 +1,6 @@
 package;
 
+import flixel.text.FlxText.FlxTextBorderStyle;
 import flixel.tweens.FlxEase;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -7,6 +8,7 @@ import flixel.util.FlxSort;
 import flixel.math.FlxAngle;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
+import flixel.util.FlxAxes;
 import flixel.FlxCamera;
 import gameObjects.hud.note.Note;
 
@@ -103,7 +105,7 @@ class CoolUtil
 		return ["left", "down", "up", "right"][i];
 	
 	inline public static function noteWidth()
-		return (160 * 0.7); // 112
+		return (160 * 0.9); // 112
 	
 	public static function setNotePos(note:FlxSprite, target:FlxSprite, angle:Float, offsetX:Float, offsetY:Float, usesLerp:Bool = false)
 	{
@@ -167,6 +169,29 @@ class CoolUtil
 		if(!Std.isOfType(num, Int))
 			num = backup;
 		return num;
+	}
+
+	public static function stringToAxes(str:String):FlxAxes
+	{
+		return switch (str.toLowerCase())
+		{
+			case "x": X;
+			case "y": Y;
+			case "xy" | "yx" | "both": XY;
+			default : NONE;
+		}
+	}
+
+	public static function stringToBorder(str:String = 'none'):FlxTextBorderStyle
+	{
+		return switch(str.toLowerCase())
+		{
+			case 'shadow': 			FlxTextBorderStyle.SHADOW;
+			case 'outline': 		FlxTextBorderStyle.OUTLINE;
+			case 'outline_fast': 	FlxTextBorderStyle.OUTLINE_FAST;
+
+			default: 				FlxTextBorderStyle.NONE;
+		}
 	}
 
 	public static function stringToEase(str:String = 'linear'):EaseFunction

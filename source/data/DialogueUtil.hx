@@ -1,7 +1,5 @@
 package data;
 
-import flixel.text.FlxText.FlxTextBorderStyle;
-
 typedef DialogueData = {
 	var pages:Array<DialoguePage>;
 }
@@ -11,22 +9,50 @@ typedef DialoguePage = {
 	// character
 	var ?char:String;
 	var ?charAnim:String;
+	// images
+	var ?underlayAlpha:Float;
+	var ?background:DialogueSprite;
+	var ?foreground:DialogueSprite;
 	// dialogue text
 	var ?text:String;
 	// text settings
-	var ?textSpeed:Float;
+	var ?textDelay:Float;
 	var ?fontFamily:String;
 	var ?fontScale:Float;
 	var ?fontColor:Int;
 	var ?fontBold:Bool;
 	// text border
-	var ?fontBorderType:FlxTextBorderStyle;
+	var ?fontBorderType:String;
 	var ?fontBorderColor:Int;
 	var ?fontBorderSize:Float;
 	// music and sound
 	var ?music:String;
 	var ?clickSfx:String;
 	var ?scrollSfx:Array<String>;
+}
+
+typedef DialogueSprite = {
+	var name:String;
+	var image:String;
+	// position
+	var ?x:Float;
+	var ?y:Float;
+	var ?screenCenter:String;
+	// other sprite stuff
+	var ?scale:Float;
+	var ?alpha:Float;
+	// flipping
+	var ?flipX:Bool;
+	var ?flipY:Bool;
+	// animation array
+	var ?animations:Array<Animation>;
+}
+
+typedef Animation = {
+	var name:String;
+	var prefix:String;
+	var framerate:Int;
+	var looped:Bool;
 }
 
 class DialogueUtil
@@ -62,7 +88,7 @@ class DialogueUtil
 							fontColor: 0xFF3F2021,
 							fontScale: 0.8,
 							
-							fontBorderType: SHADOW,
+							fontBorderType: 'shadow',
 							fontBorderColor: 0xFFD89494,
 							fontBorderSize: 4,
 
@@ -73,14 +99,14 @@ class DialogueUtil
 							// character
 							char: 'senpai',
 							
-							text: 'Ah, a new fair maiden has come in search of true love!',
+							text: 'Ah, a new fair maiden has come in search of true love!'
 						},
 						{
 							text: 'A serenade between gentlemen shall decide where her beautiful heart shall reside.'
 						},
 						{
 							char: 'bf-pixel',
-							text: 'Beep bo bop',
+							text: 'Beep bo bop'
 						}
 					]
 				}
@@ -94,7 +120,7 @@ class DialogueUtil
 							fontColor: 0xFF3F2021,
 							fontScale: 0.8,
 							
-							fontBorderType: SHADOW,
+							fontBorderType: 'shadow',
 							fontBorderColor: 0xFFD89494,
 							fontBorderSize: 4,
 
@@ -134,7 +160,7 @@ class DialogueUtil
 							char: 'spirit',
 							
 							text: 'Direct contact with real humans, after being trapped in here for so long...',
-							textSpeed: 5
+							textDelay: 5
 						},
 						{
 							text: "and HER of all people."
@@ -148,12 +174,12 @@ class DialogueUtil
 						{
 							fontColor: 0xFFFF0000,
 							text: "You don't mind your bodies being borrowed right?",
-							textSpeed: 3.4
+							textDelay: 3.4
 						},
 						{
 							fontScale: 2.5,
 							text: "It's only fair...",
-							textSpeed: 16
+							textDelay: 16
 						},
 					]
 				}

@@ -22,6 +22,8 @@ class Dialogue extends FlxGroup
 	{
 		super();
 		grpChar = new FlxTypedGroup<DialogueChar>();
+		grpBg = new FlxTypedGroup<DialogueImg>();
+		grpFg = new FlxTypedGroup<DialogueImg>();
 		box = new DialogueBox();
 		
 		text = new FlxText(0, 0, 0, "");
@@ -32,12 +34,15 @@ class Dialogue extends FlxGroup
 		textAlphabet = new Alphabet(0,0,"",false);
 		textAlphabet.visible = false;
 		
-		bg = new FlxSprite().makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFF000000);
-		bg.screenCenter();
-		bg.alpha = 0.3;
-		add(bg);
+		underlay = new FlxSprite().makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFF000000);
+		underlay.screenCenter();
+		underlay.alpha = 0.3;
+		add(underlay);
 		
+		add(grpBg);
 		add(grpChar);
+		add(grpFg);
+
 		add(box);
 		add(text);
 		add(textAlphabet);
@@ -45,9 +50,11 @@ class Dialogue extends FlxGroup
 	
 	public var data:DialogueData;
 	
-	public var bg:FlxSprite;
+	public var underlay:FlxSprite;
 	public var box:DialogueBox;
 	public var grpChar:FlxTypedGroup<DialogueChar>;
+	public var grpBg:FlxTypedGroup<DialogueImg>;
+	public var grpFg:FlxTypedGroup<DialogueImg>;
 	public var text:FlxText;
 	public var textAlphabet:Alphabet;
 	
@@ -57,7 +64,7 @@ class Dialogue extends FlxGroup
 	var fontBorderColor:Int = 0xFF000000;
 	var fontBorderType:FlxTextBorderStyle = OUTLINE;
 
-	var textSpeed:Float = 4;
+	var textDelay:Float = 4;
 	var scrollSfx:Array<String> = [];
 	var clickSfx:String = '';
 	
@@ -66,6 +73,8 @@ class Dialogue extends FlxGroup
 		this.data = data;
 		// preloading
 		var spawnedChars:Array<String> = [];
+		var spawnedBgs:Array<String> = [];
+		var spawnedFgs:Array<String> = [];
 		for(page in data.pages)
 		{
 			if(page.boxSkin != null)
@@ -79,6 +88,24 @@ class Dialogue extends FlxGroup
 					var char = new DialogueChar();
 					char.reloadChar(page.char);
 					grpChar.add(char);
+
+					spawnedChars.push(page.char);
+				}
+			}
+
+			if(page.background != null) {
+				if(!spawnedBgs.contains(page.background.image) && Paths.fileExists('images/${page.background.image}.png')) {
+					var bg = new DialogueImg(page.background);
+					grpBg.add(bg);
+					spawnedBgs.push(page.background.image);
+				}
+			}
+
+			if(page.foreground != null) {
+				if(!spawnedFgs.contains(page.foreground.image) && Paths.fileExists('images/${page.foreground.image}.png')) {
+					var fg = new DialogueImg(page.foreground);
+					grpFg.add(fg);
+					spawnedFgs.push(page.foreground.image);
 				}
 			}
 
@@ -116,9 +143,9 @@ class Dialogue extends FlxGroup
 		{
 			text.text = typeTxt.substring(0, typeLoop);
 			typeTimer += elapsed;
-			if(typeTimer >= (textSpeed / 100))
+			if(typeTimer >= (textDelay / 100))
 			{
-				if(textSpeed > 2.5 || (typeLoop % 2 == 0)) {
+				if(textDelay > 2.5 || (typeLoop % 2 == 0)) {
 					if(scrollSfx.length > 0)
 						FlxG.sound.play(Paths.sound(scrollSfx[FlxG.random.int(0, scrollSfx.length - 1)]));
 				}
@@ -195,12 +222,12 @@ class Dialogue extends FlxGroup
 				}
 			}
 
-			if(swagPage.textSpeed != null)
-				textSpeed = swagPage.textSpeed;
+			if(swagPage.textDelay != null)
+				textDelay = swagPage.textDelay;
 			
 			//text.setBorderStyle(OUTLINE, FlxColor.BLACK, 1.5);
 			if(swagPage.fontBorderType != null)
-				fontBorderType = swagPage.fontBorderType;
+				fontBorderType = CoolUtil.stringToBorder(swagPage.fontBorderType);
 			if(swagPage.fontBorderColor != null)
 				fontBorderColor = swagPage.fontBorderColor;
 			if(swagPage.fontBorderSize != null)
@@ -233,6 +260,9 @@ class Dialogue extends FlxGroup
 				//text.text = swagPage.text;
 				startTyping(swagPage.text);
 			}
+
+			if(swagPage.underlayAlpha != null)
+				underlay.alpha = swagPage.underlayAlpha;
 			
 			if(swagPage.char != null)
 			{
@@ -244,6 +274,26 @@ class Dialogue extends FlxGroup
 						char.isActive = true;
 						activeChar = char;
 					}
+				}
+			}
+
+			if(swagPage.background != null)
+			{
+				for(bg in grpBg.members)
+				{
+					bg.isActive = false;
+					if(bg.sprName == swagPage.background.name)
+						bg.isActive = true;
+				}
+			}
+
+			if(swagPage.foreground != null)
+			{
+				for(fg in grpFg.members)
+				{
+					fg.isActive = false;
+					if(fg.sprName == swagPage.foreground.name)
+						fg.isActive = true;
 				}
 			}
 			
@@ -262,6 +312,5 @@ class Dialogue extends FlxGroup
 	function reloadBox(skin:String) {
 		box.reloadBox(skin);
 		text.fieldWidth = box.fieldWidth;
-
 	}
 }

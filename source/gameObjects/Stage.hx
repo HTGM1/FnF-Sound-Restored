@@ -30,7 +30,7 @@ class Stage extends FlxGroup
 		
 		stageList = switch(song)
 		{
-			default: ["halloween"];
+			default: ["stage"];
 			
 			case "dadbattle-nm": ["stageErect"];
 			

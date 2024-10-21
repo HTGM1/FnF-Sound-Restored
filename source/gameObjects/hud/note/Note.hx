@@ -28,7 +28,7 @@ class Note extends FlxSprite
 	
 	public function reloadSprite():Note
 	{
-		noteSize = 0.75;
+		noteSize = 0.85;
 		mustMiss = false;
 		hasHoldSplash = true;
 		var direction:String = CoolUtil.getDirection(noteData);
@@ -39,7 +39,7 @@ class Note extends FlxSprite
 		switch(assetModifier)
 		{
 			case "pixel":
-				noteSize = 5;
+				noteSize = 6;
 				hasHoldSplash = true;
 				if(!isHold)
 				{
@@ -68,7 +68,7 @@ class Note extends FlxSprite
 								frames = Paths.getSparrowAtlas("notes/doido/notes");
 								noteSize = 0.95;
 							default:
-								noteSize = 0.55;
+								noteSize = 0.7;
 								frames = Paths.getSparrowAtlas("notes/base/notes");
 						}
 
