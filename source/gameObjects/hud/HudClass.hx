@@ -88,11 +88,11 @@ class HudClass extends FlxGroup
 		+ CoolUtil.posToTimer(PlayState.songLength);
 	}
 
-	public function updateHitbox(downscroll:Bool = false)
+	public function updateHitbox(downscroll:Bool = false, middlescroll:Bool = false)
 	{
-		healthBar.bg.x = (downscroll ? 120 : 560);
+		healthBar.bg.x = (downscroll ? 120 : 1000);
 		healthBar.bg.y = (downscroll ? 70 : FlxG.height - healthBar.bg.height - 50);
-		infoTxt.x = (downscroll ? 130 : 560);
+		infoTxt.x = (downscroll ? 130 : 1080);
 		healthBar.updatePos();
 		
 		updateText();
@@ -102,11 +102,11 @@ class HudClass extends FlxGroup
 		badScoreTxt.y = healthBar.bg.y - badScoreTxt.height - 4;
 		
 		updateTimeTxt();
-		timeTxt.y = (downscroll ? 90 : 610);
-		timeTxt.x = (downscroll ? 280 : 775);
-		badScoreTxt.x = (downscroll ? 735 : 95);
-		botplayTxt.x = 850;
-		botplayTxt.y = (downscroll ? 525 : 150);
+		timeTxt.y = (downscroll ? 90 : 865);
+		timeTxt.x = (downscroll ? 280 : 1200);
+		badScoreTxt.x = (downscroll ? 1135 : 75);
+		botplayTxt.x = (middlescroll ? 500 : 1175);
+		botplayTxt.y = (downscroll ? 725 : 170);
 	}
 	
 	public function setAlpha(hudAlpha:Float = 1, ?tweenTime:Float = 0, ?ease:String = "cubeout")
@@ -152,7 +152,7 @@ class HudClass extends FlxGroup
 		if(badScoreTxt.visible)
 		{
 			badScoreSin += elapsed * Math.PI;
-			badScoreTxt.alpha = 0.5 + Math.sin(botplaySin) * 0.8;
+			badScoreTxt.alpha = 0.5 + Math.sin(badScoreSin) * 0.8;
 		}
 
 		healthBar.updateIconPos();

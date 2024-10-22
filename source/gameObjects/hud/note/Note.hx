@@ -39,7 +39,7 @@ class Note extends FlxSprite
 		switch(assetModifier)
 		{
 			case "pixel":
-				noteSize = 6;
+				noteSize = 5.75;
 				hasHoldSplash = true;
 				if(!isHold)
 				{

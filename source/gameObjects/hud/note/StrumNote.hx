@@ -35,7 +35,7 @@ class StrumNote extends FlxSprite
 		switch(assetModifier)
 		{
 			case "pixel":
-				strumSize = 5.75;
+				strumSize = 6.75;
 				loadGraphic(Paths.image("notes/pixel/notesPixel"), true, 17, 17);
 
 				animation.add("static",  [strumData], 						12, false);

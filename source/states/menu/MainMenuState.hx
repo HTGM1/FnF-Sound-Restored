@@ -67,7 +67,7 @@ class MainMenuState extends MusicBeatState
 		grpOptions = new FlxTypedGroup<FlxSprite>();
 		add(grpOptions);
 		
-		var optionSize:Float = 0.9;
+		var optionSize:Float = 1.2;
 		if(optionShit.length > 4)
 		{
 			for(i in 0...(optionShit.length - 4))
@@ -109,11 +109,12 @@ class MainMenuState extends MusicBeatState
 			
 			item.ID = i;
 		}
-		
-		var doidoSplash:String = 'Doido Engine ${lime.app.Application.current.meta.get('version')}';
+
+		var soundSplash:String = 'Sound Restored ${lime.app.Application.current.meta.get('version')}';
+		var doidoSplash:String = 'Doido Engine 3.3.1Beta';
 		var funkySplash:String = 'Friday Night Funkin\' Rewritten';
 
-		var splashTxt = new FlxText(4, 0, 0, '$doidoSplash\n$funkySplash');
+		var splashTxt = new FlxText(4, 0, 0, '$soundSplash\n$doidoSplash\n$funkySplash');
 		splashTxt.setFormat(Main.gFont, 18, 0xFFFFFFFF, LEFT);
 		splashTxt.setBorderStyle(OUTLINE, 0xFF000000, 1.5);
 		splashTxt.y = FlxG.height - splashTxt.height - 4;

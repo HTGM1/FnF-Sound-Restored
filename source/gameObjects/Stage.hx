@@ -79,7 +79,7 @@ class Stage extends FlxGroup
 				front.loadGraphic(Paths.image("backgrounds/stage/stagefront"));
 				add(front);
 				
-				var curtains = new FlxSprite(-600, -400).loadGraphic(Paths.image("backgrounds/stage/stagecurtains"));
+				var curtains = new FlxSprite(-600, -500).loadGraphic(Paths.image("backgrounds/stage/stagecurtains"));
 				curtains.scrollFactor.set(1.4,1.4);
 				foreground.add(curtains);
 
@@ -97,9 +97,11 @@ class Stage extends FlxGroup
 
 			case "school":
 				bfPos.x -= 70;
+				bfPos.y += 100;
+				dadPos.y += 100;
 				dadPos.x += 50;
 				gfPos.x += 20;
-				gfPos.y += 50;
+				gfPos.y += 100;
 				
 				var bgSky = new FlxSprite().loadGraphic(Paths.image('backgrounds/school/weebSky'));
 				bgSky.scrollFactor.set(0.1, 0.1);
@@ -162,7 +164,7 @@ class Stage extends FlxGroup
 						var item:FlxSprite = cast rawItem;
 						item.antialiasing = false;
 						item.isPixelSprite = true;
-						item.scale.set(6,6);
+						item.scale.set(7.5,7.5);
 						item.updateHitbox();
 						item.x -= 170;
 						item.y -= 145;

@@ -35,7 +35,7 @@ class OptionSelector extends FlxTypedGroup<FlxSprite>
         arrowR = getArrow('right');
 
         text = new Alphabet(0, 0, value, true);
-        text.scale.set(0.75,0.75);
+        text.scale.set(0.85,0.85);
         text.updateHitbox();
 
         add(arrowL);

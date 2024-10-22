@@ -54,21 +54,24 @@ class TitleState extends MusicBeatState
 		gf.animation.addByIndices('danceRight','gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
 		gf.x = FlxG.width - gf.width - 20;
 		gf.screenCenter(Y);
+		gf.scale.set(1.25,1.25);
 		add(gf);
 		gf.animation.play('danceLeft');
 		
-		logoBump = new FlxSprite(-100, -80);
+		logoBump = new FlxSprite(0, 0);
 		logoBump.frames = Paths.getSparrowAtlas('menu/title/logoBumpin');
 		logoBump.animation.addByPrefix('bump', 'logo bumpin', 24, false);
 		logoBump.animation.play('bump');
+		logoBump.scale.set(1.25,1.25);
 		add(logoBump);
 		
-		enterTxt = new FlxSprite(500 / 4);
+		enterTxt = new FlxSprite(1200 / 4);
 		enterTxt.frames = Paths.getSparrowAtlas('menu/title/titleEnter');
 		enterTxt.animation.addByPrefix('idle', 'Press Enter to Begin', 24, true);
 		enterTxt.animation.addByPrefix('pressed', 'ENTER PRESSED', 24, true);
 		enterTxt.animation.play('idle');
 		enterTxt.y = FlxG.height - enterTxt.height - 60;
+		enterTxt.scale.set(1.25,1.25);
 		add(enterTxt);
 		
 		blackScreen = new FlxSprite().makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFF000000);
@@ -80,8 +83,9 @@ class TitleState extends MusicBeatState
 		
 		ngSpr = new FlxSprite().loadGraphic(Paths.image('menu/title/newgrounds_logo'));
 		ngSpr.screenCenter();
-		ngSpr.y = FlxG.height - ngSpr.height - 40;
+		ngSpr.y = FlxG.height - ngSpr.height - 120;
 		ngSpr.visible = false;
+		ngSpr.scale.set(1.25,1.25);
 		add(ngSpr);
 
 		addText([]);

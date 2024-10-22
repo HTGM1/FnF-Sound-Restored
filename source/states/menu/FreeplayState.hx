@@ -272,7 +272,7 @@ class ScoreCounter extends FlxGroup
 		bg.alpha = 0.4;
 		add(bg);
 		
-		var txtSize:Int = 28; // 36
+		var txtSize:Int = 38; // 36
 
 		text = new FlxText(0, 0, 0, "");
 		text.setFormat(Main.gFont, txtSize, 0xFFFFFFFF, LEFT);
