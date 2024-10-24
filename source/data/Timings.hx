@@ -98,11 +98,12 @@ class Timings
 				result = daRank;
 		}
 		// main ranks
+		calc("E", 55, 50);
 		calc("D", 65, 60);
 		calc("C", 75, 65);
 		calc("B", 80, 75);
-		calc("A", 95, 80);
-		calc("S", 100,95);
+		calc("A", 99, 80);
+		calc("S", 100,99);
 		// pluses for your rank
 		if(misses == 0) {
 			result += "+";

@@ -411,7 +411,7 @@ class PlayState extends MusicBeatState
 			var strumMult:Int = (strumline.downscroll ? 1 : -1);
 			for(strum in strumline.strumGroup)
 			{
-				strum.y += CoolUtil.noteWidth() * 0.6 * strumMult;
+				strum.y += CoolUtil.noteWidth() * 0.25 * strumMult;
 				strum.alpha = 0.0001;
 			}
 		}
@@ -977,7 +977,7 @@ class PlayState extends MusicBeatState
 		var followLerp:Float = cameraSpeed * 5 * elapsed;
 		if(followLerp > 1) followLerp = 1;
 		
-		CoolUtil.dumbCamPosLerp(camGame, camFollow, followLerp);
+		CoolUtil.camPosLerp(camGame, camFollow, followLerp);
 		
 		if(Controls.justPressed(PAUSE))
 			pauseSong();
@@ -1337,6 +1337,9 @@ class PlayState extends MusicBeatState
 			if(curSect != null)
 			{
 				followCamSection(curSect);
+
+				if(SONG.song == "tutorial")
+					extraCamZoom = CoolUtil.camZoomLerp(extraCamZoom, curSect.mustHitSection ? 0 : 0.5, 3);
 			}
 		}
 		// stuff
@@ -1346,13 +1349,10 @@ class PlayState extends MusicBeatState
 		if(health <= 0)
 			startGameOver();
 		
-		function lerpCamZoom(start:Float, target:Float = 1.0, speed:Int = 6):Float
-			return FlxMath.lerp(start, target, elapsed * speed);
-		
 		camGame.zoom = defaultCamZoom + beatCamZoom + extraCamZoom;
-		beatCamZoom = lerpCamZoom(beatCamZoom, 0);
-		camHUD.zoom = lerpCamZoom(camHUD.zoom);
-		camStrum.zoom = lerpCamZoom(camStrum.zoom);
+		beatCamZoom = CoolUtil.camZoomLerp(beatCamZoom, 0);
+		camHUD.zoom = CoolUtil.camZoomLerp(camHUD.zoom);
+		camStrum.zoom = CoolUtil.camZoomLerp(camStrum.zoom);
 		
 		health = FlxMath.bound(health, 0, 2); // bounds the health
 		callScript("updatePost", [elapsed]);
@@ -1552,14 +1552,6 @@ class PlayState extends MusicBeatState
 				char = strToChar(cameraSection).char;
 			else if(sect.mustHitSection)
 				char = bfStrumline.character.char;
-			
-			switch(SONG.song)
-			{
-				case "tutorial":
-					FlxTween.tween(PlayState, {'extraCamZoom': (sect.mustHitSection ? 0 : 0.5)}, Conductor.crochet / 1000, {
-						ease: !sect.mustHitSection ? FlxEase.cubeOut : FlxEase.cubeInOut
-					});
-			}
 		}
 
 		followCamera(char);

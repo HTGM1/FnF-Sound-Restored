@@ -28,7 +28,7 @@ class OffsetsSubState extends MusicBeatSubState
 
     var offsetCurBeat:Int = 0;
     var _offsetCurBeat:Int = 0;
-    var crochet:Float = Conductor.calcBeat(85);
+    var crochet:Float = Conductor.calcBeat(100);
     var songPos:Float = Conductor.musicOffset;
     var offsetMusic:FlxSound;
     var testingInput:Bool = false;
@@ -47,7 +47,7 @@ class OffsetsSubState extends MusicBeatSubState
         this.cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
         if(FlxG.sound.music != null)
             FlxG.sound.music.pause();
-        offsetMusic = new FlxSound().loadEmbedded(Paths.music('settingOff'), true, false, function() {
+        offsetMusic = new FlxSound().loadEmbedded(Paths.music('Offset Beat'), true, false, function() {
             loopedTimes++;
         });
         offsetMusic.play();
