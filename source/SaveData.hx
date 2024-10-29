@@ -24,10 +24,10 @@ class SaveData
 		* 
 		*/
 		"Window Size" => [
-			"1280x720",
+			"1728x972",
 			SELECTOR,
 			"Change the game's resolution if it doesn't fit your monitor",
-			["640x360","854x480","960x540","1024x576","1152x648","1280x720","1366x768","1600x900","1920x1080", "2560x1440", "3840x2160"],
+			["640x360","854x480","960x540","1024x576","1152x648","1280x720","1366x768","1600x900","1728x972", "1920x1080", "2560x1440", "3840x2160"],
 		],
 		'Flashing Lights' => [
 			"ON",
@@ -36,18 +36,18 @@ class SaveData
 			["ON", "REDUCED", "OFF"]
 		],
 		"Cutscenes" => [
-			"ON",
+			"FREEPLAY OFF",
 			SELECTOR,
 			"Decides if the song cutscenes should play",
 			["ON", "FREEPLAY OFF", "OFF"],
 		],
 		"FPS Counter" => [
-			false,
+			true,
 			CHECKMARK,
 			"Whether you want a counter showing your framerate and memory usage counter in the corner of the game",
 		],
 		'Unfocus Freeze' => [
-			true,
+			false,
 			CHECKMARK,
 			"Freezes the game when unfocusing the window",
 		],
@@ -140,7 +140,7 @@ class SaveData
 			"Makes only one rating appear at a time",
 		],
 		"Ratings on HUD" => [
-			true,
+			false,
 			CHECKMARK,
 			"Makes the ratings stick on the HUD"
 		],

@@ -65,6 +65,8 @@ class ChartingState extends MusicBeatState
 		['Change Character', 	'Value 1: Character to change (dad/gf/bf)\nValue 2: New Character (dad/pico/senpai-angry)'],
 		['Change Stage',		'Value 1: New Stage'],
 		['Play Animation',		'Value 1: Character (dad/gf/bf)\nValue 2: Animation to play\nValue 3: Override singing? (true/false)\n(if the character presses a note, does the animation stop?)'],
+		['Play HalloweenBG Anim',		'Value 2: Animation to play from haloweenBG'],
+
 
 		//PLAY
 		['Freeze Notes',		'Value 1: Freeze? (true/false)\nValue 2: Strumline? (dad/bf/both)'],

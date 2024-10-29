@@ -28,14 +28,14 @@ class Init extends MusicBeatState
 	function firstState()
 	{
 		#if html5
-		Main.switchState(new WarningState());
+		Main.switchState(new FlashingWarningState());
 		#elseif MENU
 		Main.switchState(new states.menu.MainMenuState());
 		#elseif FREEPLAY
 		Main.switchState(new states.menu.FreeplayState());
 		#else
 		if(FlxG.save.data.beenWarned == null)
-			Main.switchState(new WarningState());
+			Main.switchState(new FlashingWarningState());
 		else
 			Main.switchState(new TitleState());
 		#end

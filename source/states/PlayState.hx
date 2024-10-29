@@ -1933,6 +1933,10 @@ class PlayState extends MusicBeatState
 				char.char.specialAnim = (CoolUtil.stringToBool(daEvent.value3) ? 2 : 1);
 				char.char.playAnim(daEvent.value2, true);
 
+			case 'Play HalloweenBG Anim':
+				stageBuild.halloweenBG.animation.play(daEvent.value2);
+				
+
 			case 'Change Character':
 				var char = strToChar(daEvent.value1);
 				changeChar(char, daEvent.value2, (char != gf));

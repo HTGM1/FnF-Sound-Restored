@@ -16,6 +16,7 @@ class Stage extends FlxGroup
 	public var dadPos:FlxPoint = new FlxPoint();
 	public var gfPos:FlxPoint  = new FlxPoint();
 	public var gfVersion:String = "";
+	public var halloweenBG:FlxSprite;
 
 	public var foreground:FlxGroup;
 
@@ -84,16 +85,61 @@ class Stage extends FlxGroup
 				foreground.add(curtains);
 
 			case "halloween":
-				var weenbg = new FlxSprite(-600, -200);
-				weenbg.frames = Paths.getPackerAtlas('backgrounds/halloween/halloween_bg');
-				weenbg.animation.addByPrefix('bg', 'halloweem bg', 12);
-				weenbg.animation.addByPrefix('flash', 'halloweem bg lightning strike', 12);
+				gfPos.x += 20;
+				gfPos.y += 100;
+				var hallowTex = Paths.getSparrowAtlas('backgrounds/halloween/halloween_bg');
+				gfPos.x += 20;
+				gfPos.y += 100;
 
-				weenbg.scrollFactor.set(0.45,0.45);
-				weenbg.animation.play('bg');
-				weenbg.scale.set(6,6);
+				halloweenBG = new FlxSprite(-200, -100);
+				halloweenBG.frames = hallowTex;
+				halloweenBG.animation.addByPrefix('idle', 'halloweem bg0');
+				halloweenBG.animation.addByPrefix('lightning', 'halloweem bg lightning strike', 24, false);
+				halloweenBG.animation.play('idle');
+				halloweenBG.antialiasing = true;
+				add(halloweenBG);
 
-				add(weenbg);
+			case "philly":
+
+			var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.image('backgrounds/philly/sky'));
+			var phillyCityLights:FlxSprite;
+			var phillyTrain:FlxSprite;
+
+
+
+
+
+				bg.scrollFactor.set(0.1, 0.1);
+				add(bg);
+
+				var city:FlxSprite = new FlxSprite(-10).loadGraphic(Paths.image('backgrounds/philly/city'));
+				city.scrollFactor.set(0.3, 0.3);
+				city.setGraphicSize(Std.int(city.width * 0.85));
+				city.updateHitbox();
+				add(city);
+
+
+				for (i in 0...5)
+				{
+					var light:FlxSprite = new FlxSprite(city.x).loadGraphic(Paths.image('backgrounds/philly/win' + i));
+					light.scrollFactor.set(0.3, 0.3);
+					light.visible = false;
+					light.setGraphicSize(Std.int(light.width * 0.85));
+					light.updateHitbox();
+					light.antialiasing = true;
+					add(light);
+				}
+
+				var streetBehind:FlxSprite = new FlxSprite(-40, 50).loadGraphic(Paths.image('backgrounds/philly/behindTrain'));
+				add(streetBehind);
+
+				phillyTrain = new FlxSprite(2000, 360).loadGraphic(Paths.image('backgrounds/philly/train'));
+				add(phillyTrain);
+
+				// var cityLights:FlxSprite = new FlxSprite().loadGraphic(AssetPaths.win0.png);
+
+				var street:FlxSprite = new FlxSprite(-40, streetBehind.y).loadGraphic(Paths.image('backgrounds/philly/street'));
+				add(street);
 
 			case "school":
 				bfPos.x -= 70;

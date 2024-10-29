@@ -45,7 +45,7 @@ class OptionsSubState extends MusicBeatSubState
 		"gameplay" => [
 			"Ghost Tapping",
 			"Downscroll",
-			"Middlescroll",
+			//"Middlescroll",
             #if desktop
             "Framerate Cap",
             #end

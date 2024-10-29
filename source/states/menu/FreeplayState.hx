@@ -58,7 +58,7 @@ class FreeplayState extends MusicBeatState
 		DiscordIO.changePresence("Freeplay - Choosin' a track");
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menu/backgrounds/menuDesat'));
-		bg.scale.set(1.2,1.2); bg.updateHitbox();
+		bg.scale.set(1,1); bg.updateHitbox();
 		bg.screenCenter();
 		add(bg);
 		

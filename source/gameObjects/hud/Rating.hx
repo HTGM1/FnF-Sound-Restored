@@ -221,15 +221,15 @@ class NumberFNF extends FlxSpriteGroup
 			switch(assetModifier)
 			{
 				default:
-					num.scale.set(0.7,0.7);
+					num.scale.set(0.6,0.6);
 				case "pixel":
 					num.antialiasing = false;
 					num.isPixelSprite = true;
-					num.scale.set(5,5);
+					num.scale.set(4,4);
 			}
 			if(SaveData.data.get('Ratings on HUD')) {
-				num.scale.x *= 0.75;
-				num.scale.y *= 0.75;
+				num.scale.x *= 0.65;
+				num.scale.y *= 0.65;
 			}
 			num.updateHitbox();
 		}
