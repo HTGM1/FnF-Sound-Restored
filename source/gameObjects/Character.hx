@@ -38,6 +38,9 @@ class Character extends FlxAnimate
 	public var ratingsOffset:FlxPoint = new FlxPoint();
 	private var scaleOffset:FlxPoint = new FlxPoint();
 
+	// you're probably gonna use sparrow by default?
+	var spriteType:SpriteType = SPARROW;
+
 	public function new(curChar:String = "bf", isPlayer:Bool = false, onEditor:Bool = false)
 	{
 		super(0,0,false);
@@ -52,32 +55,6 @@ class Character extends FlxAnimate
 		// what
 		switch(curChar)
 		{
-			case "zero":
-				doidoChar.spritesheet += 'zero/zero';
-				doidoChar.anims = [
-					["idle", 	 'idle', 24, false],
-					['intro', 	'intro', 24, false],
-
-					["singLEFT", 'left', 24, false],
-					["singDOWN", 'down', 24, false],
-					["singUP",   'up', 	 24, false],
-					["singRIGHT",'right',24, false],
-				];
-				antialiasing = false;
-				scale.set(12,12);
-			case "gemamugen":
-				doidoChar.spritesheet += 'gemamugen/gemamugen';
-				doidoChar.anims = [
-					["idle", 	 'idle', 24, true],
-					['idle-alt', 'chacharealsmooth', 24, true],
-
-					["singLEFT", 'left', 24, false],
-					["singDOWN", 'down', 24, false],
-					["singUP",   'up', 	 24, false],
-					["singRIGHT",'right',24, false],
-				];
-				scale.set(2,2);
-			
 			case "senpai" | "senpai-angry":
 				doidoChar.spritesheet = 'characters/senpai/senpai';
 
@@ -170,57 +147,44 @@ class Character extends FlxAnimate
 				quickDancer = true;
 				flipX = isPlayer;
 			
-			case 'luano-day'|'luano-night':
-				var pref:String = (curChar == 'luano-night') ? 'night ' : '';
-				doidoChar.spritesheet += 'luano/luano';
-				doidoChar.anims = [
-					['idle', 		'${pref}idle', 24, false],
-					['singLEFT', 	'${pref}left', 24, false],
-					['singDOWN', 	'${pref}down', 24, false],
-					['singUP', 		'${pref}up',   24, false],
-					['singRIGHT', 	'${pref}right',24, false],
-					['jump', 		'${pref}jump', 24, false],
-				];
-
-				holdLoop = 0;
-			
 			case 'spooky'|'spooky-player':
-				var leftRight:Array<String> = ['singLEFT','singRIGHT'];
-				if(curChar == 'spooky-player')
-					leftRight.reverse();
-
 				doidoChar.spritesheet += 'spooky/SpookyKids';
 				doidoChar.anims = [
 					['danceLeft',	'Idle', 12, false, [0,2,4,8]],
 					['danceRight',	'Idle', 12, false, [10,12,14,16]],
 
-					['${leftRight[0]}',	'SingLEFT', 24, false],
+					['singLEFT',	'SingLEFT', 24, false],
 					['singDOWN', 		'SingDOWN', 24, false],
 					['singUP', 			'SingUP',   24, false],
-					['${leftRight[1]}',	'SingRIGHT',24, false],
+					['singRIGHT',	'SingRIGHT',24, false],
 				];
 				
 				idleAnims = ["danceLeft", "danceRight"];
 				quickDancer = true;
+
+				if(curChar == 'spooky-player')
+					invertDirections(X);
 			
 			case "pico":
-				doidoChar.spritesheet += 'pico/Pico_FNF_assetss';
+				doidoChar.spritesheet += 'pico/Pico_Basic';
+				doidoChar.extrasheets = ['characters/pico/Pico_Playable'];
+
 				doidoChar.anims = [
 					['idle',		'Pico Idle Dance', 24, false],
 					['singRIGHT',	'Pico NOTE LEFT0', 24, false],
 					['singDOWN', 	'Pico Down Note0', 24, false],
 					['singUP', 		'pico Up note0',   24, false],
 					['singLEFT',	'Pico Note Right0',24, false],
-					// playable pico support soon maybe
-					['singRIGHTmiss',	'Pico NOTE LEFT miss', 24, false],
+
+					['singRIGHTmiss',	'Pico Left Note MISS', 24, false],
 					['singDOWNmiss',	'Pico Down Note MISS', 24, false],
-					['singUPmiss', 		'pico Up note miss',   24, false],
-					['singLEFTmiss',	'Pico Note Right Miss',24, false],
+					['singUPmiss', 		'Pico Up Note MISS',   24, false],
+					['singLEFTmiss',	'Pico Right Note MISS',24, false],
 				];
 				flipX = true;
 
 			case "gf":
-				isAnimateAtlas = true;
+				spriteType = ATLAS;
 				doidoChar.spritesheet += 'gf/gf-spritemap';
 				doidoChar.anims = [
 					['sad',			'gf sad',			24, false, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]],
@@ -245,17 +209,18 @@ class Character extends FlxAnimate
 				];
 
 			case "dad":
-				doidoChar.spritesheet += 'dad/DADDY_DEAREST';
+				spriteType = ATLAS;
+				doidoChar.spritesheet += 'dad';
 				doidoChar.anims = [
 					['idle', 		'Dad idle dance', 		24, false],
-					['singUP', 		'Dad Sing Note UP', 	24, false],
-					['singRIGHT', 	'Dad Sing Note RIGHT', 	24, false],
+					['singUP', 		'Dad Sing note UP', 	24, false],
+					['singLEFT', 	'dad sing note right', 	24, false],
 					['singDOWN', 	'Dad Sing Note DOWN', 	24, false],
-					['singLEFT', 	'Dad Sing Note LEFT', 	24, false],
+					['singRIGHT', 	'Dad Sing Note LEFT', 	24, false],
 
 					['idle-loop', 		'Dad idle dance', 		24, true, [11,12,13,14]],
-					['singUP-loop', 	'Dad Sing Note UP', 	24, true, [3,4,5,6]],
-					['singRIGHT-loop',	'Dad Sing Note RIGHT', 	24, true, [3,4,5,6]],
+					['singUP-loop', 	'Dad Sing note UP', 	24, true, [3,4,5,6]],
+					['singLEFT-loop',	'Dad Sing note right', 	24, true, [3,4,5,6]],
 					['singLEFT-loop', 	'Dad Sing Note LEFT', 	24, true, [3,4,5,6]],
 				];
 			
@@ -284,7 +249,7 @@ class Character extends FlxAnimate
 				}
 				else if(curChar == "face")
 				{
-					isAnimateAtlas = true;
+					spriteType = ATLAS;
 					doidoChar.spritesheet += 'face';
 					doidoChar.anims = [
 						['idle', 			'idle-alive', 		24, false],
@@ -315,12 +280,20 @@ class Character extends FlxAnimate
 				flipX = true;
 		}
 
-		if(!isAnimateAtlas)
+		if(spriteType != ATLAS)
 		{
-			if(Paths.fileExists('images/${doidoChar.spritesheet}.txt'))
+			if(Paths.fileExists('images/${doidoChar.spritesheet}.txt')) {
 				frames = Paths.getPackerAtlas(doidoChar.spritesheet);
-			else if(Paths.fileExists('images/${doidoChar.spritesheet}.json'))
+				spriteType = PACKER;
+			}
+			else if(Paths.fileExists('images/${doidoChar.spritesheet}.json')) {
 				frames = Paths.getAsepriteAtlas(doidoChar.spritesheet);
+				spriteType = ASEPRITE;
+			}
+			else if(doidoChar.extrasheets != null) {
+				frames = Paths.getMultiSparrowAtlas(doidoChar.spritesheet, doidoChar.extrasheets);
+				spriteType = MULTISPARROW;
+			}
 			else
 				frames = Paths.getSparrowAtlas(doidoChar.spritesheet);
 
@@ -335,6 +308,9 @@ class Character extends FlxAnimate
 		}
 		else
 		{
+			// :shushing_face:
+			isAnimateAtlas = true;
+
 			loadAtlas(Paths.getPath('images/${doidoChar.spritesheet}'));
 			showPivot = false;
 			for(i in 0...doidoChar.anims.length)
@@ -459,7 +435,7 @@ class Character extends FlxAnimate
 		if(!animExists(animName)) return;
 		
 		curAnimName = animName;
-		if(!isAnimateAtlas)
+		if(spriteType != ATLAS)
 			animation.play(animName, forced, reversed, frame);
 		else
 			anim.play(animName, forced, reversed, frame);
@@ -479,7 +455,7 @@ class Character extends FlxAnimate
 
 	public function animExists(animName:String):Bool
 	{
-		if(!isAnimateAtlas)
+		if(spriteType != ATLAS)
 			return animation.getByName(animName) != null;
 		else
 			return anim.getByName(animName) != null;
@@ -487,7 +463,7 @@ class Character extends FlxAnimate
 
 	public function curAnimFrame():Int
 	{
-		if(!isAnimateAtlas)
+		if(spriteType != ATLAS)
 			return animation.curAnim.curFrame;
 		else
 			return anim.curSymbol.curFrame;
@@ -495,7 +471,7 @@ class Character extends FlxAnimate
 
 	public function curAnimFinished():Bool
 	{
-		if(!isAnimateAtlas)
+		if(spriteType != ATLAS)
 			return animation.curAnim.finished;
 		else
 			return anim.finished;
