@@ -1,8 +1,9 @@
-# FNF: Sound Restored (EDGE Branch)
+# FNF: Sound Restored (RC Branch)
 
 ## Branch Info
 
-EDGE is the bleeding edge Branch, changes are done almost as they are made, meaning alot of bugs and issues if you try to compile from these commits, as a example if im testing a stage the default stage may have changed and make week 1 a diffrent stage type thing
+RC stands for Release Candidate, this is where the end of the development cycle is for most revisions end up, the point of these are to polish up for a release mainline release build
+- Current RC: SR v0.1.0
 
 ### everything involed with this branch is subjected to change, meaning the way some songs are EQed are not final as im always taking notes and feedback with playtesters!
 

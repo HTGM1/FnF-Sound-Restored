@@ -33,8 +33,6 @@ class Stage extends FlxGroup
 		{
 			default: ["stage"];
 			
-			case "dadbattle-nm": ["stageErect"];
-			
 			case "senpai"|"roses": 	["school"];
 			case "thorns": 			["school-evil"];
 			
@@ -69,6 +67,8 @@ class Stage extends FlxGroup
 		switch(curStage)
 		{
 			default:
+				bfPos.x += -150;
+				bfPos.y += -400;
 				this.curStage = "stage";
 				PlayState.defaultCamZoom = 0.9;
 				
@@ -98,146 +98,6 @@ class Stage extends FlxGroup
 				halloweenBG.animation.play('idle');
 				halloweenBG.antialiasing = true;
 				add(halloweenBG);
-
-			case "philly":
-
-			var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.image('backgrounds/philly/sky'));
-			var phillyCityLights:FlxSprite;
-			var phillyTrain:FlxSprite;
-
-
-
-
-
-				bg.scrollFactor.set(0.1, 0.1);
-				add(bg);
-
-				var city:FlxSprite = new FlxSprite(-10).loadGraphic(Paths.image('backgrounds/philly/city'));
-				city.scrollFactor.set(0.3, 0.3);
-				city.setGraphicSize(Std.int(city.width * 0.85));
-				city.updateHitbox();
-				add(city);
-
-
-				for (i in 0...5)
-				{
-					var light:FlxSprite = new FlxSprite(city.x).loadGraphic(Paths.image('backgrounds/philly/win' + i));
-					light.scrollFactor.set(0.3, 0.3);
-					light.visible = false;
-					light.setGraphicSize(Std.int(light.width * 0.85));
-					light.updateHitbox();
-					light.antialiasing = true;
-					add(light);
-				}
-
-				var streetBehind:FlxSprite = new FlxSprite(-40, 50).loadGraphic(Paths.image('backgrounds/philly/behindTrain'));
-				add(streetBehind);
-
-				phillyTrain = new FlxSprite(2000, 360).loadGraphic(Paths.image('backgrounds/philly/train'));
-				add(phillyTrain);
-
-				// var cityLights:FlxSprite = new FlxSprite().loadGraphic(AssetPaths.win0.png);
-
-				var street:FlxSprite = new FlxSprite(-40, streetBehind.y).loadGraphic(Paths.image('backgrounds/philly/street'));
-				add(street);
-
-			case "school":
-				bfPos.x -= 70;
-				bfPos.y += 100;
-				dadPos.y += 100;
-				dadPos.x += 50;
-				gfPos.x += 20;
-				gfPos.y += 100;
-				
-				var bgSky = new FlxSprite().loadGraphic(Paths.image('backgrounds/school/weebSky'));
-				bgSky.scrollFactor.set(0.1, 0.1);
-				add(bgSky);
-				
-				var bgSchool:FlxSprite = new FlxSprite(-200, 0).loadGraphic(Paths.image('backgrounds/school/weebSchool'));
-				bgSchool.scrollFactor.set(0.6, 0.90);
-				add(bgSchool);
-				
-				var bgStreet:FlxSprite = new FlxSprite(-200).loadGraphic(Paths.image('backgrounds/school/weebStreet'));
-				bgStreet.scrollFactor.set(0.95, 0.95);
-				add(bgStreet);
-				
-				var fgTrees:FlxSprite = new FlxSprite(-200 + 170, 130).loadGraphic(Paths.image('backgrounds/school/weebTreesBack'));
-				fgTrees.scrollFactor.set(0.9, 0.9);
-				add(fgTrees);
-				
-				var bgTrees:FlxSprite = new FlxSprite(-200 - 380, -1100);
-				bgTrees.frames = Paths.getPackerAtlas('backgrounds/school/weebTrees');
-				bgTrees.animation.add('treeLoop', CoolUtil.intArray(18), 12);
-				bgTrees.animation.play('treeLoop');
-				bgTrees.scrollFactor.set(0.85, 0.85);
-				add(bgTrees);
-				
-				var treeLeaves:FlxSprite = new FlxSprite(-200, -40);
-				treeLeaves.frames = Paths.getSparrowAtlas('backgrounds/school/petals');
-				treeLeaves.animation.addByPrefix('leaves', 'PETALS ALL', 24, true);
-				treeLeaves.animation.play('leaves');
-				treeLeaves.scrollFactor.set(0.85, 0.85);
-				add(treeLeaves);
-				
-				var bgGirls = new FlxSprite(-100, 175); // 190
-				bgGirls.frames = Paths.getSparrowAtlas('backgrounds/school/bgFreaks');
-				bgGirls.scrollFactor.set(0.9, 0.9);
-				
-				var girlAnim:String = "girls group";
-				if(PlayState.SONG.song == 'roses')
-					girlAnim = 'fangirls dissuaded';
-				
-				bgGirls.animation.addByIndices('danceLeft',  'BG $girlAnim', CoolUtil.intArray(14),		"", 24, false);
-				bgGirls.animation.addByIndices('danceRight', 'BG $girlAnim', CoolUtil.intArray(30, 15), "", 24, false);
-				bgGirls.animation.play('danceLeft');
-				bgGirls._stepHit = function(curStep:Int)
-				{
-					if(curStep % 4 == 0)
-					{
-						if(bgGirls.animation.curAnim.name == 'danceLeft')
-							bgGirls.animation.play('danceRight', true);
-						else
-							bgGirls.animation.play('danceLeft', true);
-					}
-				}
-				add(bgGirls);
-				
-				// easier to manage
-				for(rawItem in members)
-				{
-					if(Std.isOfType(rawItem, FlxSprite))
-					{
-						var item:FlxSprite = cast rawItem;
-						item.antialiasing = false;
-						item.isPixelSprite = true;
-						item.scale.set(7.5,7.5);
-						item.updateHitbox();
-						item.x -= 170;
-						item.y -= 145;
-					}
-				}
-				
-			case "school-evil":
-				bfPos.x -= 70;
-				dadPos.x += 50;
-				gfPos.x += 20;
-				gfPos.y += 50;
-				
-				var bg:FlxSprite = new FlxSprite(400, 100);
-				bg.frames = Paths.getSparrowAtlas('backgrounds/school/animatedEvilSchool');
-				bg.animation.addByPrefix('idle', 'background 2', 24);
-				bg.animation.play('idle');
-				bg.scrollFactor.set(0.8, 0.9);
-				bg.antialiasing = false;
-				bg.scale.set(6,6);
-				add(bg);
-
-
-			case "stageErect":
-				var bg = new FlxSprite(-600, -600).loadGraphic(Paths.image('backgrounds/stage/erect/bg'));
-				bg.scrollFactor.set(0.6, 0);
-				bg.scale.set(0.5, 0.5);
-				add(bg);
 		}
 	}
 

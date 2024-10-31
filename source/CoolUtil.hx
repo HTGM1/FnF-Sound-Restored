@@ -32,13 +32,8 @@ class CoolUtil
 			"gf",
 			"bf",
 			"bf-dead",
-			"bf-pixel",
-			"bf-pixel-dead",
 			"gf-pixel",
 			"spooky",
-			"senpai",
-			"senpai-angry",
-			"spirit",
 		];
 	}
 	

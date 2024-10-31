@@ -62,24 +62,7 @@ class SongData
 			weekFile: 'week1',
 			weekName: 'daddy dearest',
 			chars: ['dad', 'bf', 'gf'],
-			diffs: ['easy', 'normal', 'hard', 'erect', 'nightmare'],
-		},
-		{
-			songs: [
-				['senpai', 	'senpai'],
-				['roses', 	'senpai'],
-				['thorns', 	'spirit'],
-			],
-			weekFile: 'week6',
-			weekName: 'hating simulator (ft. moawling)',
-			chars: ['senpai', 'bf', 'gf'],
-			diffs: ['easy', 'normal', 'hard', 'erect', 'nightmare'],
-		},
-		{
-			songs: [
-				["-debug", 			"bf-pixel"],
-			],
-			freeplayOnly: true,
+			diffs: ['easy', 'normal', 'hard'],
 		},
 	];
 	inline public static function getWeek(index:Int):FunkyWeek
