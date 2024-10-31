@@ -231,17 +231,20 @@ class Character extends FlxAnimate
 
 				if(curChar == "bf")
 				{
-					doidoChar.spritesheet += 'bf/BOYFRIEND';
+					spriteType = ATLAS;
+					doidoChar.spritesheet += 'bf';
 					doidoChar.anims = [
 						['idle', 			'BF idle dance', 		24, false],
 						['singUP', 			'BF NOTE UP0', 			24, false],
 						['singLEFT', 		'BF NOTE LEFT0', 		24, false],
 						['singRIGHT', 		'BF NOTE RIGHT0', 		24, false],
 						['singDOWN', 		'BF NOTE DOWN0', 		24, false],
+
 						['singUPmiss', 		'BF NOTE UP MISS', 		24, false],
 						['singLEFTmiss', 	'BF NOTE LEFT MISS', 	24, false],
 						['singRIGHTmiss', 	'BF NOTE RIGHT MISS', 	24, false],
 						['singDOWNmiss', 	'BF NOTE DOWN MISS', 	24, false],
+
 						['hey', 			'BF HEY', 				24, false],
 						['scared', 			'BF idle shaking', 		24, true],
 					];
@@ -269,10 +272,11 @@ class Character extends FlxAnimate
 				this.curChar = curChar;
 			
 			case "bf-dead":
-				doidoChar.spritesheet += 'bf/BOYFRIEND';
+				spriteType = ATLAS;
+				doidoChar.spritesheet += 'bf';
 				doidoChar.anims = [
-					['firstDeath', 		"BF dies", 			24, false],
-					['deathLoop', 		"BF Dead Loop", 	24, true],
+					['firstDeath', 		"DBFBF dies", 			24, false],
+					['deathLoop', 		"DBFBF Dead Loop", 	24, true],
 					['deathConfirm', 	"BF Dead confirm", 	24, false],
 				];
 

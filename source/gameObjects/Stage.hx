@@ -69,6 +69,8 @@ class Stage extends FlxGroup
 		switch(curStage)
 		{
 			default:
+				bfPos.x += -150;
+				bfPos.y += -400;
 				this.curStage = "stage";
 				PlayState.defaultCamZoom = 0.9;
 				
