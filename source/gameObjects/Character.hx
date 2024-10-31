@@ -220,8 +220,9 @@ class Character extends FlxAnimate
 
 					['idle-loop', 		'Dad idle dance', 		24, true, [11,12,13,14]],
 					['singUP-loop', 	'Dad Sing note UP', 	24, true, [3,4,5,6]],
-					['singLEFT-loop',	'Dad Sing note right', 	24, true, [3,4,5,6]],
-					['singLEFT-loop', 	'Dad Sing Note LEFT', 	24, true, [3,4,5,6]],
+					['singLEFT-loop',	'dad sing note right', 	24, true, [3,4,5,6]],
+					['singRIGHT-loop', 	'Dad Sing Note LEFT', 	24, true, [3,4,5,6]],
+					['singDOWN-loop', 	'Dad Sing Note DOWN', 	24, true, [3,4,5,6]],
 				];
 			
 			default: // case "bf"
