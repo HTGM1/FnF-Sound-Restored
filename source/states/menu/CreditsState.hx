@@ -1,7 +1,5 @@
 package states.menu;
 
-import data.Discord.DiscordIO;
-import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxObject;
 import flixel.group.FlxGroup;
@@ -9,15 +7,15 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
-import data.Highscore;
-import data.Highscore.ScoreData;
-import data.GameData.MusicBeatState;
-import data.SongData;
-import gameObjects.menu.AlphabetMenu;
-import gameObjects.hud.HealthIcon;
+import backend.game.GameData.MusicBeatState;
+import backend.song.Highscore;
+import backend.song.Highscore.ScoreData;
+import backend.song.SongData;
+import objects.menu.AlphabetMenu;
+import objects.hud.HealthIcon;
 import states.*;
-import subStates.DeleteScoreSubState;
 import states.editors.ChartingState;
+import subStates.menu.DeleteScoreSubState;
 
 using StringTools;
 
@@ -77,15 +75,12 @@ class CreditsState extends MusicBeatState
 		// :D
 		
 		// btw you dont need to credit everyone here on your mod, just credit doido engine as a whole and we're good
-		addCredit('DiogoTV', 			'diogotv', 	 0xFFC385FF, "Doido Engine's Owner and Main Coder", 				'https://bsky.app/profile/diogotv.bsky.social');
-		addCredit('teles', 				'teles', 	 0xFFFF95AC, "Doido Engine's Additional Coder",					'https://youtube.com/@telesfnf');
-		addCredit('GoldenFoxy',			'anna', 	 0xFFFFE100, "Main designer of Doido Engine's chart editor",		'https://bsky.app/profile/goldenfoxy.bsky.social');
-		addCredit('JulianoBeta', 		'juyko', 	 0xFF0BA5FF, "Composed Doido Engine's offset menu music",			'https://www.youtube.com/@prodjuyko');
-		addCredit('crowplexus',			'crowplexus',0xFF313538, "Creator of HScript Iris",							'https://github.com/crowplexus/hscript-iris');
-		addCredit('yoisabo',			'yoisabo',	 0xFF56EF19, "Chart Editor's Event Icons Artist",					'https://bsky.app/profile/yoisabo.bsky.social');
-		addCredit('doubleonikoo', 		'nikoo', 	 0xFF60458A, "is gonna make an actual logo for Doido Engine soon",	'https://bsky.app/profile/doubleonikoo.bsky.social');
-		addCredit('Github Contributors','github', 	 0xFFFFFFFF, 'Thank you\n${specialCoders}!!', 'https://github.com/DoidoTeam/FNF-Doido-Engine/graphs/contributors');
-		addCredit('Special Thanks', 	'heart', 	 0xFFC01B42, 'Thank you\n${specialPeople}!!', "https://youtu.be/rnr8Oo2RV_c");
+		addCredit('HunterTronGames&Music', 	'HTGM', 	 0xFFC385FF, "Main Director, Audio Designer, and Coder, reanimater, animation converter", 		'https://bsky.app/profile/htgm.bsky.social');
+		addCredit('Ava_LavCat', 			'LavCat', 	 0xFFC385FF, "PlayTester, Audio Feedback, Ideas, reanimateion/animation fixer", 				'https://github.com/AvaLavenderCat');
+		addCredit('Kaze_DT', 				'Kaze', 	 0xFFC385FF, "PlayTester, Audio Feedback", 														'https://bsky.app/profile/klonoadt.bsky.social');
+		addCredit('ACM240', 				'ACM240', 	 0xFFC385FF, "PlayTester, Audio Feedback", 														'https://linktr.ee/acm240');
+		addCredit('Doido Engine', 			'diogotv', 	 0xFFC385FF, "Engine used for making this remaster project", 									'https://github.com/DoidoTeam/FNF-Doido-Engine');
+		addCredit('FunkinCrew', 			'FunkinCrew',0xFFC385FF, "the Makers of FnF",		 														'https://github.com/FunkinCrew');
 		
 		for(i in 0...creditList.length)
 		{

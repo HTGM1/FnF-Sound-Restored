@@ -3,7 +3,7 @@
 
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="FNF: SoundRestored" file="FnFSR" main="Main" version="0.1.0RC" company="HTGM" />
+	<app title="FNF: SoundRestored" file="FnFSR" main="Main" version="0.1.0" company="HTGM" />
 	
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
@@ -45,23 +45,31 @@
 	<!-- RENAME UNDERSCORE FOLDERS -->
 	<section if="RENAME_UNDERSCORE">
 		<assets path="assets/images/characters/_offsets" 	rename="assets/images/characters/offsets"/>
-		<assets path="assets/images/notes/_other" 		rename="assets/images/notes/other"/>
+		<assets path="assets/images/notes/_other" 			rename="assets/images/notes/other"/>
 	</section>
+
+		<!-- OpenAL config -->
+	<section if="desktop">
+		<assets path="alsoft.txt" rename="alsoft.ini" 	type="text" if=	"windows"/>
+		<assets path="alsoft.txt" rename="alsoft.conf" 	type="text" unless="windows"/>
+	</section>
+
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
 	<haxelib name="flixel-ui" />
 
-	<haxelib name="flxanimate-doido"/>
-	<haxelib name="tjson"/>
-	<haxelib name="hxdiscord_rpc" if="DISCORD_RPC" />
+	<haxelib name="hscript" if="debug" /> <!--Used only for flixel's debugger!-->
 
 	<haxelib name="hscript-iris" />
 	<haxedef name="hscriptPos" />
 
-	<!--Used only for flixel's debugger!-->
-	<haxelib name="hscript" if="debug" />
+	<haxelib name="hxdiscord_rpc" if="DISCORD_RPC" />
+	
+	<!-- ______ Custom Doido Libraries ______ -->
+	<haxelib name="flxanimate-doido"/>
+	<haxelib name="tjson"/>
 
 	<!--In case you want to use nape with flixel-->
 	<!--<haxelib name="nape-haxe4" />-->

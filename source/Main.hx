@@ -1,11 +1,15 @@
 package;
 
-import data.*;
+import backend.game.*;
+import backend.system.FPSCounter;
 import flixel.FlxG;
 import flixel.FlxState;
-import openfl.display.Sprite;
-import data.FPSCounter;
 import flixel.input.keyboard.FlxKey;
+import openfl.display.Sprite;
+
+#if desktop
+import backend.system.ALSoftConfig;
+#end
 
 #if !html5
 import sys.FileSystem;

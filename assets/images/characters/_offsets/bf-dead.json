@@ -5,19 +5,19 @@
 	],
 	"animOffsets": [
 		[
-			"firstDeath",
-			-190,
-			657
+			"deathLoop",
+			-50,
+			888
 		],
 		[
 			"deathConfirm",
-			-190,
-			657
+			-50,
+			887
 		],
 		[
-			"deathLoop",
-			-190,
-			656
+			"firstDeath",
+			-51,
+			887
 		]
 	],
 	"ratingsOffset": [

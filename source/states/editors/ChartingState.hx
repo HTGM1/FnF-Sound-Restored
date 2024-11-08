@@ -25,23 +25,26 @@ import flixel.ui.FlxButton;
 import flixel.ui.FlxSpriteButton;
 import flixel.util.FlxColor;
 import flixel.tweens.FlxTween;
-import data.*;
-import data.SongData.EventSong;
-import data.SongData.SwagSong;
-import data.SongData.SwagSection;
-import data.GameData.MusicBeatState;
-import gameObjects.*;
-import gameObjects.hud.note.*;
-import gameObjects.hud.HealthIcon;
-import states.PlayState;
-import states.LoadingState;
-import subStates.editors.*;
 import haxe.Json;
 import lime.utils.Assets;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 import openfl.media.Sound;
 import openfl.net.FileReference;
+import backend.game.*;
+import backend.game.GameData.MusicBeatState;
+import backend.song.Conductor;
+import backend.song.SongData;
+import backend.song.SongData.EventSong;
+import backend.song.SongData.SwagSong;
+import backend.song.SongData.SwagSection;
+import backend.utils.CharacterUtil;
+import objects.*;
+import objects.hud.HealthIcon;
+import objects.note.*;
+import states.PlayState;
+import states.LoadingState;
+import subStates.editors.*;
 
 using StringTools;
 
@@ -424,8 +427,8 @@ class ChartingState extends MusicBeatState
 		stepperSpeed.name = 'song_speed';	
 		addTypingShit(stepperSpeed);
 
-		var characters = CoolUtil.charList();
-		
+		var characters = CharacterUtil.charList();
+
 		var player1Button:FlxUIButton = null;
 		player1Button = new FlxUIButton(140, 115, SONG.player1, function() {
 			openSubState(new ChooserSubState(characters, CHARACTER, function(pick:String) {

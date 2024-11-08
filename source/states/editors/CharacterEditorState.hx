@@ -1,30 +1,28 @@
 package states.editors;
 
-import subStates.editors.ChooserSubState;
-import flixel.addons.ui.FlxUIButton;
-import haxe.Json;
-import flixel.FlxG;
 import flixel.FlxCamera;
 import flixel.FlxObject;
 import flixel.FlxSprite;
-import flixel.group.FlxSpriteGroup;
-import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.math.FlxPoint;
-import flixel.text.FlxText;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.ui.FlxUI;
+import flixel.addons.ui.FlxUIButton;
 import flixel.addons.ui.FlxUICheckBox;
 import flixel.addons.ui.FlxUIDropDownMenu;
 import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.ui.FlxUITabMenu;
+import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.group.FlxSpriteGroup;
+import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
-import gameObjects.Character;
-import gameObjects.hud.Rating;
-import data.CharacterData;
-import data.GameData.MusicBeatState;
+import haxe.Json;
 import openfl.net.FileReference;
+import backend.game.GameData.MusicBeatState;
+import backend.utils.CharacterUtil;
+import objects.Character;
+import objects.hud.Rating;
 import states.*;
+import subStates.editors.ChooserSubState;
 
 class CharacterEditorState extends MusicBeatState
 {
@@ -197,7 +195,7 @@ class CharacterEditorState extends MusicBeatState
 		charsTab.name = "chars";
 		charsHud.addGroup(charsTab);
 
-		var charList = CoolUtil.charList();
+		var charList = CharacterUtil.charList();
 
 		var charButton = new FlxUIButton(10, 25, curChar, function() {
 			openSubState(new ChooserSubState(charList, CHARACTER, function(pick:String) {
@@ -586,8 +584,8 @@ class CharacterEditorState extends MusicBeatState
 
 	function saveOffsets()
 	{
-		var exportData = CharacterData.defaultOffsets();
-		
+		var exportData = CharacterUtil.defaultOffsets();
+
 		exportData.globalOffset = [char.globalOffset.x, char.globalOffset.y];
 		exportData.cameraOffset = [char.cameraOffset.x, char.cameraOffset.y];
 		exportData.ratingsOffset= [char.ratingsOffset.x, char.ratingsOffset.y];

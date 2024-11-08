@@ -4,8 +4,12 @@ import crowplexus.iris.Iris;
 import crowplexus.hscript.Parser;
 import crowplexus.hscript.Printer;
 import crowplexus.hscript.Bytes;
-import data.Discord.DiscordIO;
-import data.SongData.EventSong;
+import backend.game.GameData.MusicBeatState;
+import backend.utils.DialogueUtil;
+import backend.song.*;
+import backend.song.SongData.EventSong;
+import backend.song.SongData.SwagSong;
+import backend.song.SongData.SwagSection;
 import flixel.FlxG;
 import flixel.FlxBasic;
 import flixel.FlxCamera;
@@ -23,16 +27,10 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 import flixel.util.FlxTimer;
-import data.*;
-import data.DialogueUtil;
-import data.SongData.SwagSong;
-import data.SongData.SwagSection;
-import data.chart.*;
-import data.GameData.MusicBeatState;
-import gameObjects.*;
-import gameObjects.hud.*;
-import gameObjects.hud.note.*;
-import gameObjects.dialogue.Dialogue;
+import objects.*;
+import objects.hud.*;
+import objects.note.*;
+import objects.dialogue.Dialogue;
 import shaders.*;
 import states.editors.*;
 import states.menu.*;
@@ -287,13 +285,23 @@ class PlayState extends MusicBeatState
 		add(strumlines);
 
 		ghostTapping = SaveData.data.get('Ghost Tapping');
+
 		var downscroll:Bool = SaveData.data.get("Downscroll");
-		
-		dadStrumline = new Strumline(0, dad, downscroll, false, true, assetModifier);
+		var noteskins:Array<String> = [];
+
+		for(character in [dad.curChar, boyfriend.curChar]) {
+			switch(character) {
+				case 'bf-pixel':
+					noteskins.push("pixel");
+				default:
+					noteskins.push(assetModifier);
+			}
+		}
+		dadStrumline = new Strumline(0, dad, downscroll, false, true, noteskins[0]);
 		dadStrumline.ID = 0;
 		strumlines.add(dadStrumline);
 		
-		bfStrumline = new Strumline(0, boyfriend, downscroll, true, false, assetModifier);
+		bfStrumline = new Strumline(0, boyfriend, downscroll, true, false, noteskins[1]);
 		bfStrumline.ID = 1;
 		strumlines.add(bfStrumline);
 		
@@ -381,7 +389,9 @@ class PlayState extends MusicBeatState
 				if(note.strumlineID == strumline.ID)
 					thisStrumline = strumline;
 			
-			var noteAssetMod:String = assetModifier;
+			var noteAssetMod:String = noteskins[1];
+			if(thisStrumline == dadStrumline)
+				noteAssetMod = noteskins[0];
 			
 			// the funny
 			/*noteAssetMod = ["base", "pixel"][FlxG.random.int(0, 1)];
@@ -424,8 +434,8 @@ class PlayState extends MusicBeatState
 				case 'senpai'|'roses':
 					startDialogue(DialogueUtil.loadDialogue(SONG.song));
 					
-					if(SONG.song == 'roses')
-						FlxG.sound.play(Paths.sound('dialogue/senpai/roses_sfx'));
+					//if(SONG.song == 'roses')
+						//FlxG.sound.play(Paths.sound('dialogue/senpai/roses_sfx'));
 				
 				case 'thorns':
 					CoolUtil.playMusic('dialogue/lunchbox-scary');
@@ -629,7 +639,7 @@ class PlayState extends MusicBeatState
 
 	override function closeSubState()
 	{
-		activateTimers(true);
+		CoolUtil.activateTimers(true);
 		super.closeSubState();
 		if(startedSong)
 		{
@@ -641,21 +651,6 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	// for pausing timers and tweens
-	function activateTimers(apple:Bool = true)
-	{
-		FlxTimer.globalManager.forEach(function(tmr:FlxTimer)
-		{
-			if(!tmr.finished)
-				tmr.active = apple;
-		});
-
-		FlxTween.globalManager.forEach(function(twn:FlxTween)
-		{
-			if(!twn.finished)
-				twn.active = apple;
-		});
-	}
 
 	// check if you actually hit it
 	public function checkNoteHit(note:Note, strumline:Strumline)
@@ -792,7 +787,7 @@ class PlayState extends MusicBeatState
 		
 		if(note.noteType != "no animation" && thisChar.specialAnim != 2)
 		{
-			if(thisChar.curAnimFrame() == thisChar.holdLoop
+			if(thisChar.curAnimFrame == thisChar.holdLoop			
 			|| SaveData.data.get("Static Hold Anim"))
 			{
 				/*thisChar.specialAnim = 0;
@@ -1723,7 +1718,7 @@ class PlayState extends MusicBeatState
 		if(!startedCountdown || endedSong || paused || isDead) return;
 		
 		paused = true;
-		activateTimers(false);
+		CoolUtil.activateTimers(false);
 		discordUpdateTime = 0.0;
 		openSubState(new PauseSubState());
 	}
@@ -1737,7 +1732,7 @@ class PlayState extends MusicBeatState
 		health = 0;
 		isDead = true;
 		blueballed++;
-		activateTimers(false);
+		CoolUtil.activateTimers(false);
 		persistentDraw = false;
 		openSubState(new GameOverSubState(bfStrumline.character));
 	}

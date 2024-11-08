@@ -1,19 +1,21 @@
 package states;
 
+import backend.game.GameData.MusicBeatState;
+import backend.utils.DialogueUtil;
+import backend.song.ChartLoader;
+import backend.song.SongData.SwagSong;
+import flxanimate.animate.FlxAnim;
+import flxanimate.FlxAnimate;
 import flixel.FlxG;
 import flixel.FlxBasic;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
-import data.ChartLoader;
-import data.GameData.MusicBeatState;
-import data.SongData.SwagSong;
-import data.DialogueUtil;
-import gameObjects.*;
-import gameObjects.hud.*;
-import gameObjects.hud.note.*;
-import gameObjects.dialogue.Dialogue;
+import objects.*;
+import objects.hud.*;
+import objects.note.*;
+import objects.dialogue.Dialogue;
 
 #if PRELOAD_SONG
 import sys.thread.Mutex;
@@ -37,6 +39,7 @@ class LoadingState extends MusicBeatState
 	
 	var loadBar:FlxSprite;
 	var loadPercent:Float = 0;
+	var Loading:FlxAnimate;
 	
 	function addBehind(item:FlxBasic)
 	{
@@ -55,11 +58,23 @@ class LoadingState extends MusicBeatState
 		add(color);
 		
 		// loading image
-		bg = new FlxSprite().loadGraphic(Paths.image('funkay'));
+		bg = new FlxSprite().loadGraphic(Paths.image('Loading/BG/funkay'));
 		bg.scale.set(0.8,0.8);
 		bg.updateHitbox();
 		bg.screenCenter();
 		add(bg);
+
+		var antialiasing = FlxSprite.defaultAntialiasing;
+		
+		Loading = new FlxAnimate(550, 920);
+		Loading.isAnimateAtlas = true;
+		Loading.loadAtlas(Paths.getPath('images/Loading/LOADING'));
+		Loading.showPivot = false;
+		Loading.anim.addBySymbol('LOADING', 'LOADING', 60, true);
+		Loading.anim.play('LOADING');
+		Loading.scale.set(.60, .60);
+		Loading.antialiasing = false;
+		add(Loading);
 		
 		loadBar = new FlxSprite().makeGraphic(FlxG.width - 16, 20 - 8, 0xFFFF16D2);
 		loadBar.y = FlxG.height - loadBar.height - 8;
