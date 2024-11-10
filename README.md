@@ -1,8 +1,14 @@
-# FNF: Sound Restored (EDGE Branch)
+# FNF: Sound Restored (hxVLCTest Branch)
 
 ## Branch Info
 
-EDGE is the bleeding edge Branch, changes are done almost as they are made, meaning alot of bugs and issues if you try to compile from these commits, as a example if im testing a stage the default stage may have changed and make week 1 a diffrent stage type thing
+do not use this one, this was made as a test, requires hxVLC to work
+
+only state that has video is a new state called IntroState, its made specificly for splash intros
+
+autobuild hasnt been setup for this so it does compile, just that it wont comiple here, ill implament stuff for it if i do end up using this for auto builds to work
+
+theroiticly if done properly there can be full video support on Doido Engine, but im not that kind of guy, i just did this as a proof of concept for splashscreens
 
 ### everything involed with this branch is subjected to change, meaning the way some songs are EQed are not final as im always taking notes and feedback with playtesters!
 

@@ -10,6 +10,7 @@ class Init extends MusicBeatState
 {
 	override function create()
 	{
+
 		super.create();
 		SaveData.init();
 		DiscordIO.initialize();
@@ -37,7 +38,7 @@ class Init extends MusicBeatState
 		if(FlxG.save.data.beenWarned == null)
 			Main.switchState(new FlashingWarningState());
 		else
-			Main.switchState(new TitleState());
+			Main.switchState(new IntroState());
 		#end
 	}
 }

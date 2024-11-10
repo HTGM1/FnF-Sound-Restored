@@ -66,6 +66,8 @@
 	<haxedef name="hscriptPos" />
 
 	<haxelib name="hxdiscord_rpc" if="DISCORD_RPC" />
+
+	<haxelib name="hxvlc"/>
 	
 	<!-- ______ Custom Doido Libraries ______ -->
 	<haxelib name="flxanimate-doido"/>
