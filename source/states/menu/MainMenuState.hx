@@ -66,7 +66,7 @@ class MainMenuState extends MusicBeatState
 		grpOptions = new FlxTypedGroup<FlxSprite>();
 		add(grpOptions);
 		
-		var optionSize:Float = 1.2;
+		var optionSize:Float = 1.1;
 		if(optionShit.length > 4)
 		{
 			for(i in 0...(optionShit.length - 4))

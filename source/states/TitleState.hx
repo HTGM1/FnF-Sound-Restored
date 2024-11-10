@@ -68,8 +68,8 @@ class TitleState extends MusicBeatState
 		gf.anim.addBySymbol('danceLeft', 'DanceLeft', 24, false);
 		gf.anim.addBySymbol('danceRight', 'Dance Right', 24, false);
 		gf.x = FlxG.width - gf.width - 200;
-		gf.y = FlxG.height - gf.height - 300;
-		gf.scale.set(1.25,1.25);
+		gf.y = FlxG.height - gf.height - 250;
+		gf.scale.set(1.15,1.15);
 		add(gf);
 		gf.anim.play('danceLeft');
 		
@@ -98,7 +98,7 @@ class TitleState extends MusicBeatState
 
 		HTGMLogo = new FlxAnimate();
 		HTGMLogo.screenCenter();
-		HTGMLogo.y = FlxG.height - ngSpr.height - 120;
+		HTGMLogo.y = FlxG.height - ngSpr.height - 0;
 		HTGMLogo.isAnimateAtlas = true;
 		HTGMLogo.loadAtlas(Paths.getPath('images/menu/title/HTGMLogo'));
 		HTGMLogo.showPivot = false;

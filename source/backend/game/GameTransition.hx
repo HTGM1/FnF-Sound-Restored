@@ -37,7 +37,7 @@ class GameTransition extends MusicBeatSubState
 		sprBlack.y = yPos[curY];
 		updateGradPos();
 		
-		FlxTween.tween(sprBlack, {y: yPos[curY + 1]}, fadeOut ? 0.6 : 0.8, {
+		FlxTween.tween(sprBlack, {y: yPos[curY + 1]}, fadeOut ? 0.4 : 0.6, {
 			onComplete: function(twn:FlxTween)
 			{
 				if(finishCallback != null)

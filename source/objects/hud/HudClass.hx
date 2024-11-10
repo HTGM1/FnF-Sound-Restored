@@ -89,9 +89,9 @@ class HudClass extends FlxGroup
 
 	public function updateHitbox(downscroll:Bool = false, middlescroll:Bool = false)
 	{
-		healthBar.bg.x = (downscroll ? 120 : 1000);
+		healthBar.bg.x = (downscroll ? 120 : 925);
 		healthBar.bg.y = (downscroll ? 70 : FlxG.height - healthBar.bg.height - 50);
-		infoTxt.x = (downscroll ? 130 : 1080);
+		infoTxt.x = (downscroll ? 130 : 955);
 		healthBar.updatePos();
 		
 		updateText();
@@ -101,8 +101,8 @@ class HudClass extends FlxGroup
 		badScoreTxt.y = healthBar.bg.y - badScoreTxt.height - 4;
 		
 		updateTimeTxt();
-		timeTxt.y = (downscroll ? 90 : 865);
-		timeTxt.x = (downscroll ? 280 : 1200);
+		timeTxt.y = (downscroll ? 90 : FlxG.height - healthBar.bg.height - 90);
+		timeTxt.x = (downscroll ? 280 : 1125);
 		badScoreTxt.x = (downscroll ? 1135 : 75);
 		botplayTxt.x = (middlescroll ? 500 : 1175);
 		botplayTxt.y = (downscroll ? 725 : 170);

@@ -66,7 +66,7 @@ class LoadingState extends MusicBeatState
 
 		var antialiasing = FlxSprite.defaultAntialiasing;
 		
-		Loading = new FlxAnimate(550, 920);
+		Loading = new FlxAnimate(520, 780);
 		Loading.isAnimateAtlas = true;
 		Loading.loadAtlas(Paths.getPath('images/Loading/LOADING'));
 		Loading.showPivot = false;
