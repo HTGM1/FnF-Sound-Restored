@@ -4,7 +4,7 @@
 
 do not use this one, this was made as a test, requires hxVLC to work
 
-only state that has video is a new state called IntroState, its made specificly for splash intros
+only state that has video is a new state called IntroState(borrowed the structure from Beta/FlashingWarningState), its made specificly for splash intros
 
 autobuild hasnt been setup for this so it does compile, just that it wont comiple here, ill implament stuff for it if i do end up using this for auto builds to work
 
