@@ -89,9 +89,11 @@ class HudClass extends FlxGroup
 
 	public function updateHitbox(downscroll:Bool = false, middlescroll:Bool = false)
 	{
-		healthBar.bg.x = (downscroll ? 120 : 925);
+		//there is problably a better way to set these up, for now this (should) fix most goofy stuff with desktop scale
+
+		healthBar.bg.x = (downscroll ? 120 : FlxG.width - healthBar.bg.width - 100);
 		healthBar.bg.y = (downscroll ? 70 : FlxG.height - healthBar.bg.height - 50);
-		infoTxt.x = (downscroll ? 130 : 955);
+		infoTxt.x = (downscroll ? 130 : FlxG.width - healthBar.bg.width - 60);
 		healthBar.updatePos();
 		
 		updateText();
@@ -102,10 +104,10 @@ class HudClass extends FlxGroup
 		
 		updateTimeTxt();
 		timeTxt.y = (downscroll ? 90 : FlxG.height - healthBar.bg.height - 90);
-		timeTxt.x = (downscroll ? 280 : 1125);
+		timeTxt.x = (downscroll ? 280 : FlxG.width - healthBar.bg.width + 100);
 		badScoreTxt.x = (downscroll ? 1135 : 75);
-		botplayTxt.x = (middlescroll ? 500 : 1175);
-		botplayTxt.y = (downscroll ? 725 : 170);
+		botplayTxt.x = (downscroll ? FlxG.width - healthBar.bg.width + 60 : FlxG.width - healthBar.bg.width + 60);
+		botplayTxt.y = (downscroll ? FlxG.height - healthBar.bg.height - 200 : FlxG.height - healthBar.bg.height - 650);
 	}
 	
 	public function setAlpha(hudAlpha:Float = 1, ?tweenTime:Float = 0, ?ease:String = "cubeout")

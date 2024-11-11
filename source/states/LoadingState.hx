@@ -66,7 +66,7 @@ class LoadingState extends MusicBeatState
 
 		var antialiasing = FlxSprite.defaultAntialiasing;
 		
-		Loading = new FlxAnimate(520, 780);
+		Loading = new FlxAnimate(0, 0);
 		Loading.isAnimateAtlas = true;
 		Loading.loadAtlas(Paths.getPath('images/Loading/LOADING'));
 		Loading.showPivot = false;
@@ -74,12 +74,15 @@ class LoadingState extends MusicBeatState
 		Loading.anim.play('LOADING');
 		Loading.scale.set(.60, .60);
 		Loading.antialiasing = false;
-		add(Loading);
 		
 		loadBar = new FlxSprite().makeGraphic(FlxG.width - 16, 20 - 8, 0xFFFF16D2);
 		loadBar.y = FlxG.height - loadBar.height - 8;
 		changeBarSize(0);
+
+		Loading.x = FlxG.width - loadBar.width - 1175;
+		Loading.y = FlxG.height - loadBar.height - 50;
 		add(loadBar);
+		add(Loading);
 
 		#if PRELOAD_SONG
 		mutex = new Mutex();
