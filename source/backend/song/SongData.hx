@@ -144,8 +144,8 @@ class SongData
 		if(!Paths.fileExists('songs/$jsonInput/$formatPath.json'))
 			formatPath = '$jsonInput';
 			
-		trace('Chart Loaded: ' + '$jsonInput/$formatPath');
-		
+		Logs.print('Chart Loaded: ' + '$jsonInput/$formatPath');
+
 		var daSong:SwagSong = cast Paths.json('songs/$jsonInput/$formatPath').song;
 		
 		// no need for SONG.song.toLowerCase() every time
@@ -191,7 +191,7 @@ class SongData
 			}
 		}
 		if(removed > 0)
-			trace('removed $removed duplicated notes');
+		Logs.print('removed $removed duplicated notes');
 		
 		return SONG;
 	}
@@ -206,11 +206,11 @@ class SongData
 		if(!checkFile())
 			formatPath = 'events';
 		if(!checkFile()) {
-			trace('No Events Loaded');
+			Logs.print('No Events Loaded');
 			return {songEvents: []};
 		}
 
-		trace('Events Loaded: ' + '$jsonInput/$formatPath');
+		Logs.print('Events Loaded: ' + '$jsonInput/$formatPath');
 
 		var daEvents:EventSong = cast Paths.json('songs/$jsonInput/$formatPath');
 		return daEvents;

@@ -1,11 +1,12 @@
 package;
 
-import backend.game.*;
-import backend.system.FPSCounter;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.input.keyboard.FlxKey;
+import haxe.Log;
 import openfl.display.Sprite;
+import backend.game.*;
+import backend.system.FPSCounter;
 
 #if desktop
 import backend.system.ALSoftConfig;
@@ -41,6 +42,14 @@ class Main extends Sprite
 		fpsCount = new FPSCounter(5, 3);
 		addChild(fpsCount);
 		#end
+
+		#if ENABLE_PRINTING
+		// Even though we don't actually use this, we convert regular traces into our custom print func
+		Log.trace = function(v:Dynamic, ?infos:Null<haxe.PosInfos>) {
+			Logs.print(Std.string(v), TRACE, true, true, true, infos);
+		};
+		#end
+
 
 		// shader coords fix
 		FlxG.signals.focusGained.add(function() {

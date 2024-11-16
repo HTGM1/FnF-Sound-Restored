@@ -24,7 +24,7 @@ class ChartLoader
 				if(event.stepTime == (daSection * 16))
 				{
 					noteCrochet = Conductor.calcStep(event.bpm);
-					trace('changed note bpm ${event.bpm}');
+					Logs.print('changed note bpm ${event.bpm}');
 				}
 			
 			for (songNotes in section.sectionNotes)
@@ -60,7 +60,12 @@ class ChartLoader
 					swagNote.holdLength = susLength;
 					swagNote.noteCrochet = noteCrochet;
 					
-					var holdLoop:Int = Math.floor(susLength / noteCrochet);
+					var rawLoop:Float = (susLength / noteCrochet);
+					var holdLoop:Int =(
+						(rawLoop - Math.floor(rawLoop) <= 0.5) ?
+						Math.floor(rawLoop) : Math.round(rawLoop)
+					);
+					
 					if (holdLoop <= 0)
 						holdLoop = 1;
 					
