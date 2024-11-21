@@ -68,8 +68,6 @@ class ChartingState extends MusicBeatState
 		['Change Character', 	'Value 1: Character to change (dad/gf/bf)\nValue 2: New Character (dad/pico/senpai-angry)'],
 		['Change Stage',		'Value 1: New Stage'],
 		['Play Animation',		'Value 1: Character (dad/gf/bf)\nValue 2: Animation to play\nValue 3: Override singing? (true/false)\n(if the character presses a note, does the animation stop?)'],
-		['Play HalloweenBG Anim',		'Value 2: Animation to play from haloweenBG'],
-
 
 		//PLAY
 		['Freeze Notes',		'Value 1: Freeze? (true/false)\nValue 2: Strumline? (dad/bf/both)'],
@@ -140,7 +138,7 @@ class ChartingState extends MusicBeatState
 	{
 		super.create();
 		CoolUtil.playMusic();
-		reloadAudio();
+		loadAudio();
 		Controls.setSoundKeys(true);
 		FlxG.mouse.visible = true;
 		PlayState.resetStatics();
@@ -388,7 +386,7 @@ class ChartingState extends MusicBeatState
 		});
 
 		var reloadSong = new FlxButton(200, 70, "Reload Audio", function() {
-			reloadAudio();
+			Main.resetState();
 		});
 
 		var reloadJson = new FlxButton(200, 90, "Reload JSON", function() {
@@ -428,7 +426,7 @@ class ChartingState extends MusicBeatState
 		addTypingShit(stepperSpeed);
 
 		var characters = CharacterUtil.charList();
-
+		
 		var player1Button:FlxUIButton = null;
 		player1Button = new FlxUIButton(140, 115, SONG.player1, function() {
 			openSubState(new ChooserSubState(characters, CHARACTER, function(pick:String) {
@@ -449,11 +447,11 @@ class ChartingState extends MusicBeatState
 		});
 		player2Button.resize(125, 20);
 		
-		var playTicksBf = new FlxUICheckBox(10, 210, null, null, 'BF Hitsounds', 100);
+		var playTicksBf = new FlxUICheckBox(10, 230, null, null, 'BF Hitsounds', 70);
 		playTicksBf.name = "bf_hitsounds";
 		playTicksBf.checked = playHitSounds[1];
 
-		var playTicksDad = new FlxUICheckBox(10, 230, null, null, 'Dad Hitsounds', 100);
+		var playTicksDad = new FlxUICheckBox(110, 230, null, null, 'Dad Hitsounds', 70);
 		playTicksDad.name = "dad_hitsounds";
 		playTicksDad.checked = playHitSounds[0];
 
@@ -486,14 +484,33 @@ class ChartingState extends MusicBeatState
 			if(!muteInst.checked)
 				songList[0].volume = stepperVolInst.value;
 		});
+		var muteVoiceLabel:String = 'Mute Voices';
+		if(songList.length > 2)
+			muteVoiceLabel += " (Player)";
+		
 		var muteVoices:FlxUICheckBox = null;
-		muteVoices = new FlxUICheckBox(10, 190, null, null, 'Mute Voices', 100, function() {
-			if(songList.length <= 1) return;
+		var muteVoicesEnemy:FlxUICheckBox = null;
+		if(SONG.needsVoices)
+		{
+			muteVoices = new FlxUICheckBox(10, 190, null, null, muteVoiceLabel, 100, function() {
+				if(songList.length <= 1) return;
+				
+				songList[1].volume = 0;
+				if(!muteVoices.checked)
+					songList[1].volume = stepperVolVoices.value;
+			});
+			// opponent mute
 			
-			songList[1].volume = 0;
-			if(!muteVoices.checked)
-				songList[1].volume = stepperVolVoices.value;
-		});
+			if(songList.length > 2) {
+				muteVoicesEnemy = new FlxUICheckBox(10, 210, null, null, 'Mute Voices (Opponent)', 100, function() {
+					if(songList.length <= 2) return;
+					
+					songList[2].volume = 0;
+					if(!muteVoicesEnemy.checked)
+						songList[2].volume = stepperVolVoices.value;
+				});
+			}
+		}
 
 		var clearEventsButton = new FlxButton(200, 210, "Clear Events", function() {
 			addAutoSave();
@@ -539,7 +556,8 @@ class ChartingState extends MusicBeatState
 		tabSong.add(stepperVolInst);
 		tabSong.add(stepperVolVoices);
 		tabSong.add(muteInst);
-		tabSong.add(muteVoices);
+		if(muteVoices != null) tabSong.add(muteVoices);
+		if(muteVoicesEnemy != null) tabSong.add(muteVoicesEnemy);
 		
 		tabSong.add(clearEventsButton);
 		tabSong.add(clearNotesButton);
@@ -884,7 +902,7 @@ class ChartingState extends MusicBeatState
 					updateCurEventData();
 				}
 			} catch(e) {
-				Logs.print('error clearing single slot: ' + e, ERROR);
+				Logs.print('error clearing all slots: ' + e, ERROR);
 			}
 		});
 		dangerButton(clearSlots);
@@ -1074,7 +1092,7 @@ class ChartingState extends MusicBeatState
 					case "bf_hitsounds":  playHitSounds[1] = check.checked;
 					case "check_voices": 
 						SONG.needsVoices = check.checked;
-						reloadAudio();
+						Main.resetState();
 					case "check_mustHit":
 						getSection(curSection).mustHitSection = check.checked;
 						reloadSection(curSection, false);
@@ -1219,8 +1237,8 @@ class ChartingState extends MusicBeatState
 
 	// basically goes for the shortest audio
 	public static var songLength:Float = 0;
-
-	function reloadAudio()
+	
+	function loadAudio()
 	{
 		songList = [];
 		songLength = 0;
@@ -1250,8 +1268,16 @@ class ChartingState extends MusicBeatState
 		if(SONG.needsVoices)
 		{
 			var vocals = new FlxSound();
-			vocals.loadEmbedded(Paths.vocals(daSong, songDiff), false, false);
+			vocals.loadEmbedded(Paths.vocals(daSong, songDiff, '-player'), false, false);
 			addMusic(vocals);
+
+			// opponent vocals
+			if(Paths.songPath('$daSong/Voices', songDiff, '-opp').endsWith('-opp'))
+			{
+				var vocalsOpp = new FlxSound();
+				vocalsOpp.loadEmbedded(Paths.vocals(daSong, songDiff, '-opp'), false, false);
+				addMusic(vocalsOpp);
+			}
 		}
 	}
 
@@ -1402,7 +1428,7 @@ class ChartingState extends MusicBeatState
 
 						for(i in 0...event[2].length)
 						{
-							//Logs.print(swagNote.noteType);
+							//Logs.print(event[2][i]);
 							eventNote.eventDataStuff.push(event[2][i][0]);
 							eventNote.reloadSprites();
 							for(sprite in eventNote.eventSprites)

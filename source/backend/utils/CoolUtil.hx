@@ -142,7 +142,7 @@ class CoolUtil
 	public static function stringToFloat(str:String, ?backup:Float = 0):Float
 	{
 		var num:Float = Std.parseFloat(str);
-		if(!Std.isOfType(num, Float))
+		if(!Std.isOfType(num, Float) || Math.isNaN(num))
 			num = backup;
 		return num;
 	}
@@ -210,6 +210,27 @@ class CoolUtil
 			case 'expoin': FlxEase.expoIn;
 			case 'expoinout': FlxEase.expoInOut;
 			case 'expoout': FlxEase.expoOut;
+
+
+			case 'smoothstepin': FlxEase.smoothStepIn;
+			case 'smoothstepout': FlxEase.smoothStepOut;
+			case 'smoothstepinout': FlxEase.smoothStepInOut;
+
+			case 'smootherstepin': FlxEase.smootherStepIn;
+			case 'smootherstepout': FlxEase.smootherStepOut;
+			case 'smootherstepinout': FlxEase.smootherStepInOut;
+
+			case 'bouncein': FlxEase.bounceIn;
+			case 'bounceinout': FlxEase.bounceInOut;
+			case 'bounceout': FlxEase.bounceOut;
+
+			case 'backin': FlxEase.backIn;
+			case 'backinout': FlxEase.backInOut;
+			case 'backout': FlxEase.backOut;
+
+			case 'elasticin': FlxEase.elasticIn;
+			case 'elasticinout': FlxEase.elasticInOut;
+			case 'elasticout': FlxEase.elasticOut;
 
 			default: FlxEase.linear;
 		}

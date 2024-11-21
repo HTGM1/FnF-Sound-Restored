@@ -129,6 +129,13 @@ class MainMenuState extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+
+		if(FlxG.keys.justPressed.V)
+		{
+			persistentUpdate = false;
+			openSubState(new subStates.VideoPlayerSubState("test"));
+		}
+
 		/*if(FlxG.keys.justPressed.R)
 		{
 			// crash handler test
