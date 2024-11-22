@@ -1,12 +1,16 @@
 package;
 
-import flixel.FlxG;
-import flixel.FlxState;
-import flixel.input.keyboard.FlxKey;
-import haxe.Log;
-import openfl.display.Sprite;
 import backend.game.*;
 import backend.system.FPSCounter;
+import flixel.FlxG;
+import flixel.FlxGame;
+import flixel.FlxState;
+import flixel.input.keyboard.FlxKey;
+import haxe.CallStack;
+import haxe.io.Path;
+import openfl.Lib;
+import openfl.display.Sprite;
+import openfl.events.UncaughtErrorEvent;
 
 #if desktop
 import backend.system.ALSoftConfig;
@@ -21,33 +25,27 @@ using StringTools;
 
 class Main extends Sprite
 {
-	public static var fpsCount:FPSCounter;
+	public static var fpsCounter:FPSCounter;
 
 	// Use these to customize your mod further!
-	public static final savePath:String = "HTGM/FnFSoundRestored";
+	public static final savePath:String = "DiogoTV/DoidoEngine";
 	public static var gFont:String = Paths.font("vcr.ttf");
-
-	public static var instance:Main;
-	@:unreflective
-	var game:DoidoGame;
 
 	public function new()
 	{
 		super();
-		instance = this;
+		// thanks @sqirradotdev
+		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onUncaughtError);
 
-		addChild(game = new DoidoGame(0, 0, Init, 120, 120, true));
+		addChild(new FlxGame(0, 0, Init, 120, 120, true));
 
 		#if desktop
-		fpsCount = new FPSCounter(5, 3);
-		addChild(fpsCount);
+		addChild(fpsCounter = new FPSCounter(5, 3));
 		#end
 
 		#if ENABLE_PRINTING
-		
- 		Logs.init();
+		Logs.init();
 		#end
-
 
 		// shader coords fix
 		FlxG.signals.focusGained.add(function() {
@@ -86,6 +84,37 @@ class Main extends Sprite
 			sprite.__cacheBitmap 	 = null;
 			sprite.__cacheBitmapData = null;
 		}
+	}
+
+	function onUncaughtError(e:UncaughtErrorEvent):Void
+	{
+		e.preventDefault();
+		e.stopImmediatePropagation();
+
+		var path:String;
+		var stackTraceString = StringTools.trim(CallStack.toString(CallStack.exceptionStack(true)));
+		var dateNow:String = Date.now().toString().replace(" ", "_").replace(":", "'");
+
+		path = 'crash/DoidoEngine_${dateNow}.txt';
+
+		#if sys
+		if (!FileSystem.exists("crash/"))
+			FileSystem.createDirectory("crash/");
+		File.saveContent(path, '${stackTraceString}\n');
+		#end
+
+		var normalPath:String = Path.normalize(path);
+
+		Logs.print(stackTraceString, ERROR, true, true, false, false);
+		Logs.print('Crash dump saved in $normalPath', WARNING, true, true, false, false);
+
+		// byebye
+		FlxG.bitmap.dumpCache();
+		FlxG.bitmap.clearCache();
+		CoolUtil.playMusic();
+
+		Main.skipTrans = true;
+		Main.switchState(new CrashHandlerState(stackTraceString + '\n\nCrash log created at: "${normalPath}"'));
 	}
 	
 	public static var activeState:FlxState;

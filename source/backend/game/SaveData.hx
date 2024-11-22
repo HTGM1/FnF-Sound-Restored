@@ -21,10 +21,10 @@ class SaveData
 		* 
 		*/
 		"Window Size" => [
-			"1728x972",
+			"1280x720",
 			SELECTOR,
 			"Change the game's resolution if it doesn't fit your monitor",
-			["640x360","854x480","960x540","1024x576","1152x648","1280x720","1366x768","1600x900","1728x972", "1920x1080", "2560x1440", "3840x2160"],
+			["640x360","854x480","960x540","1024x576","1152x648","1280x720","1366x768","1600x900","1920x1080", "2560x1440", "3840x2160"],
 		],
 		'Flashing Lights' => [
 			"ON",
@@ -33,18 +33,18 @@ class SaveData
 			["ON", "REDUCED", "OFF"]
 		],
 		"Cutscenes" => [
-			"FREEPLAY OFF",
+			"ON",
 			SELECTOR,
 			"Decides if the song cutscenes should play",
 			["ON", "FREEPLAY OFF", "OFF"],
 		],
 		"FPS Counter" => [
-			true,
+			false,
 			CHECKMARK,
 			"Whether you want a counter showing your framerate and memory usage counter in the corner of the game",
 		],
 		'Unfocus Freeze' => [
-			false,
+			true,
 			CHECKMARK,
 			"Freezes the game when unfocusing the window",
 		],
@@ -137,7 +137,7 @@ class SaveData
 			"Makes only one rating appear at a time",
 		],
 		"Ratings on HUD" => [
-			false,
+			true,
 			CHECKMARK,
 			"Makes the ratings stick on the HUD"
 		],
@@ -230,8 +230,8 @@ class SaveData
 	{
 		Main.changeFramerate(data.get("Framerate Cap"));
 		
-		if(Main.fpsCount != null)
-			Main.fpsCount.visible = data.get("FPS Counter");
+		if(Main.fpsCounter != null)
+			Main.fpsCounter.visible = data.get("FPS Counter");
 
 		FlxSprite.defaultAntialiasing = data.get("Antialiasing");
 
