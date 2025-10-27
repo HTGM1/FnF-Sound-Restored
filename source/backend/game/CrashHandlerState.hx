@@ -1,9 +1,13 @@
 package backend.game;
 
 import flixel.text.FlxText;
-import backend.game.GameData.MusicBeatState;
+import backend.game.MusicBeatData.MusicBeatState;
 import flixel.FlxSprite;
 import flixel.util.FlxGradient;
+
+/*
+	State that is displayed when the game crashes
+*/
 
 class CrashHandlerState extends MusicBeatState
 {
@@ -21,7 +25,7 @@ class CrashHandlerState extends MusicBeatState
 
         var bg = new FlxSprite().loadGraphic(Paths.image('menu/backgrounds/menuInvert'));
         bg.screenCenter();
-        bg.alpha = 0.5;
+        bg.alpha = 0.4;
         add(bg);
 
         var gradient = FlxGradient.createGradientFlxSprite(FlxG.width, FlxG.height, [0xFF38173F, 0xFF924DB2]);

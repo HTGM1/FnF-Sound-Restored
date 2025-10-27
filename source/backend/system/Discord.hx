@@ -44,7 +44,6 @@ class DiscordIO
 			});
 
 			Logs.print("initialized Discord RPC");
-
 		}
 		#end
 	}
@@ -62,7 +61,7 @@ class DiscordIO
 		#if DISCORD_RPC
 		DiscordAPI.changePresence(details, state);
 		if(log)
-		Logs.print("changed RPC to " + details);
+			Logs.print("changed RPC to " + details);
 		lastDetails = details;
 		#end
 	}
@@ -108,7 +107,7 @@ class DiscordAPI
 	}
 
 	private static function onDisconnected(errorCode:Int, message:cpp.ConstCharStar):Void {
-		trace('Discord: Disconnected ($errorCode: ${cast(message, String)})');
+		Logs.print('Discord: Disconnected ($errorCode: ${cast(message, String)})');
 	}
 
 	public static function initialize()
@@ -156,7 +155,6 @@ class DiscordAPI
 		presence.startTimestamp = Std.int(startTimestamp / 1000);
 		presence.endTimestamp = Std.int(endTimestamp / 1000);
 		updatePresence();
-		//Logs.print('Discord RPC Updated. Arguments: $details, $state, $smallImageKey, $hasStartTimestamp, $endTimestamp');
 	}
 
 	public static function updatePresence() {

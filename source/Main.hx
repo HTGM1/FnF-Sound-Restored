@@ -11,6 +11,7 @@ import haxe.io.Path;
 import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.events.UncaughtErrorEvent;
+import flixel.util.typeLimit.NextState;
 
 #if desktop
 import backend.system.ALSoftConfig;
@@ -37,9 +38,14 @@ class Main extends Sprite
 		// thanks @sqirradotdev
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onUncaughtError);
 
-		addChild(new FlxGame(0, 0, Init, 120, 120, true));
+		var ws:Array<String> = SaveData.displaySettings.get("Window Size")[0].split("x");
+		var windowSize:Array<Int> = [Std.parseInt(ws[0]),Std.parseInt(ws[1])];
 
-		#if desktop
+		addChild(new FlxGame(windowSize[0], windowSize[1], Init, 120, 120, true));
+
+		#if android
+		FlxG.android.preventDefaultKeys = [BACK];
+		#elseif desktop
 		addChild(fpsCounter = new FPSCounter(5, 3));
 		#end
 
@@ -92,7 +98,8 @@ class Main extends Sprite
 		e.stopImmediatePropagation();
 
 		var path:String;
-		var stackTraceString = StringTools.trim(CallStack.toString(CallStack.exceptionStack(true)));
+		var exception:String = 'Exception: ${e.error}\n';
+		var stackTraceString = exception + StringTools.trim(CallStack.toString(CallStack.exceptionStack(true)));
 		var dateNow:String = Date.now().toString().replace(" ", "_").replace(":", "'");
 
 		path = 'crash/DoidoEngine_${dateNow}.txt';
@@ -109,7 +116,10 @@ class Main extends Sprite
 		Logs.print('Crash dump saved in $normalPath', WARNING, true, true, false, false);
 
 		// byebye
+		#if (flixel < "6.0.0")
 		FlxG.bitmap.dumpCache();
+		#end
+
 		FlxG.bitmap.clearCache();
 		CoolUtil.playMusic();
 
@@ -121,9 +131,11 @@ class Main extends Sprite
 	
 	public static var skipClearMemory:Bool = false; // dont
 	public static var skipTrans:Bool = true; // starts on but it turns false inside Init
-	public static function switchState(?target:FlxState):Void
+	public static var lastTransition:String = '';
+	public static function switchState(?target:NextState, transition:String = 'funkin'):Void
 	{
-		var trans = new GameTransition(false);
+		lastTransition = transition;
+		var trans = new GameTransition(false, transition);
 		trans.finishCallback = function()
 		{
 			if(target != null)		
@@ -141,8 +153,8 @@ class Main extends Sprite
 	}
 	
 	// you could just do Main.switchState() but whatever
-	public static function resetState():Void
-		return switchState();
+	public static function resetState(transition:String = 'funkin'):Void
+		return switchState(null, transition);
 
 	// so you dont have to type it every time
 	public static function skipStuff(?ohreally:Bool = true):Void

@@ -1,6 +1,5 @@
 package states;
 
-import backend.game.GameData.MusicBeatState;
 import backend.utils.DialogueUtil;
 import backend.song.ChartLoader;
 import backend.song.SongData.SwagSong;
@@ -64,8 +63,6 @@ class LoadingState extends MusicBeatState
 		bg.screenCenter();
 		add(bg);
 
-		var antialiasing = FlxSprite.defaultAntialiasing;
-		
 		Loading = new FlxAnimate(0, 0);
 		Loading.isAnimateAtlas = true;
 		Loading.loadAtlas(Paths.getPath('images/Loading/LOADING'));
@@ -79,7 +76,7 @@ class LoadingState extends MusicBeatState
 		loadBar.y = FlxG.height - loadBar.height - 8;
 		changeBarSize(0);
 
-		Loading.x = FlxG.width - loadBar.width - 1175;
+		Loading.x = FlxG.width - loadBar.width - 1275;
 		Loading.y = FlxG.height - loadBar.height - 50;
 		add(loadBar);
 		add(Loading);
@@ -108,7 +105,7 @@ class LoadingState extends MusicBeatState
 			Paths.preloadGraphic('hud/base/healthBar');
 			
 			var stageBuild = new Stage();
-			stageBuild.reloadStageFromSong(SONG.song);
+			stageBuild.reloadStageFromSong(SONG.song, SONG.gfVersion);
 			addBehind(stageBuild);
 
 			var playerChars:Array<String> = [SONG.player1];
@@ -126,7 +123,9 @@ class LoadingState extends MusicBeatState
 					case 'Change Stage':
 						stageBuild.reloadStage(daEvent.value1);
 						addBehind(stageBuild);
-						charList.push(stageBuild.gfVersion);
+
+						if(!charList.contains(stageBuild.gfVersion))
+							charList.push(stageBuild.gfVersion);
 				}
 			}
 			Logs.print('preloaded stage and hud');
@@ -143,8 +142,6 @@ class LoadingState extends MusicBeatState
 					addBehind(dead);
 				}
 				
-				//Logs.print('preloaded char $i');
-				
 				if(i != stageBuild.gfVersion)
 				{
 					var icon = new HealthIcon();
@@ -158,12 +155,13 @@ class LoadingState extends MusicBeatState
 			loadPercent = 0.6;
 			
 			var songDiff:String = PlayState.songDiff;
-			Paths.preloadSound(Paths.songPath('${SONG.song}/Inst', songDiff));
+			Paths.preloadSound(Paths.songPath(SONG.song, 'Inst', songDiff));
 			if(SONG.needsVoices)
 			{
-				Paths.preloadSound(Paths.songPath('${SONG.song}/Voices', songDiff, '-player'));
+				Paths.preloadSound(Paths.songPath(SONG.song, 'Voices', songDiff, '-player'));
+				
 				// opponent voices
-				var oppPath:String = Paths.songPath('${SONG.song}/Voices', songDiff, '-opp');
+				var oppPath:String = Paths.songPath(SONG.song, 'Voices', songDiff, '-opp');
 				if(oppPath.endsWith('-opp'))
 					Paths.preloadSound(oppPath);
 			}
@@ -171,7 +169,7 @@ class LoadingState extends MusicBeatState
 			Logs.print('preloaded music');
 			loadPercent = 0.75;
 
-			var dialData:DialogueData = DialogueUtil.loadDialogue(SONG.song);
+			var dialData:DialogueData = DialogueUtil.loadDialogue(SONG.song, songDiff);
 			if(dialData.pages.length > 0) {
 				var dial = new Dialogue();
 				dial.load(dialData, true);

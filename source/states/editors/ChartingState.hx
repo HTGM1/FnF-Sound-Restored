@@ -32,7 +32,6 @@ import openfl.events.IOErrorEvent;
 import openfl.media.Sound;
 import openfl.net.FileReference;
 import backend.game.*;
-import backend.game.GameData.MusicBeatState;
 import backend.song.Conductor;
 import backend.song.SongData;
 import backend.song.SongData.EventSong;
@@ -55,21 +54,21 @@ class ChartingState extends MusicBeatState
 	public static final colorDesc:String = "Colors: white/black/silver/gray/red/purple/pink/\ngreen/lime/yellow/blue/aqua";
 	public static final possibleEvents:Array<Array<String>> = [
 		['none', 				''],
-
-		//CAMERA
+		// CAMERA (permanent)
 		['Change Cam Zoom', 	'Value 1: New Zoom \nValue 2: Duration (in steps)\nValue 3: $easeDesc'],
 		['Change Cam Pos', 		'Value 1: New X \nValue 2: New Y\nValue 3: Camera Speed (Default: 1)\n(Leave Value 1 or 2 empty to revert back to normal camera)'],
-		['Change Cam Section', 	'Value 1: Character to change (dad/gf/bf/none) \nChoosing NONE returns camera to focusing on mustHitSections'],
+		['Change Cam Section', 	'Value 1: Character to focus (dad/gf/bf/none) \nChoosing NONE returns camera to focusing on mustHitSections'],
+		['Change Cam Angle', 	'Value 1: New Angle \nValue 2: Duration (in steps)\nValue 3: $easeDesc'],
+		// CAMERA (temporary)
 		['Flash Screen',		'Value 1: Duration (in steps)\nValue 2: Color\n$colorDesc'],
 		['Fade Screen',			'Value 1: Fade Out (true/false)\nValue 2: Duration (in steps)\nValue 3: Color\n$colorDesc'],
 		['Shake Screen',		'Value 1: Intensity\nValue 2: Duration (in steps)\nValue 3: Camera? (camGame, camHUD, camStrum)'],
-		
-		//GAME
+		// game objects
 		['Change Character', 	'Value 1: Character to change (dad/gf/bf)\nValue 2: New Character (dad/pico/senpai-angry)'],
 		['Change Stage',		'Value 1: New Stage'],
+		// animation
 		['Play Animation',		'Value 1: Character (dad/gf/bf)\nValue 2: Animation to play\nValue 3: Override singing? (true/false)\n(if the character presses a note, does the animation stop?)'],
-
-		//PLAY
+		// notes
 		['Freeze Notes',		'Value 1: Freeze? (true/false)\nValue 2: Strumline? (dad/bf/both)'],
 		['Change Note Speed', 	'Value 1: New Speed\nValue 2: Duration (in steps)\nValue 3: $easeDesc'],
 	];
@@ -81,6 +80,7 @@ class ChartingState extends MusicBeatState
 	var allNoteTypes:Array<String> = [
 		'none',
 		'no animation',
+		'gf note',
 		'bomb',
 		'hurt note',
 		'warn note',
@@ -216,7 +216,6 @@ class ChartingState extends MusicBeatState
 		infoTxt.scrollFactor.set();
 		add(infoTxt);
 
-
 		controlTxt = new FlxText(0, 0, 0, 
 			"- LMB to select a note
 			- RMB to delete a note
@@ -233,13 +232,8 @@ class ChartingState extends MusicBeatState
 		20);
 
 		controlTxt.size = 12;
-
-		var controlFormat:FlxTextFormat = new FlxTextFormat();
-		controlFormat.leading = -5;
-		controlTxt.addFormat(controlFormat);
-
 		controlTxt.scrollFactor.set();
-		controlTxt.y = FlxG.height - controlTxt.height + 110;
+		controlTxt.y = FlxG.height - controlTxt.height;
 		controlTxt.visible = true;
 		add(controlTxt);
 
@@ -354,7 +348,7 @@ class ChartingState extends MusicBeatState
 			if(data != null && data.length > 0)
 			{
 				var _file = new FileReference();
-				_file.save(data.trim(), '${SONG.song.toLowerCase()}-$songDiff.json');
+				_file.save(data.trim(), '$songDiff.json');
 			}
 		});
 
@@ -446,6 +440,16 @@ class ChartingState extends MusicBeatState
 			}));
 		});
 		player2Button.resize(125, 20);
+
+		var gfButton:FlxUIButton = null;
+		gfButton = new FlxUIButton(10, 147, SONG.gfVersion, function() {
+			openSubState(new ChooserSubState(["stage-set", "no-gf"].concat(characters), CHARACTER, function(pick:String) {
+				gfButton.label.text = pick;
+				SONG.gfVersion = pick;
+				reloadIcons(true);
+			}));
+		});
+		gfButton.resize(125, 20);
 		
 		var playTicksBf = new FlxUICheckBox(10, 230, null, null, 'BF Hitsounds', 70);
 		playTicksBf.name = "bf_hitsounds";
@@ -565,9 +569,11 @@ class ChartingState extends MusicBeatState
 
 		tabSong.add(new FlxText(player1Button.x, player1Button.y - 15, 0, 'Boyfriend:'));
 		tabSong.add(new FlxText(player2Button.x, player2Button.y - 15, 0, 'Opponent:'));
+		tabSong.add(new FlxText(gfButton.x, gfButton.y - 13, 0, 'Girlfriend:'));
+
 		tabSong.add(player1Button);
 		tabSong.add(player2Button);
-
+		tabSong.add(gfButton);
 
 		/*
 		*
@@ -1013,8 +1019,14 @@ class ChartingState extends MusicBeatState
 	}
 	function updateEventInfo()
 	{
+		#if (flixel < "6.0.0")
 		eventInfo.graphic.dump();
-		eventInfo.text = possibleEvents[eventsLabels.indexOf(eventButton.label.text)][1];
+		#end
+		var daIndex = eventsLabels.indexOf(eventButton.label.text);
+		if(daIndex == -1)
+			eventInfo.text = "event info not found!!";
+		else
+			eventInfo.text = possibleEvents[daIndex][1];
 	}
 	function updateEventLabel()
 	{
@@ -1272,7 +1284,7 @@ class ChartingState extends MusicBeatState
 			addMusic(vocals);
 
 			// opponent vocals
-			if(Paths.songPath('$daSong/Voices', songDiff, '-opp').endsWith('-opp'))
+			if(Paths.songPath(daSong, 'Voices', songDiff, '-opp').endsWith('-opp'))
 			{
 				var vocalsOpp = new FlxSound();
 				vocalsOpp.loadEmbedded(Paths.vocals(daSong, songDiff, '-opp'), false, false);
@@ -1673,7 +1685,7 @@ class ChartingState extends MusicBeatState
 		}
 		if(FlxG.mouse.wheel != 0)
 		{
-			if(FlxG.keys.pressed.CONTROL)
+			if(Controls.pressed(CONTROL))
 			{
 				if(FlxG.mouse.wheel > 0)
 					reloadSection(curSection - 1);
@@ -1791,7 +1803,7 @@ class ChartingState extends MusicBeatState
 						if(note[0] == removeNote.songTime
 						&& note[1] == rawNoteData)
 						{
-							if(!FlxG.keys.pressed.CONTROL)
+							if(!Controls.pressed(CONTROL))
 							{
 								getSection(curSection).sectionNotes.remove(note);
 								curSelectedNote = null;
@@ -1946,7 +1958,9 @@ class ChartingState extends MusicBeatState
 			endTime = CoolUtil.posToTimer(songLength, true);
 		}
 
+		#if (flixel < "6.0.0")
 		infoTxt.graphic.dump();
+		#end
 		infoTxt.text = ""
 		+ "Time: " + curTime
 		+ " - "    + endTime

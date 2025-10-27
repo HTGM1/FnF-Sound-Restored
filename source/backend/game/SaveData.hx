@@ -6,6 +6,10 @@ import openfl.system.Capabilities;
 import backend.song.Conductor;
 import backend.song.Highscore;
 
+/*
+	Save data such as options and other things.
+*/
+
 enum SettingType
 {
 	CHECKMARK;
@@ -43,15 +47,15 @@ class SaveData
 			CHECKMARK,
 			"Whether you want a counter showing your framerate and memory usage counter in the corner of the game",
 		],
-		'Unfocus Freeze' => [
+		'Unfocus Pause' => [
 			true,
 			CHECKMARK,
-			"Freezes the game when unfocusing the window",
+			"Pauses the game when the window is unfocused",
 		],
-		"Countdown on Unpause" => [
-			true,
+		"Delay on Unpause" => [
+			#if desktop true #else false #end,
 			CHECKMARK,
-			"Whether you want to have a countdown when unpausing the game",
+			"Whether you want to have a delay when unpausing the game",
 		],
 		'Discord RPC' => [
 			#if DISCORD_RPC
@@ -62,15 +66,26 @@ class SaveData
 			CHECKMARK,
 			"Whether to use Discord's game activity.",
 		],
+		"Shaders" => [
+			true,
+			CHECKMARK,
+			"Fancy graphical effects. Disable this if you get GPU related crashes."
+		],
+		"Low Quality" => [
+			false,
+			CHECKMARK,
+			"Disables extra assets that might make very low end computers lag."
+		],
 		/*
 		*
 		* GAMEPLAY
 		* 
 		*/
-		"Ghost Tapping" => [
-			true,
-			CHECKMARK,
-			"Makes you able to press keys freely without missing notes"
+		"Can Ghost Tap" => [
+			"WHILE IDLING",
+			SELECTOR,
+			"Makes you able to press keys freely without missing notes",
+			["ALWAYS", "WHILE IDLING", "NEVER"]
 		],
 		"Downscroll" => [
 			false,
@@ -136,15 +151,45 @@ class SaveData
 			CHECKMARK,
 			"Makes only one rating appear at a time",
 		],
-		"Ratings on HUD" => [
-			true,
-			CHECKMARK,
-			"Makes the ratings stick on the HUD"
-		],
 		"Song Timer" => [
 			true,
 			CHECKMARK,
-			"Makes the song timer visible"
+			"Makes the song timer visible",
+		],
+		"Song Timer Info" => [
+			"ELAPSED TIME",
+			SELECTOR,
+			"What information appears on the song timer.\nSong Timer must be enabled.",
+			["ELAPSED TIME", "TIME LEFT", "FULL TIMER"],
+		],
+		"Song Timer Style" => [
+			"MIN:SEC",
+			SELECTOR,
+			"How should the song timer look like.\nSong Timer must be enabled.",
+			["MIN:SEC", "MIN'SEC\"MIL"],
+		],
+		/*
+		*
+		* MOBILE
+		* 
+		*/
+		"Invert Swipes" => [
+			"OFF",
+			SELECTOR,
+			"Inverts the direction of the swipes.",
+			["HORIZONTAL", "VERTICAL", "BOTH", "OFF"],
+		],
+		"Button Opacity" => [
+			5,
+			SELECTOR,
+			"Decides the transparency of the virtual buttons.",
+			[0, 10]
+		],
+		"Hitbox Opacity" => [
+			7,
+			SELECTOR,
+			"Decides the transparency of the playing Hitboxes.",
+			[0, 10]
 		],
 		/*
 		*
@@ -169,9 +214,9 @@ class SaveData
 	public static var saveControls:FlxSave = new FlxSave();
 	public static function init()
 	{
-		saveSettings.bind("settings",	Main.savePath); // use these for settings
-		saveControls.bind("controls", 	Main.savePath); // controls :D
-		FlxG.save.bind("save-data", 	Main.savePath); // these are for other stuff
+		saveSettings.bind("settings"); // use these for settings
+		saveControls.bind("controls"); // controls :D
+		FlxG.save.bind("save-data"); // these are for other stuff, not recquiring to access the SaveData class
 		
 		load();
 		Controls.load();
@@ -194,6 +239,14 @@ class SaveData
 			
 			saveSettings.data.settings = data;
 		}
+		else
+		{
+			var freeze:Null<Bool> = saveSettings.data.settings.get("Unfocus Freeze");
+			if(freeze != null) {
+				saveSettings.data.settings.set("Unfocus Pause", freeze);
+				saveSettings.data.settings.remove("Unfocus Freeze");
+			}
+		}
 		
 		if(Lambda.count(displaySettings) != Lambda.count(saveSettings.data.settings)) {
 			data = saveSettings.data.settings;
@@ -211,7 +264,7 @@ class SaveData
 			saveSettings.data.settings = data;
 		}
 		
-		for(hitsound in Paths.readDir('sounds/hitsounds', ".ogg", true))
+		for(hitsound in Paths.readDir('sounds/hitsounds', [".ogg"], true))
 			if(!displaySettings.get("Hitsounds")[3].contains(hitsound))
 				displaySettings.get("Hitsounds")[3].insert(1, hitsound);
 		
@@ -235,7 +288,7 @@ class SaveData
 
 		FlxSprite.defaultAntialiasing = data.get("Antialiasing");
 
-		FlxG.autoPause = data.get('Unfocus Freeze');
+		FlxG.autoPause = data.get('Unfocus Pause');
 
 		Conductor.musicOffset = data.get('Song Offset');
 		Conductor.inputOffset = data.get('Input Offset');
@@ -245,6 +298,7 @@ class SaveData
 
 	public static function updateWindowSize()
 	{
+		#if desktop
 		if(FlxG.fullscreen) return;
 		var ws:Array<String> = data.get("Window Size").split("x");
         	var windowSize:Array<Int> = [Std.parseInt(ws[0]),Std.parseInt(ws[1])];
@@ -254,5 +308,6 @@ class SaveData
 		// centering the window
 		FlxG.stage.window.x = Math.floor(Capabilities.screenResolutionX / 2 - windowSize[0] / 2);
 		FlxG.stage.window.y = Math.floor(Capabilities.screenResolutionY / 2 - (windowSize[1] + 16) / 2);
+		#end
 	}
 }

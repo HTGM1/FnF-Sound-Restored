@@ -1,6 +1,5 @@
 package subStates.options;
 
-import backend.game.GameData.MusicBeatSubState;
 import backend.song.Conductor;
 import flixel.FlxG;
 import flixel.FlxBasic;
@@ -28,7 +27,7 @@ class OffsetsSubState extends MusicBeatSubState
 
     var offsetCurBeat:Int = 0;
     var _offsetCurBeat:Int = 0;
-    var crochet:Float = Conductor.calcBeat(100);
+    var crochet:Float = Conductor.calcBeat(85);
     var songPos:Float = Conductor.musicOffset;
     var offsetMusic:FlxSound;
     var testingInput:Bool = false;
@@ -47,7 +46,7 @@ class OffsetsSubState extends MusicBeatSubState
         this.cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
         if(FlxG.sound.music != null)
             FlxG.sound.music.pause();
-        offsetMusic = new FlxSound().loadEmbedded(Paths.music('Offset Beat'), true, false, function() {
+        offsetMusic = new FlxSound().loadEmbedded(Paths.music('settingOff'), true, false, function() {
             loopedTimes++;
         });
         offsetMusic.play();
@@ -110,6 +109,10 @@ class OffsetsSubState extends MusicBeatSubState
             grpSelectors.add(selector);
         }
         add(grpSelectors);
+
+        #if TOUCH_CONTROLS
+		createPad("back", [FlxG.cameras.list[FlxG.cameras.list.length - 1]]);
+		#end
 
         changeOption();
         offsetBeatHit();
@@ -203,14 +206,14 @@ class OffsetsSubState extends MusicBeatSubState
             Controls.pressed(DOWN),
             Controls.pressed(UP),
             Controls.pressed(RIGHT),
-            FlxG.keys.pressed.SPACE,
+            Controls.pressed(ACCEPT),
         ];
         var justPressed:Array<Bool> = [
             Controls.justPressed(LEFT),
             Controls.justPressed(DOWN),
             Controls.justPressed(UP),
             Controls.justPressed(RIGHT),
-            FlxG.keys.justPressed.SPACE,
+            Controls.justPressed(ACCEPT),
         ];
 
         cameras[0].zoom = FlxMath.lerp(cameras[0].zoom, 1.0, elapsed * 6);

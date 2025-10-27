@@ -34,7 +34,7 @@ class StrumNote extends FlxSprite
 		switch(assetModifier)
 		{
 			case "pixel":
-				strumSize = 5.55;
+				strumSize = 6;
 				loadGraphic(Paths.image("notes/pixel/notesPixel"), true, 17, 17);
 
 				animation.add("static",  [strumData], 						12, false);
@@ -45,7 +45,7 @@ class StrumNote extends FlxSprite
 				isPixelSprite = true;
 
 			default:
-				strumSize = 0.65;
+				strumSize = 0.7;
 				frames = Paths.getSparrowAtlas("notes/base/strums");
 				
 				switch(assetModifier)
@@ -73,7 +73,6 @@ class StrumNote extends FlxSprite
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		//angle += elapsed * 1000 * 180 / data.Conductor.crochet;
 		updateOffset();
 	}
 	

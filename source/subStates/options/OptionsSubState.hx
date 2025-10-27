@@ -1,6 +1,5 @@
 package subStates.options;
 
-import backend.game.GameData.MusicBeatSubState;
 import backend.game.SaveData.SettingType;
 import flixel.FlxBasic;
 import flixel.FlxSprite;
@@ -9,6 +8,8 @@ import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import objects.menu.Alphabet;
 import objects.menu.options.*;
 import states.PlayState;
@@ -20,6 +21,7 @@ class OptionsSubState extends MusicBeatSubState
         "preferences",
         "gameplay",
         "appearance",
+        #if TOUCH_CONTROLS "mobile", #end
         "adjust offsets",
         "controls",
     ];
@@ -33,17 +35,21 @@ class OptionsSubState extends MusicBeatSubState
             "Cutscenes",
             #if desktop
             "FPS Counter",
-            "Unfocus Freeze",
+            "Unfocus Pause",
             #end
-            "Countdown on Unpause",
+            #if desktop
+            "Delay on Unpause",
+            #end
             #if DISCORD_RPC
-            "Discord RPC"
+            "Discord RPC",
             #end
+            "Shaders",
+            "Low Quality",
         ],
 		"gameplay" => [
-			"Ghost Tapping",
+			"Can Ghost Tap",
 			"Downscroll",
-			//"Middlescroll",
+			"Middlescroll",
             #if desktop
             "Framerate Cap",
             #end
@@ -59,18 +65,29 @@ class OptionsSubState extends MusicBeatSubState
             "Split Holds",
             "Static Hold Anim",
             "Single Rating",
-			"Ratings on HUD",
 			"Song Timer",
+			"Song Timer Info",
+			"Song Timer Style",
 		],
+        #if TOUCH_CONTROLS
+        "mobile" => [
+            "Invert Swipes",
+            "Button Opacity",
+            "Hitbox Opacity",
+        ]
+        #end
 	];
     
     var restartTimer:Float = 0;
     var forceRestartOptions:Array<String> = [ // options that you gotta restart the song for them to reload sorry
-        "Ghost Tapping", // you can't cheat >:]
+        "Can Ghost Tap", // you can't cheat >:]
+        "Low Quality",
+        "Split Holds" // it dont work
     ];
     var reloadOptions:Array<String> = [ // options that need some manual reloading on playstate when changed
         "Antialiasing",
         "Song Timer",
+        "Shaders"
     ];
     // anything else already updates automatically
     var playState:PlayState = null;
@@ -78,6 +95,7 @@ class OptionsSubState extends MusicBeatSubState
     var curCat:String = 'gameplay';
 
     var curSelected:Int = 0;
+    var startCounter:Int = 0;
     var storedSelected:Map<String, Int> = [];
 
     var grpItems:FlxTypedGroup<Alphabet>;
@@ -111,7 +129,7 @@ class OptionsSubState extends MusicBeatSubState
         }
 
         #if !html5
-        CoolUtil.playMusic('Picky Friday');
+        CoolUtil.playMusic('lilBitBack');
         #end
 		DiscordIO.changePresence("Options - Tweakin' the Settings");
 
@@ -121,7 +139,8 @@ class OptionsSubState extends MusicBeatSubState
         else
         {
             bg.makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFF000000);
-            bg.alpha = 0.80;
+            bg.alpha = 0;
+            FlxTween.tween(bg, {alpha: 0.8}, 0.1);
         }
         bg.screenCenter();
         add(bg);
@@ -150,6 +169,10 @@ class OptionsSubState extends MusicBeatSubState
         add(infoTxt);
 
         spawnItems('main');
+
+        #if TOUCH_CONTROLS
+		createPad("back", [FlxG.cameras.list[FlxG.cameras.list.length - 1]]);
+		#end
     }
 
     var inputDelay:Float = 0.1;
@@ -202,7 +225,7 @@ class OptionsSubState extends MusicBeatSubState
 
         if(curCat == 'main')
         {
-            if(Controls.justPressed(ACCEPT))
+            if(Controls.justPressed(ACCEPT) && startCounter >= mainShit.length)
             {
                 switch(mainShit[curSelected])
                 {
@@ -257,6 +280,10 @@ class OptionsSubState extends MusicBeatSubState
                         // custom stuff
                         if(selec.label == "Window Size")
                             SaveData.updateWindowSize();
+                        #if TOUCH_CONTROLS
+                        else if(selec.label == "Button Opacity")
+                            pad.togglePad(true);
+                        #end
                         // only happens when youre not holding the selector
                         if(selec.holdTimer < holdMax)
                         {
@@ -381,6 +408,22 @@ class OptionsSubState extends MusicBeatSubState
                 item.y = (FlxG.height / 2) - (item.height / 2);
                 item.y += (100 * i);
                 item.y -= (100 * ((mainShit.length - 1) / 2));
+
+                if(playState == null)
+                    startCounter++;
+                else if(startCounter < mainShit.length) {
+                    item.y += 20;
+                    item.alpha = 0;
+
+                    var newAlpha = 0.4;
+                    if(i == curSelected)
+                        newAlpha = 1.0;
+    
+                    FlxTween.tween(item, {y: item.y - 20, alpha: newAlpha}, 0.15, {ease: FlxEase.quadInOut, startDelay: 0.05 * i,
+                    onComplete: function(twn:FlxTween) {
+                        startCounter++;
+                    }});
+                }
             }
         }
         else
@@ -413,10 +456,17 @@ class OptionsSubState extends MusicBeatSubState
             updateItemPos(1);
         }
         changeSelection();
+
+        #if TOUCH_CONTROLS
+        Controls.resetTimer();
+        #end
     }
     
     function changeSelection(change:Int = 0)
     {
+        if(startCounter < mainShit.length)
+            return;
+
         if(change != 0)
             FlxG.sound.play(Paths.sound('menu/scrollMenu'));
         

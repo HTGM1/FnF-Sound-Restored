@@ -1,6 +1,5 @@
 package subStates.editors;
 
-import backend.game.GameData.MusicBeatSubState;
 import backend.song.SongData;
 import backend.song.SongData.EventSong;
 import backend.song.SongData.SwagSong;
@@ -30,7 +29,7 @@ class ChartAutoSaveSubState extends MusicBeatSubState
 	public static function load()
 	{
 		saveFile = new FlxSave();
-		saveFile.bind("autosave", Main.savePath);
+		saveFile.bind("autosave");
 		
 		if (saveFile.data.autoSaveArray == null)
 			saveFile.data.autoSaveArray = autoSaveArray;

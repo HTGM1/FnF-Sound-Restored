@@ -17,10 +17,9 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import haxe.Json;
 import openfl.net.FileReference;
-import backend.game.GameData.MusicBeatState;
 import backend.utils.CharacterUtil;
 import objects.Character;
-import objects.hud.Rating;
+import objects.menu.DoidoSlider;
 import states.*;
 import subStates.editors.ChooserSubState;
 
@@ -46,6 +45,7 @@ class CharacterEditorState extends MusicBeatState
 	var camFollow:FlxObject;
 	
 	var ghostAnimButtons:FlxSpriteGroup;
+	var frameSliders:Array<DoidoSlider> = [];
 	
 	function reloadGhostButtons()
 	{
@@ -59,10 +59,13 @@ class CharacterEditorState extends MusicBeatState
 					ghost.animOffsets = char.animOffsets;
 
 				ghost.playAnim(ghostAnims[i], true);
+				updateFrameSlider(1);
 			});
 			ghostAnimButtons.add(animButton);
 			animButton.cameras = [camHUD];
 		}
+		if(frameSliders.length >= 2)
+			updateFrameSlider(1);
 	}
 
 	function reloadChar(dude:Character, newChar:String = "bf", isGhost:Bool = false):Character
@@ -87,13 +90,6 @@ class CharacterEditorState extends MusicBeatState
 		//dude.setPosition(0,0);
 	}
 	
-	function spawnRating()
-	{
-		var lol = new Rating("sick", FlxG.random.int(900, 999));
-		lol.setPos(char.x + char.ratingsOffset.x, char.y + char.ratingsOffset.y);
-		add(lol);
-	}
-	
 	var changeInputX:FlxUIInputText;
 	var changeInputY:FlxUIInputText;
 	var checkCamFollow:FlxUICheckBox;
@@ -108,8 +104,6 @@ class CharacterEditorState extends MusicBeatState
 		//grid.screenCenter();
 		add(grid);
 		
-		Rating.preload("base");
-		
 		camMain = new FlxCamera();
 		
 		camHUD = new FlxCamera();
@@ -123,6 +117,7 @@ class CharacterEditorState extends MusicBeatState
 		FlxG.camera.follow(camFollow, LOCKON, 1);
 		//FlxG.camera.focusOn(camFollow.getPosition());
 		camMain.zoom = camZoom; // 0.7
+		camMain.followLerp = 1;
 
 		add(charGrp);
 
@@ -163,6 +158,38 @@ class CharacterEditorState extends MusicBeatState
 		animTab.name = "anims";
 		animsHud.addGroup(animTab);
 
+		for(i in 0...2)
+		{
+			var frameSlider = new DoidoSlider(
+				'${(i == 0) ? 'Character' : 'Ghost'} Frame Picker',
+				6, animsHud.height - 120 + (60 * i), -1, -1, 10, 0
+			);
+			frameSlider.minLabel.text = "OFF";
+			frameSliders.push(frameSlider);
+			animTab.add(frameSlider);
+			frameSlider.ID = i;
+			frameSlider.onChange = function()
+			{
+				//Logs.print(i + ' ' + frameSlider.value);
+				var charFrame:Character = ((i == 0) ? char : ghost);
+				var isOff:Bool = (frameSlider.value < 0.0);
+				frameSlider.valueLabel.alpha = (isOff ? 0.0 : 1.0);
+				if(isOff)
+					charFrame.playAnim(charFrame.curAnimName, true);
+				else
+				{
+					charFrame.playAnim(charFrame.curAnimName, true, false, Math.floor(frameSlider.value));
+					charFrame.pauseAnim();
+				}
+			}
+			frameSlider.valueLabel.alpha = 0.0;
+			frameSlider.cameras = [camHUD];
+			for(item in frameSlider.members)
+				item.cameras = [camHUD];
+			frameSlider.scrollFactor.set();
+			updateFrameSlider(i);
+		}
+
 		animTab.add(new FlxText(10, 10,0,"Character: "));
 		animTab.add(new FlxText(100,10,0,"Ghost: "));
 		
@@ -175,6 +202,7 @@ class CharacterEditorState extends MusicBeatState
 		{
 			var animButton = new FlxButton(10, 30 + (20 * i), animList[i], function() {
 				char.playAnim(animList[i], true);
+				updateFrameSlider(0);
 				updateInputTxt();
 				updateTxt();
 			});
@@ -288,7 +316,7 @@ class CharacterEditorState extends MusicBeatState
 				}
 			}
 		}
-		var thoseButtons:Array<String> = ["animation", "global", "camera", "ratings"];
+		var thoseButtons:Array<String> = ["animation", "global", "camera"];
 		for(i in 0...thoseButtons.length)
 		{
 			var butt = new FlxButton(
@@ -340,7 +368,28 @@ class CharacterEditorState extends MusicBeatState
 		charsTab.add(new FlxText(140,10,0,"Ghost: "));
 		charsTab.add(ghostButton);
 	}
-	
+
+	function updateFrameSlider(i:Int = 0)
+	{
+		var slider = frameSliders[i];
+		var daChar:Character = (i == 0 ? char : ghost);
+		slider.maxValue = (!daChar.isAnimateAtlas ?
+			daChar.animation.curAnim.numFrames :
+			daChar.anim.curSymbol.length
+		);
+		slider.maxLabel.text = '${slider.maxValue}';
+		resetSlider(slider, true);
+	}
+	function resetSlider(slider:DoidoSlider, force:Bool = false)
+	{
+		if(FlxG.keys.pressed.SHIFT && !force)
+			return;
+		
+		slider.valueLabel.alpha = 0.0;
+		@:privateAccess
+			slider._value = -1;
+	}
+
 	override function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>)
 	{
 		switch(id)
@@ -396,13 +445,6 @@ class CharacterEditorState extends MusicBeatState
 									ghost.playAnim(char.curAnimName, true);
 									ghost.animOffsets = char.animOffsets;
 								}
-							
-							case "ratings":
-								if(input.name == 'inputX')
-									char.ratingsOffset.x = inputNum;
-								else
-									char.ratingsOffset.y = inputNum;
-								spawnRating();
 						}
 						updateTxt();
 				}
@@ -431,17 +473,16 @@ class CharacterEditorState extends MusicBeatState
 			if(camZoom < 0.4)
 				camZoom = 0.4;
 			
+			camMain.zoom = Math.floor(camZoom / 0.1) * 0.1;
 			updateTxt();
 		}
-		
-		camMain.zoom = Math.floor(camZoom / 0.1) * 0.1;
 		
 		// you can drag the camera
 		if(FlxG.mouse.pressedMiddle)
 		{
 			if(FlxG.mouse.justPressedMiddle)
 			{
-				camMain.followLerp = 1;
+				//camMain.followLerp = 1;
 				checkCamFollow.checked = false;
 				dragCam = [camFollow.x, camFollow.y, FlxG.mouse.x, FlxG.mouse.y];
 			}
@@ -450,10 +491,23 @@ class CharacterEditorState extends MusicBeatState
 				dragCam[1] + (dragCam[3] - FlxG.mouse.y) * 0.8
 			);
 		}
+		else // or just use the keyboard keys ig
+		{
+			if(FlxG.keys.anyJustPressed([I, J, K, L]))
+			{
+				//camMain.followLerp = 1;
+				checkCamFollow.checked = false;
+			}
+			var speed:Float = elapsed * 400;
+			if(FlxG.keys.pressed.J) camFollow.x -= speed;
+			if(FlxG.keys.pressed.L) camFollow.x += speed;
+			if(FlxG.keys.pressed.I) camFollow.y -= speed;
+			if(FlxG.keys.pressed.K) camFollow.y += speed;
+		}
 		// follows the character
 		if(checkCamFollow.checked)
 		{
-			camMain.followLerp = elapsed * 3;
+			//camMain.followLerp = elapsed * 3;
 			var playerMult:Int = (char.isPlayer ? -1 : 1);
 
 			camFollow.setPosition(char.getMidpoint().x + (200 * playerMult), char.getMidpoint().y - 20);
@@ -475,7 +529,7 @@ class CharacterEditorState extends MusicBeatState
 		if(daChange[3]) updateOffset(0,  1);
 		
 		// just to test things out
-		if(FlxG.keys.justPressed.SPACE)
+		if(FlxG.keys.justPressed.SPACE && selectedChange == "animation")
 			updateOffset();
 	}
 	
@@ -489,10 +543,12 @@ class CharacterEditorState extends MusicBeatState
 		} else if(FlxG.keys.pressed.SHIFT) {
 			x*=10;
 			y*=10;
-		} else if(FlxG.keys.pressed.CONTROL) {
+		} else if(Controls.pressed(CONTROL)) {
 			x*=100;
 			y*=100;
 		}
+
+		var isSpace:Bool = (x + y == 0);
 		
 		// ARROWS WASD IJKL
 		switch(selectedChange)
@@ -518,18 +574,26 @@ class CharacterEditorState extends MusicBeatState
 			case "animation":
 				char.animOffsets.get(char.curAnimName)[0] += -x;
 				char.animOffsets.get(char.curAnimName)[1] += -y;
-				char.playAnim(char.curAnimName, true);
+				if(isSpace)
+					resetSlider(frameSliders[0]);
+				if(frameSliders[0].value >= 0.0) {
+					char.playAnim(char.curAnimName, true, false, Math.floor(frameSliders[0].value));
+					char.pauseAnim();
+				} else
+					char.playAnim(char.curAnimName, true);
 				
 				if(char.curAnimName == ghost.curAnimName
 				&& char.curChar == ghost.curChar)
 				{
-					ghost.playAnim(char.curAnimName, true);
 					ghost.animOffsets = char.animOffsets;
+					if(isSpace)
+						resetSlider(frameSliders[1]);
+					if(frameSliders[1].value >= 0.0) {
+						ghost.playAnim(char.curAnimName, true, false, Math.floor(frameSliders[1].value));
+						ghost.pauseAnim();
+					} else
+						ghost.playAnim(char.curAnimName, true);
 				}
-			case "ratings":
-				char.ratingsOffset.x += x;
-				char.ratingsOffset.y += y;
-				spawnRating();
 		}
 		updateInputTxt();
 		
@@ -551,7 +615,6 @@ class CharacterEditorState extends MusicBeatState
 		exportTxt.text
 		+='\nGlobal Offset: ${char.globalOffset.x} ${char.globalOffset.y}'
 		+ '\nCamera Offset: ${char.cameraOffset.x} ${char.cameraOffset.y}'
-		+ '\nRatings Offset: ${char.ratingsOffset.x} ${char.ratingsOffset.y}'
 		+ '\nZoom (on editor): ${camMain.zoom}';
 		exportTxt.x = FlxG.width - exportTxt.width;
 		exportTxt.y = FlxG.height- exportTxt.height;
@@ -570,25 +633,20 @@ class CharacterEditorState extends MusicBeatState
 				changeInputY.text = Std.string(char.cameraOffset.y);
 		
 			case "animation":
-				Logs.print(char.curAnimName);
+				//Logs.print(char.curAnimName);
 				var daAnim = char.animOffsets.get(char.curAnimName);
 				
 				changeInputX.text = Std.string(daAnim[0]);
 				changeInputY.text = Std.string(daAnim[1]);
-			
-			case "ratings":
-				changeInputX.text = Std.string(char.ratingsOffset.x);
-				changeInputY.text = Std.string(char.ratingsOffset.y);
 		}
 	}
 
 	function saveOffsets()
 	{
 		var exportData = CharacterUtil.defaultOffsets();
-
+		
 		exportData.globalOffset = [char.globalOffset.x, char.globalOffset.y];
 		exportData.cameraOffset = [char.cameraOffset.x, char.cameraOffset.y];
-		exportData.ratingsOffset= [char.ratingsOffset.x, char.ratingsOffset.y];
 		
 		for(anim => offsets in char.animOffsets)
 			exportData.animOffsets.push([anim, offsets[0], offsets[1]]);

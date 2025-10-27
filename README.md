@@ -1,34 +1,92 @@
-# FNF: Sound Restored (EDGE Branch)
+# FNF: DOIDO ENGINE
+<p align="center">
+<img src="https://www.newgrounds.com/dump/draw/a7487bb1dcc15a499c00a5c5d4be5eb3">
+</p>
 
-## Branch Info
+## Friday Night Funkin' Rewritten
 
-EDGE is the bleeding edge Branch, changes are done almost as they are made, meaning alot of bugs and issues if you try to compile from these commits, as a example if im testing a stage the default stage may have changed and make week 1 a diffrent stage type thing
-
-### everything involed with this branch is subjected to change, meaning the way some songs are EQed are not final as im always taking notes and feedback with playtesters!
-
-## What is FnF: Sound Restored?
-
-This is a sound remaster project that aims to provide the definitive way to play base game before V-Slice with a few V-Slice extras already included in the Engine Were Currently Using which is Doido Engine:
-[Doido Engine's Repository](https://github.com/DoidoTeam/FNF-Doido-Engine)
-
-## Why Not Use Psych Engine or another engine?
-
-the reason why this project doesnt use Psych Engine or other engines is because the modding community has been overrun by Psych Forks, and as much as i love codename, we havent really gotten a new Engine in awhile, this is one of the first ones in awhile that is actually new and not a psych engine fork
+FNF: Doido Engine is a rewritte of FNF's code, while still being written in HaxeFlixel and aiming to be familiar to anyone knowledged in other FNF hardcoded engines.
 
 ## Features
 
-- repositioned and slightly tuned HUD
-- Song Instrumentals and Vocals Remastered from the original Stems (Before V-Slice)
-- Week 1-7 all ported and will be playable
-- sound effect tweaks
-- possibly more!
+- Re-Organized Source Code
+- HScript-Iris support for softcoded Modcharts!
+- Full Controller Support
+- Support for spritesheet, animate atlas or Aseprite sprites
+- Erect Remix support
+- Customizable Note skins and types
+- Asset Modifier for notes, ratings, countdowns, etc...
+- New Chart Editor featuring Events
+- New Character Offset Editor
+- Optimized memory and CPU usage
+- Customizable loading screen
+- Easily customizable Options and Save data
+- In-game Crash Handler
+- Chart auto-saving
 
-## the main goal of this project
+and more!
 
-the main plan for me with this project is too better understand Doido so i can use it for one off mods on my own and with friends in the future, my hopes are too make sure to use this as my little source playground and see what this engine is capable of as compared to other engines, this one is one i can actually read :3
+### Supports Windows, Linux and HTML5!
 
-## Current Project Credits
-### [HuntertronGames&Music](https://bsky.app/profile/htgm.bsky.social) - Main Director, Audio Designer, Coder, reanimater, animation converter
-### [Ava_LavCat](https://github.com/AvaLavenderCat) - PlayTester, Audio Feedback, Ideas, reanimateion/animation fixer
-### [Kaze_DT](https://bsky.app/profile/klonoadt.bsky.social) - PlayTester, Audio Feedback
-### [ACM240](https://linktr.ee/acm240) - PlayTester, Audio Feedback
+## How to use
+For information on how to Build the engine, as well as guides for how to use it, please check out the [FNF: Doido Engine Wiki](https://doidoteam.github.io/wiki/)!
+If you need help with anything, you can [join our Discord Server for support!](https://discord.gg/KVXf9Ygzu5)
+
+### Libraries
+To install the correct libraries, you can run your platform's respective script in `art/setup/`. You can also install manually by checking the `.hmm` file.
+
+## Licenses
+
+The code in FNF': Doido Engine and it's core original assets are licensed under the Apache 2.0 license: (https://www.apache.org/licenses/LICENSE-2.0).
+Some assets, including the "Friday Night Funkin'" name and logo, are property of The Funkin' Crew Inc. and all rights are reserved to it.
+Some other assets, such as test sprites and music, are used under permission from their creators, and so, have their rights reserved to whoever created them.
+
+
+<p align="center">
+<img src="https://www.newgrounds.com/dump/draw/5657fbf528979526e5e7da27e30cd2a7">
+</p>
+
+### [DiogoTV](https://bsky.app/profile/diogotv.bsky.social) - Doido Engine's Owner and Main Coder
+### [teles](https://youtube.com/@telesfnf) - Doido Engine's Additional Coder
+
+### [GoldenFoxy](https://bsky.app/profile/goldenfoxy.bsky.social) - Main designer of Doido Engine's chart editor
+### [JulianoBeta](https://www.youtube.com/@prodjuyko) - Composed Doido Engine's offset menu music
+### [crowplexus](https://github.com/crowplexus) - Creator of HScript Iris
+### [yoisabo](https://bsky.app/profile/yoisabo.bsky.social) - Chart Editor's Event Icons Artist
+### [cocopuffs](https://x.com/cocopuffswow) - Mobile Button Artist
+
+### [doubleonikoo](https://bsky.app/profile/doubleonikoo.bsky.social) - didn't really do much but i already made the ingame icon so you can stay... for now (-DiogoTV)
+
+## [Github Contributors](https://github.com/DoidoTeam/FNF-Doido-Engine/graphs/contributors)
+
+## Special Thanks
+### [Anakim](https://www.youtube.com/@Anakim2), [ArturYoshi](https://www.youtube.com/@arturyoshi), [BeastlyChip♧](https://www.youtube.com/@beastlychip_), [Bnyu](https://twitter.com/bnyu_official), [Evandro](https://www.youtube.com/@evandrogabriel4531), [NxtVithor](https://bsky.app/profile/nxtvithor.bsky.social), [Pi3tr0](https://www.youtube.com/channel/UCEkf4h74pKFK9RO3FAze-7Q), [Raphalitos](https://www.youtube.com/@RaphaLitosReviews), [ZieroSama <33](https://bsky.app/profile/samaziero.bsky.social)
+
+## Songs used to test the engine
+#### Base FNF' Songs - Kawai Sprite
+#### [Blam](https://youtu.be/0ig_WF-YAp8?t=1417), [-Debug](https://youtu.be/0ig_WF-YAp8?t=1824) - Yoisabo
+#### [Collision](https://youtu.be/Q6x0ylzN7L0), [Lunar Odyssey](https://youtu.be/N0HzDRY38js) - BeastlyChip♧
+#### [Useless V2](https://youtu.be/sgSeGm0i_BI?si=0Ep-aZcZakjzU5ff) - teles ft. Pi3tr0
+#### [Beep Power](https://youtu.be/NamGMx1xYL4) - Moodyyaser
+
+## Showcase
+
+<p align="center">
+<img src="https://doidoteam.github.io/img/readme/1main.png">
+</p>
+
+<p align="center">
+<img src="https://doidoteam.github.io/img/readme/6chart.png">
+</p>
+
+<p align="center">
+<img src="https://doidoteam.github.io/img/readme/7events.png">
+</p>
+
+<p align="center">
+<img src="https://doidoteam.github.io/img/readme/9character.png">
+</p>
+
+<p align="center">
+<img src="https://doidoteam.github.io/img/readme/10crash.png">
+</p>

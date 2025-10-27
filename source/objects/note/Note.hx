@@ -2,6 +2,7 @@ package objects.note;
 
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
+import flixel.math.FlxRect;
 import backend.song.Conductor;
 
 class Note extends FlxSprite
@@ -10,7 +11,6 @@ class Note extends FlxSprite
 	{
 		super();
 		moves = false;
-		//reloadNote(0, 0, "default");
 	}
 
 	public var noteSize:Float = 1.0;
@@ -27,7 +27,7 @@ class Note extends FlxSprite
 	
 	public function reloadSprite():Note
 	{
-		noteSize = 0.85;
+		noteSize = 1.0;
 		mustMiss = false;
 		hasHoldSplash = true;
 		var direction:String = CoolUtil.getDirection(noteData);
@@ -38,7 +38,7 @@ class Note extends FlxSprite
 		switch(assetModifier)
 		{
 			case "pixel":
-				noteSize = 4.75;
+				noteSize = 6;
 				hasHoldSplash = true;
 				if(!isHold)
 				{
@@ -63,11 +63,10 @@ class Note extends FlxSprite
 						switch(assetModifier)
 						{
 							case "doido":
-								hasHoldSplash = false;
 								frames = Paths.getSparrowAtlas("notes/doido/notes");
 								noteSize = 0.95;
 							default:
-								noteSize = 0.57;
+								noteSize = 0.7;
 								frames = Paths.getSparrowAtlas("notes/base/notes");
 						}
 
@@ -117,9 +116,6 @@ class Note extends FlxSprite
 				animation.play('warn');
 		}
 
-		//if(isHold)
-		//	antialiasing = false;
-
 		scale.set(noteSize, noteSize);
 		updateHitbox();
 
@@ -154,6 +150,9 @@ class Note extends FlxSprite
 	public var isHoldEnd:Bool = false;
 	public var holdLength:Float = 0;
 	public var holdHitLength:Float = 0;
+
+	// reusing this for clipRect later
+	public var holdClipHeight:Float = 0.0;
 	
 	public var children:Array<Note> = [];
 	public var parentNote:Note = null;
@@ -208,5 +207,16 @@ class Note extends FlxSprite
 		
 		clipRect = null;
 		setAlpha();
+	}
+
+	@:noCompletion
+	override function set_clipRect(rect:FlxRect):FlxRect
+	{
+		clipRect = rect;
+
+		if (frames != null)
+			frame = frames.frames[animation.frameIndex];
+
+		return rect;
 	}
 }

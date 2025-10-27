@@ -20,28 +20,40 @@ class Timings
 	
 	public static var minTiming:Float = getTimings("miss")[1];
 
+	// score and accuracy
 	public static var score:Int = 0;
-	public static var misses:Int = 0;
-	public static var combo:Int = 0;
 	public static var accuracy:Float = 0;
-	
+	// accuracy calculation
+	public static var accHit:Int = 0;
+	public static var accJudge:Float = 0;
+	// note stuff
+	public static var combo:Int = 0;
 	public static var notesHit:Int = 0;
-	public static var notesJudge:Float = 0;
+	public static var misses:Int = 0;
+	// ratings
+	public static var ratingCount:Map<String, Int> = [];
 
 	public static function init()
 	{
 		score = 0;
-		misses = 0;
-		combo = 0;
 		accuracy = 0;
+		accHit = 0;
+		accJudge = 0;
+		combo = 0;
 		notesHit = 0;
-		notesJudge = 0;
+		misses = 0;
+		ratingCount = [
+			"sick" 	=> 0,
+			"good" 	=> 0,
+			"bad"	=> 0,
+			"shit"	=> 0,
+		];
 	}
 
 	public static function addAccuracy(judge:Float = 1)
 	{
-		notesHit++;
-		notesJudge += judge;
+		accHit++;
+		accJudge += judge;
 		updateAccuracy();
 	}
 
@@ -82,36 +94,45 @@ class Timings
 
 	public static function updateAccuracy()
 	{
-		var rawAccuracy:Float = (notesJudge / notesHit) * 100;
+		var rawAccuracy:Float = (accJudge / accHit) * 100;
 
 		accuracy = FlxMath.roundDecimal(rawAccuracy, 2);
 
 		accuracy = FlxMath.bound(accuracy, 0, 100);
 	}
 
-	public static function getRank():String
+	public static function getRank(?accuracy:Float, ?misses:Int, inGame:Bool = true, hasPlus:Bool = true):String
 	{
+		if(misses == null)
+			misses = Timings.misses;
+
+		if(accuracy == null)
+			accuracy = Timings.accuracy;
+
 		var result:String = "F";
 		function calc(daRank:String, maxAcc:Float, minAcc:Float)
 		{
 			if(accuracy > minAcc && accuracy <= maxAcc)
 				result = daRank;
 		}
+
 		// main ranks
-		calc("E", 55, 50);
 		calc("D", 65, 60);
 		calc("C", 75, 65);
 		calc("B", 80, 75);
-		calc("A", 99, 80);
-		calc("S", 100,99);
+		calc("A", 95, 80);
+		calc("S", 100,95);
+
 		// pluses for your rank
 		if(misses == 0) {
-			result += "+";
+			if(hasPlus)
+				result += "+";
 			if(accuracy == 100.0)
 				result = "P";
 		}
+		
 		// you cant give a result without notes :/
-		if(notesHit <= 0)
+		if(inGame ? (accHit <= 0) : (accuracy == 0 && misses == 0))
 			result = "N/A";
 
 		return result;

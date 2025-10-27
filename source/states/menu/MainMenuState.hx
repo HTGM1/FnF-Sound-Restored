@@ -1,6 +1,5 @@
 package states.menu;
 
-import backend.game.GameData.MusicBeatState;
 import backend.song.SongData;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -32,15 +31,10 @@ class MainMenuState extends MusicBeatState
 		super.create();
 		CoolUtil.playMusic("freakyMenu");
 		
-		#if mobile
-			optionShit.remove('donate');
-		#end
-		
 		DiscordIO.changePresence("In the Main Menu");
-		//persistentUpdate = true;
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menu/backgrounds/menuBG'));
-		bg.scale.set(1.25,1.25);
+		bg.scale.set(1.2,1.2);
 		bg.updateHitbox();
 		bg.screenCenter(X);
 		add(bg);
@@ -60,20 +54,23 @@ class MainMenuState extends MusicBeatState
 				herobrine.updateHitbox();
 				herobrine.screenCenter(Y);
 				add(herobrine);
+
+				new FlxTimer().start(2, function(tmr) {
+					if(herobrine != null)
+						remove(herobrine);
+				});
 			}
 		}
 		
 		grpOptions = new FlxTypedGroup<FlxSprite>();
 		add(grpOptions);
 		
-		var optionSize:Float = 1.1;
+		var optionSize:Float = 0.9;
 		if(optionShit.length > 4)
 		{
 			for(i in 0...(optionShit.length - 4))
 				optionSize -= 0.04;
 		}
-		
-		//Logs.print('optionSize: ' + optionSize);
 		
 		for(i in 0...optionShit.length)
 		{
@@ -108,12 +105,11 @@ class MainMenuState extends MusicBeatState
 			
 			item.ID = i;
 		}
-
-		var soundSplash:String = 'Sound Restored ${lime.app.Application.current.meta.get('version')}';
-		var doidoSplash:String = 'Doido Engine 3.3.1Beta';
+		
+		var doidoSplash:String = 'Doido Engine ${lime.app.Application.current.meta.get('version')}';
 		var funkySplash:String = 'Friday Night Funkin\' Rewritten';
 
-		var splashTxt = new FlxText(4, 0, 0, '$soundSplash\n$doidoSplash\n$funkySplash');
+		var splashTxt = new FlxText(4, 0, 0, '$doidoSplash\n$funkySplash');
 		splashTxt.setFormat(Main.gFont, 18, 0xFFFFFFFF, LEFT);
 		splashTxt.setBorderStyle(OUTLINE, 0xFF000000, 1.5);
 		splashTxt.y = FlxG.height - splashTxt.height - 4;
@@ -121,48 +117,30 @@ class MainMenuState extends MusicBeatState
 
 		changeSelection();
 		bg.y = bgPosY;
+
+		#if TOUCH_CONTROLS
+		createPad("back");
+		#end
 	}
 	
-	//var itemSin:Float = 0;
 	var selectedSum:Bool = false;
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
+		#if debug
+		// Crash the game. For CrashHandler test purposes
+		if(FlxG.keys.justPressed.R)
+			null.draw();
+		#end
+
 		if(FlxG.keys.justPressed.V)
 		{
 			persistentUpdate = false;
-			openSubState(new subStates.VideoPlayerSubState("test"));
+			openSubState(new subStates.video.VideoPlayerSubState("test"));
 		}
 
-		/*if(FlxG.keys.justPressed.R)
-		{
-			// crash handler test
-			null.draw();
-		}*/
-		/*if(FlxG.keys.justPressed.R)
-		{
-			Main.skipStuff();
-			Main.resetState();
-		}*/
-		/*if(FlxG.keys.justPressed.J)
-		{
-			optionShit.remove('options');
-			Main.skipStuff();
-			Main.switchState();
-		}
-		if(FlxG.keys.justPressed.K)
-		{
-			optionShit.push('options');
-			Main.skipStuff();
-			Main.switchState();
-		}
-		itemSin += elapsed * Math.PI;
-		for(item in grpOptions.members)
-		{
-			item.x = (FlxG.width / 2) + (Math.sin(itemSin + item.ID) * FlxG.width / 4);
-		}*/
 		if(FlxG.keys.justPressed.EIGHT)
 		{
 			FlxG.sound.play(Paths.sound("menu/cancelMenu"));
@@ -193,7 +171,7 @@ class MainMenuState extends MusicBeatState
 					for(item in grpOptions.members)
 					{
 						if(item.ID != curSelected)
-							FlxTween.tween(item, {alpha: 0}, 0.75, {ease: FlxEase.cubeOut});
+							FlxTween.tween(item, {alpha: 0}, 0.4, {ease: FlxEase.cubeOut});
 					}
 					
 					new FlxTimer().start(1.5, function(tmr:FlxTimer)

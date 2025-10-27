@@ -4,7 +4,6 @@ typedef DoidoOffsets = {
 	var animOffsets:Array<Array<Dynamic>>;
 	var globalOffset:Array<Float>;
 	var cameraOffset:Array<Float>;
-	var ratingsOffset:Array<Float>;
 }
 
 typedef DoidoCharacter = {
@@ -30,8 +29,7 @@ class CharacterUtil
 				//["idle",0,0],
 			],
 			globalOffset: [0,0],
-			cameraOffset: [0,0],
-			ratingsOffset:[0,0]
+			cameraOffset: [0,0]
 		};
 	}
 
@@ -49,7 +47,6 @@ class CharacterUtil
 	public static function charList():Array<String>
 	{
 		return [
-			"face",
 			"dad",
 			"gf",
 			"bf",
@@ -58,8 +55,15 @@ class CharacterUtil
 			"bf-pixel-dead",
 			"gf-pixel",
 			"spooky",
+			"spooky-player",
+			"luano-day",
+			"luano-night",
 			"senpai",
 			"senpai-angry",
+			"spirit",
+			"gemamugen",
+			"zero",
+			"face"
 		];
 	}
 }

@@ -1,10 +1,7 @@
 package states;
 
-import backend.game.GameData.MusicBeatState;
 import backend.song.Conductor;
 import backend.song.SongData;
-import flxanimate.animate.FlxAnim;
-import flxanimate.FlxAnimate;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
@@ -23,15 +20,12 @@ class TitleState extends MusicBeatState
 	var ngSpr:FlxSprite;
 	
 	var blackScreen:FlxSprite;
-	var gf:FlxAnimate;
-	var logoBump:FlxAnimate;
-	var HTGMLogo:FlxAnimate;
+	var gf:FlxSprite;
+	var logoBump:FlxSprite;
 	
 	var enterTxt:FlxSprite;
-	var gfCurAnim:String = 'danceLeft';
 	
 	static var introEnded:Bool = false;
-
 
 	override function create()
 	{
@@ -42,7 +36,7 @@ class TitleState extends MusicBeatState
 				CoolUtil.playMusic("freakyMenu");
 			});
 			
-			var allTexts:Array<String> = CoolUtil.coolTextFile('introText');
+			var allTexts:Array<String> = CoolUtil.parseTxt('introText');
 			curWacky = allTexts[FlxG.random.int(0, allTexts.length - 1)].split('--');
 		}
 		
@@ -51,35 +45,28 @@ class TitleState extends MusicBeatState
 		
 		persistentUpdate = true;
 		Conductor.setBPM(102);
-
 		
-
-		logoBump = new FlxAnimate(25, 25);
-		logoBump.isAnimateAtlas = true;
-		logoBump.loadAtlas(Paths.getPath('images/menu/title/logoBumpin'));
-		logoBump.showPivot = false;
-		logoBump.anim.addBySymbol('bump', 'logoBump', 23, false);
-		logoBump.anim.play('bump');
-		logoBump.scale.set(1.65,1.65);
+		gf = new FlxSprite();
+		gf.frames = Paths.getSparrowAtlas('menu/title/gfDanceTitle');
+		gf.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
+		gf.animation.addByIndices('danceRight','gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
+		gf.x = FlxG.width - gf.width - 20;
+		gf.screenCenter(Y);
+		add(gf);
+		gf.animation.play('danceLeft');
+		
+		logoBump = new FlxSprite(-100, -80);
+		logoBump.frames = Paths.getSparrowAtlas('menu/title/logoBumpin');
+		logoBump.animation.addByPrefix('bump', 'logo bumpin', 24, false);
+		logoBump.animation.play('bump');
 		add(logoBump);
 		
-		gf = new FlxAnimate();
-		gf.loadAtlas(Paths.getPath('images/menu/title/gfTitleBump'));
-		gf.anim.addBySymbol('danceLeft', 'DanceLeft', 24, false);
-		gf.anim.addBySymbol('danceRight', 'Dance Right', 24, false);
-		gf.x = FlxG.width - gf.width - 200;
-		gf.y = FlxG.height - gf.height - 250;
-		gf.scale.set(1.15,1.15);
-		add(gf);
-		gf.anim.play('danceLeft');
-		
-		enterTxt = new FlxSprite(1200 / 4);
+		enterTxt = new FlxSprite(500 / 4);
 		enterTxt.frames = Paths.getSparrowAtlas('menu/title/titleEnter');
 		enterTxt.animation.addByPrefix('idle', 'Press Enter to Begin', 24, true);
 		enterTxt.animation.addByPrefix('pressed', 'ENTER PRESSED', 24, true);
 		enterTxt.animation.play('idle');
 		enterTxt.y = FlxG.height - enterTxt.height - 60;
-		enterTxt.scale.set(1.25,1.25);
 		add(enterTxt);
 		
 		blackScreen = new FlxSprite().makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFF000000);
@@ -91,22 +78,9 @@ class TitleState extends MusicBeatState
 		
 		ngSpr = new FlxSprite().loadGraphic(Paths.image('menu/title/newgrounds_logo'));
 		ngSpr.screenCenter();
-		ngSpr.y = FlxG.height - ngSpr.height - 120;
+		ngSpr.y = FlxG.height - ngSpr.height - 40;
 		ngSpr.visible = false;
-		ngSpr.scale.set(1.25,1.25);
 		add(ngSpr);
-
-		HTGMLogo = new FlxAnimate();
-		HTGMLogo.screenCenter();
-		HTGMLogo.y = FlxG.height - ngSpr.height - 0;
-		HTGMLogo.isAnimateAtlas = true;
-		HTGMLogo.loadAtlas(Paths.getPath('images/menu/title/HTGMLogo'));
-		HTGMLogo.showPivot = false;
-		HTGMLogo.anim.addBySymbol('logoLoop', 'logoLoop', 60, true);
-		HTGMLogo.anim.play('logoLoop');
-		HTGMLogo.visible = false;
-		HTGMLogo.scale.set(.5 ,.5);
-		add(HTGMLogo);
 
 		addText([]);
 		
@@ -152,16 +126,13 @@ class TitleState extends MusicBeatState
 			switch(curBeat)
 			{
 				case 1:
-					addText(['HunterTronGames&Music'], true);
-					HTGMLogo.visible = true;
+					addText(['ninjamuffin99', 'phantomArcade', 'kawaisprite', 'evilsk8er'], true);
 				case 3:
 					addText(['present'], false);
 				case 4:
 					addText([]);
-					HTGMLogo.visible = false;
 					
 				case 5:
-					//addText(['In association', 'with']);
 					addText(['Not associated', 'with']);
 				case 7:
 					addText(['newgrounds'], false);
@@ -176,41 +147,36 @@ class TitleState extends MusicBeatState
 					addText([curWacky[1]], false);
 				case 12:
 					addText([]);
-				
-				//case 13:
 					addText(['Friday']);
 				case 13:
 					addText(['Night'], false);
 				case 14:
 					addText(['Funkin'], false);
 				case 15:
-					addText(['Sound Restored!'], false);
-
+					addText(['Doido Engine'], false);
 				case 16:
 					skipIntro();
 			}
 		}
 		
-		logoBump.anim.play('bump', true);
-		if(gfCurAnim == 'danceLeft') {
-     		gf.anim.play('danceRight');
-     		gfCurAnim = 'danceRight';
-		}
-		else {
-     		gf.anim.play('danceLeft');
-    		gfCurAnim = 'danceLeft';
-			}
+		logoBump.animation.play('bump', true);
+		
+		if(gf.animation.curAnim.name == 'danceLeft')
+			gf.animation.play('danceRight');
+		else
+			gf.animation.play('danceLeft');
 	}
-	
 	
 	public function skipIntro(force:Bool = false)
 	{
 		if(introEnded && !force) return;
 		introEnded = true;
 		
+		if(FlxG.sound.music != null)
+			FlxG.sound.music.time = (Conductor.crochet * 16);
+		
 		addText([]);
 		ngSpr.visible = false;
-		HTGMLogo.visible = false;
 		CoolUtil.flash(FlxG.camera, Conductor.crochet * 4 / 1000, 0xFFFFFFFF);
 		remove(blackScreen);
 	}

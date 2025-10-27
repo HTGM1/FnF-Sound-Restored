@@ -1,6 +1,5 @@
 package states.menu;
 
-import backend.game.GameData.MusicBeatState;
 import backend.song.Highscore;
 import backend.song.SongData;
 import flixel.FlxSprite;
@@ -14,7 +13,7 @@ import flixel.tweens.FlxEase;
 import flixel.util.FlxTimer;
 import objects.menu.Alphabet;
 import subStates.menu.DeleteScoreSubState;
-
+import flixel.util.FlxStringUtil;
 
 class StoryMenuState extends MusicBeatState
 {
@@ -64,37 +63,39 @@ class StoryMenuState extends MusicBeatState
 		}
 		updateWeekPos(1);
 		
-		
-		var blackMf = new FlxSprite(0, 0).makeGraphic(FlxG.width * 5, 60, 0xFF000000);
+		var blackMf = new FlxSprite(0, 0).makeGraphic(FlxG.width * 2, 60, 0xFF000000);
 		blackMf.screenCenter(X);
 		add(blackMf);
-		var yellowMf = new FlxSprite(0, 75).makeGraphic(FlxG.width * 6, 392, 0xFFF9CF51);
+
+		var yellowMf = new FlxSprite(0, 50).makeGraphic(FlxG.width * 2, 392, 0xFFF9CF51);
 		yellowMf.screenCenter(X);
 		add(yellowMf);
 		
+		#if !TOUCH_CONTROLS
 		resetTxt = new FlxText(0,0,0,"PRESS RESET TO DELETE WEEK SCORE");
-		resetTxt.setFormat(Main.gFont, 24, 0xFFFFFFFF, LEFT);
+		resetTxt.setFormat(Main.gFont, 18, 0xFFFFFFFF, LEFT);
 		resetTxt.x = FlxG.width - resetTxt.width - 8;
 		resetTxt.y = FlxG.height - resetTxt.height - 8;
 		resetTxt.alpha = 0.8;
 		add(resetTxt);
+		#end
 		
 		weekScoreTxt = new FlxText(8, 8, 0,"");
-		weekScoreTxt.setFormat(Main.gFont, 54, 0xFFFFFFFF, LEFT);
+		weekScoreTxt.setFormat(Main.gFont, 36, 0xFFFFFFFF, LEFT);
 		add(weekScoreTxt);
 		
 		weekNameTxt = new FlxText(8, 8, 0,"");
-		weekNameTxt.setFormat(Main.gFont, 54, 0xFFFFFFFF, RIGHT);
+		weekNameTxt.setFormat(Main.gFont, 36, 0xFFFFFFFF, RIGHT);
 		weekNameTxt.alpha = 0.8;
 		add(weekNameTxt);
 		
 		var trackTitle = new FlxText(0,0,0,"TRACKS");
-		trackTitle.setFormat(Main.gFont, 72, 0xFFFC3EAA, CENTER);
+		trackTitle.setFormat(Main.gFont, 48, 0xFFFC3EAA, CENTER);
 		trackTitle.setPosition(200 - trackTitle.width / 2, yellowMf.y + yellowMf.height + 20);
 		add(trackTitle);
 		
 		trackTxt = new FlxText(0,0,0,"what the hell");
-		trackTxt.setFormat(Main.gFont, 54, 0xFFFC3EAA, CENTER);
+		trackTxt.setFormat(Main.gFont, 36, 0xFFFC3EAA, CENTER);
 		trackTxt.y = (trackTitle.y + trackTitle.height + 12);
 		add(trackTxt);
 		
@@ -115,6 +116,13 @@ class StoryMenuState extends MusicBeatState
 		}
 		
 		changeWeek();
+
+		#if TOUCH_CONTROLS
+		createPad("reset");
+
+		weekNameTxt.y = FlxG.height - weekNameTxt.height - 8;
+		weekScoreTxt.y = FlxG.height - weekScoreTxt.height - 8;
+		#end
 	}
 		
 	var canSelect:Bool = true;
@@ -155,7 +163,6 @@ class StoryMenuState extends MusicBeatState
 				
 				new FlxTimer().start(1.9, function(tmr:FlxTimer)
 				{
-					//Main.switchState(new states.MenuState());
 					var daWeek = weekList[curWeek];
 					
 					PlayState.curWeek = daWeek.weekFile;
@@ -212,14 +219,14 @@ class StoryMenuState extends MusicBeatState
 		if(Math.abs(scoreCount[1] - scoreCount[0]) <= 0.4)
 			scoreCount[1] = scoreCount[0];
 		
-		weekScoreTxt.text = "WEEK SCORE: " + Math.floor(scoreCount[1]);
+		weekScoreTxt.text = "WEEK SCORE: " + FlxStringUtil.formatMoney(Math.floor(scoreCount[1]), false, true);
 	}
 	
 	public function updateWeekPos(lerp:Float = 0)
 	{
 		for(week in grpWeeks.members)
 		{
-			week.y = FlxMath.lerp(week.y, 422 + 60 + (week.ID - curWeek) * 120, lerp);
+			week.y = FlxMath.lerp(week.y, 402 + 60 + (week.ID - curWeek) * 120, lerp);
 		}
 	}
 	
@@ -278,7 +285,7 @@ class StoryMenuState extends MusicBeatState
 		function doShit(daFile:String)
 		{
 			var path:String = 'menu/story/$daFile/';
-			for(item in Paths.readDir('images/' + path, ".png"))
+			for(item in Paths.readDir('images/' + path, [".png"]))
 				Paths.preloadGraphic(path + item);
 		}
 		
@@ -353,6 +360,7 @@ class StoryChar extends FlxSprite
 			default:
 				x = FlxG.width / 2 - width / 2;
 		}
+
 		// 0.8 bf
 		// 0.48 others
 		if(pos == "bf")
@@ -386,6 +394,7 @@ class StoryChar extends FlxSprite
 		offset.y += scaleOffset.y;
 	}
 }
+
 // nvm i was just sleepy
 class DiffSelector extends FlxGroup
 {

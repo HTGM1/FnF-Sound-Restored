@@ -1,10 +1,8 @@
 package objects.menu.options;
 
-import flxanimate.animate.FlxAnim;
-import flxanimate.FlxAnimate;
 import flixel.FlxSprite;
 
-class OptionCheckmark extends FlxAnimate
+class OptionCheckmark extends FlxSprite
 {
 	public var value:Bool = false;
 
@@ -12,11 +10,10 @@ class OptionCheckmark extends FlxAnimate
 	{
 		super();
 		this.value = value;
-		isAnimateAtlas = true;
-		loadAtlas(Paths.getPath('images/menu/Options/OptionsCheckbox'));
-		anim.addBySymbol("true", "true", 36, false);
-		anim.addBySymbol("false","false",36, false);
-		anim.play(Std.string(value), true, false, (value ? 5 : 7));
+		frames = Paths.getSparrowAtlas('menu/checkmark');
+		animation.addByPrefix("true", "true", 24, false);
+		animation.addByPrefix("false","false",24, false);
+		animation.play(Std.string(value), true, false, (value ? 5 : 7));
 		scale.set(size, size);
 		updateHitbox();
 	}
@@ -24,14 +21,12 @@ class OptionCheckmark extends FlxAnimate
 	public function setValue(value:Bool = false)
 	{
 		this.value = value;
-		anim.play(Std.string(value));
+		animation.play(Std.string(value));
 	}
 
 	override function updateHitbox()
 	{
 		super.updateHitbox();
-		//offset.x -= 20 * scale.x;
-		//offset.y += 22 * scale.y;
 		offset.y += 18 * scale.y;
 	}
 }

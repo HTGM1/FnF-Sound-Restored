@@ -66,7 +66,7 @@ class Paths
 				#if desktop
 				Sound.fromFile(getPath('$key.ogg', library))
 				#else
-				openfl.Assets.getSound(getPath('$key.ogg', library))
+				openfl.Assets.getSound(getPath('$key.ogg', library), false)
 				#end
 			);
 		}
@@ -84,7 +84,7 @@ class Paths
 				#if desktop
 				var bitmap = BitmapData.fromFile(path);
 				#else
-				var bitmap = openfl.Assets.getBitmapData(path);
+				var bitmap = openfl.Assets.getBitmapData(path, false);
 				#end
 				
 				var newGraphic = FlxGraphic.fromBitmapData(bitmap, false, key, false);
@@ -122,7 +122,9 @@ class Paths
 				openfl.Assets.cache.removeBitmapData(key);
 			
 			FlxG.bitmap.remove(graphic);
+			#if (flixel < "6.0.0")
 			graphic.dump();
+			#end
 			graphic.destroy();
 		}
 
@@ -138,7 +140,9 @@ class Paths
 			{
 				openfl.Assets.cache.removeBitmapData(key);
 				FlxG.bitmap._cache.remove(key);
+				#if (flixel < "6.0.0")
 				obj.dump();
+				#end
 				obj.destroy();
 			}
 		}
@@ -159,9 +163,9 @@ class Paths
 	public static function sound(key:String, ?library:String):Sound
 		return getSound('sounds/$key', library);
 
-	public static function songPath(key:String, diff:String, prefix:String = ''):String
+	public static function songPath(song:String, key:String, diff:String, prefix:String = ''):String
 	{
-		var song:String = 'songs/$key';
+		var song:String = 'songs/$song/audio/$key';
 		var diffPref:String = '';
 		
 		// erect
@@ -174,10 +178,10 @@ class Paths
 			return '$song$diffPref';
 	}
 	public static function inst(song:String, diff:String = ''):Sound
-		return getSound(songPath('$song/Inst', diff));
+		return getSound(songPath(song, 'Inst', diff));
 
 	public static function vocals(song:String, diff:String = '', ?prefix:String = ''):Sound
-		return getSound(songPath('$song/Voices', diff, prefix));
+		return getSound(songPath(song, 'Voices', diff, prefix));
 	
 	public static function image(key:String, ?library:String):FlxGraphic
 		return getGraphic(key, library);
@@ -201,12 +205,15 @@ class Paths
 	public static function script(key:String, ?library:String):String
 		return getContent('$key', library);
 
+	public static function shader(key:String, ?library:String):Null<String>
+		return getContent('shaders/$key', library);
+
 	public static function getScriptArray(?song:String):Array<String>
 	{
 		var arr:Array<String> = [];
-		for(folder in ["scripts", 'songs/$song'])
+		for(folder in ["scripts", 'songs/$song/scripts'])
 		{
-			for(file in readDir(folder, ".hxc", false))
+			for(file in readDir(folder, [".hx", ".hxc"], false))
 				arr.push('$folder/$file');
 		}
 		//trace(arr);
@@ -243,36 +250,39 @@ class Paths
 
 		return frames;
 	}
+
+	// get single frame (for now sparrow only)
+	public static function getFrame(key:String, frame:String, ?library:String):FlxGraphic
+		return FlxGraphic.fromFrame(getSparrowAtlas(key).getByName(frame));
 		
-	public static function readDir(dir:String, ?type:String, ?removeType:Bool = true, ?library:String):Array<String>
+	public static function readDir(dir:String, ?typeArr:Array<String>, ?removeType:Bool = true, ?library:String):Array<String>
 	{
-		var theList:Array<String> = [];
+		var swagList:Array<String> = [];
 		
 		try {
 			#if desktop
 			var rawList = sys.FileSystem.readDirectory(getPath(dir, library));
 			for(i in 0...rawList.length)
 			{
-				if(type != null) {
-					// 
-					if(!rawList[i].endsWith(type))
-						rawList[i] = "";
-					
-					// cleans it
-					if(removeType)
-						rawList[i] = rawList[i].replace(type, "");
+				if(typeArr?.length > 0)
+				{
+					for(type in typeArr) {
+						if(rawList[i].endsWith(type)) {
+							// cleans it
+							if(removeType)
+								rawList[i] = rawList[i].replace(type, "");
+							swagList.push(rawList[i]);
+						}
+					}
 				}
-				
-				// adds it to the real list if its not empty
-				if(rawList[i] != "")
-					theList.push(rawList[i]);
+				else
+					swagList.push(rawList[i]);
 			}
 			#end
 		} catch(e) {}
 		
-		
-		Logs.print(theList);
-		return theList;
+		Logs.print('read dir ${(swagList.length > 0) ? '$swagList' : 'EMPTY'} at ${getPath(dir, library)}');
+		return swagList;
 	}
 
 	// preload stuff for playstate

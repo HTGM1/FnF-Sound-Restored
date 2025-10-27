@@ -7,7 +7,6 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
-import backend.game.GameData.MusicBeatState;
 import backend.song.Highscore;
 import backend.song.Highscore.ScoreData;
 import backend.song.SongData;
@@ -16,6 +15,8 @@ import objects.hud.HealthIcon;
 import states.*;
 import states.editors.ChartingState;
 import subStates.menu.DeleteScoreSubState;
+import backend.song.Timings;
+import flixel.util.FlxStringUtil;
 
 using StringTools;
 
@@ -56,7 +57,7 @@ class FreeplayState extends MusicBeatState
 		DiscordIO.changePresence("Freeplay - Choosin' a track");
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menu/backgrounds/menuDesat'));
-		bg.scale.set(1,1); bg.updateHitbox();
+		bg.scale.set(1.2,1.2); bg.updateHitbox();
 		bg.screenCenter();
 		add(bg);
 		
@@ -70,17 +71,21 @@ class FreeplayState extends MusicBeatState
 				addSong(song[0], song[1], week.diffs);
 		}
 
-		var extraSongs = CoolUtil.coolTextFile('extra-songs');
+		var extraSongs = CoolUtil.parseTxt('extra-songs');
 		for(line in extraSongs)
 		{
 			if(line.startsWith("//")) continue;
+
 			// if the line is empty then skip it
 			var diffArray:Array<String> = line.split(' ');
 			if(diffArray.length < 1) continue;
+
 			// separating the song name from the difficulties
 			var songName:String = diffArray.shift();
+
 			// if theres no difficulties, add easy normal and hard
 			if(diffArray.length < 1) diffArray = SongData.defaultDiffs;
+
 			// finally adding the song
 			addSong(songName, "face", diffArray);
 		}
@@ -113,6 +118,9 @@ class FreeplayState extends MusicBeatState
 		scoreCounter = new ScoreCounter();
 		add(scoreCounter);
 
+		#if TOUCH_CONTROLS
+		createPad("reset");
+		#else
 		var resetTxt = new FlxText(0, 0, 0, "PRESS RESET TO DELETE SONG SCORE");
 		resetTxt.setFormat(Main.gFont, 28, 0xFFFFFFFF, RIGHT);
 		var resetBg = new FlxSprite().makeGraphic(
@@ -127,6 +135,7 @@ class FreeplayState extends MusicBeatState
 		resetTxt.y = resetBg.y + 4;
 		add(resetBg);
 		add(resetTxt);
+		#end
 
 		changeSelection();
 	}
@@ -249,6 +258,7 @@ class FreeplayState extends MusicBeatState
 		scoreCounter.updateDisplay(curSong.name, curSong.diffs[curDiff]);
 	}
 }
+
 /*
 *	instead of it being separate objects in FreeplayState
 *	its just a bunch of stuff inside an FlxGroup
@@ -262,6 +272,7 @@ class ScoreCounter extends FlxGroup
 
 	public var realValues:ScoreData;
 	public var lerpValues:ScoreData;
+	var rank:String = "N/A";
 
 	public function new()
 	{
@@ -270,7 +281,7 @@ class ScoreCounter extends FlxGroup
 		bg.alpha = 0.4;
 		add(bg);
 		
-		var txtSize:Int = 38; // 36
+		var txtSize:Int = 28; // 36
 
 		text = new FlxText(0, 0, 0, "");
 		text.setFormat(Main.gFont, txtSize, 0xFFFFFFFF, LEFT);
@@ -290,13 +301,20 @@ class ScoreCounter extends FlxGroup
 		super.update(elapsed);
 		text.text = "";
 
-		text.text +=   "HIGHSCORE: " + Math.floor(lerpValues.score);
-		text.text += "\nACCURACY:  " +(Math.floor(lerpValues.accuracy * 100) / 100) + "%";
+		text.text +=   "HIGHSCORE: " + FlxStringUtil.formatMoney(Math.floor(lerpValues.score), false, true);
+		text.text += "\nACCURACY:  " +(Math.floor(lerpValues.accuracy * 100) / 100) + "%" + ' [$rank]';
 		text.text += "\nMISSES:    " + Math.floor(lerpValues.misses);
 
 		lerpValues.score 	= FlxMath.lerp(lerpValues.score, 	realValues.score, 	 elapsed * 8);
 		lerpValues.accuracy = FlxMath.lerp(lerpValues.accuracy, realValues.accuracy, elapsed * 8);
 		lerpValues.misses 	= FlxMath.lerp(lerpValues.misses, 	realValues.misses, 	 elapsed * 8);
+
+		rank = Timings.getRank(
+			lerpValues.accuracy,
+			Math.floor(lerpValues.misses),
+			false,
+			lerpValues.accuracy == realValues.accuracy
+		);
 
 		if(Math.abs(lerpValues.score - realValues.score) <= 10)
 			lerpValues.score = realValues.score;
@@ -309,11 +327,14 @@ class ScoreCounter extends FlxGroup
 		bg.scale.y = ((text.height + diffTxt.height + 8) / 32);
 		bg.updateHitbox();
 
-		//bg.y = 0;
+		#if TOUCH_CONTROLS
+		bg.y = FlxG.height - bg.height;
+		#end
+
 		bg.x = FlxG.width - bg.width;
 
 		text.x = FlxG.width - text.width - 4;
-		text.y = 4;
+		text.y = bg.y + 4;
 		
 		diffTxt.x = bg.x + bg.width / 2 - diffTxt.width / 2;
 		diffTxt.y = text.y + text.height;

@@ -33,8 +33,8 @@ class OptionSelector extends FlxTypedGroup<FlxSprite>
         arrowL = getArrow('left');
         arrowR = getArrow('right');
 
-        text = new Alphabet(0, 0, value, true);
-        text.scale.set(0.85,0.85);
+        text = new Alphabet(0, 0, Std.string(value), true);
+        text.scale.set(0.75,0.75);
         text.updateHitbox();
 
         add(arrowL);
@@ -94,5 +94,5 @@ class OptionSelector extends FlxTypedGroup<FlxSprite>
     }
 
     public function getWidth():Float
-        return (arrowR.x + arrowR.width - arrowL.x);
+        return arrowR.x + arrowR.width - arrowL.x;
 }

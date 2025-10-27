@@ -12,32 +12,36 @@ using StringTools;
 
 class Character extends FlxAnimate
 {
+	// dont mess with these unless you know what youre doing!
+	// they are used in important stuff
 	public var curChar:String = "bf";
 	public var isPlayer:Bool = false;
 	public var onEditor:Bool = false;
-
+	public var specialAnim:Int = 0;
+	public var curAnimFrame(get, never):Int;
+	public var curAnimFinished(get, never):Bool;
 	public var holdTimer:Float = Math.NEGATIVE_INFINITY;
+
+	// time (in seconds) that takes to the character return to their idle anim
 	public var holdLength:Float = 0.7;
+	// when (in frames) should the character singing animation reset when pressing long notes
 	public var holdLoop:Int = 4;
 
+	// modify these for your liking (idle will cycle through every array value)
 	public var idleAnims:Array<String> = ["idle"];
 	public var altIdle:String = "";
 	public var altSing:String = "";
-
-	public var quickDancer:Bool = false;
-	public var specialAnim:Int = 0;
-
 	
-	public var curAnimFrame(get, never):Int;
-	public var curAnimFinished(get, never):Bool;
+	// true: dances every beat // false: dances every other beat
+	public var quickDancer:Bool = false;
 
 	// warning, only uses this
 	// if the current character doesnt have game over anims
 	public var deathChar:String = "bf-dead";
 
+	// you can modify these manually but i reccomend using the offset editor instead
 	public var globalOffset:FlxPoint = new FlxPoint();
 	public var cameraOffset:FlxPoint = new FlxPoint();
-	public var ratingsOffset:FlxPoint = new FlxPoint();
 	private var scaleOffset:FlxPoint = new FlxPoint();
 
 	// you're probably gonna use sparrow by default?
@@ -54,7 +58,6 @@ class Character extends FlxAnimate
 		isPixelSprite = false;
 		
 		var doidoChar = CharacterUtil.defaultChar();
-		// what
 		switch(curChar)
 		{
 			case "senpai" | "senpai-angry":
@@ -77,7 +80,6 @@ class Character extends FlxAnimate
 						['singRIGHT', 	'Angry Senpai RIGHT NOTE instance 1',	24, false],
 					];
 				}
-				antialiasing = false;
 				isPixelSprite = true;
 				scale.set(6,6);
 				
@@ -91,7 +93,6 @@ class Character extends FlxAnimate
 					['singRIGHT', 	"right_", 		24, false],
 				];
 
-				antialiasing = false;
 				isPixelSprite = true;
 				scale.set(6,6);
 				
@@ -111,7 +112,6 @@ class Character extends FlxAnimate
 				];
 
 				flipX = true;
-				antialiasing = false;
 				isPixelSprite = true;
 				scale.set(6,6);
 
@@ -131,7 +131,6 @@ class Character extends FlxAnimate
 
 				flipX = true;
 				scale.set(6,6);
-				antialiasing = false;
 				isPixelSprite = true;
 				
 			case "gf-pixel":
@@ -144,10 +143,23 @@ class Character extends FlxAnimate
 				idleAnims = ["danceLeft", "danceRight"];
 				
 				scale.set(6,6);
-				antialiasing = false;
 				isPixelSprite = true;
 				quickDancer = true;
 				flipX = isPlayer;
+			
+			case 'luano-day'|'luano-night':
+				var pref:String = (curChar == 'luano-night') ? 'night ' : '';
+				doidoChar.spritesheet += 'luano/luano';
+				doidoChar.anims = [
+					['idle', 		'${pref}idle', 24, false],
+					['singLEFT', 	'${pref}left', 24, false],
+					['singDOWN', 	'${pref}down', 24, false],
+					['singUP', 		'${pref}up',   24, false],
+					['singRIGHT', 	'${pref}right',24, false],
+					['jump', 		'${pref}jump', 24, false],
+				];
+
+				holdLoop = 0;
 			
 			case 'spooky'|'spooky-player':
 				doidoChar.spritesheet += 'spooky/SpookyKids';
@@ -287,6 +299,8 @@ class Character extends FlxAnimate
 				flipX = true;
 		}
 
+		if(isPixelSprite) antialiasing = false;
+
 		if(spriteType != ATLAS)
 		{
 			if(Paths.fileExists('images/${doidoChar.spritesheet}.txt')) {
@@ -329,12 +343,14 @@ class Character extends FlxAnimate
 					anim.addBySymbol(dAnim[0], dAnim[1], dAnim[2], dAnim[3]);
 			}
 		}
+
 		// adding animations to array
 		for(i in 0...doidoChar.anims.length) {
 			var daAnim = doidoChar.anims[i][0];
 			if(animExists(daAnim) && !animList.contains(daAnim))
 				animList.push(daAnim);
 		}
+
 		// prevents crashing
 		for(i in 0...idleAnims.length)
 		{
@@ -356,7 +372,6 @@ class Character extends FlxAnimate
 					}
 					globalOffset.set(charData.globalOffset[0], charData.globalOffset[1]);
 					cameraOffset.set(charData.cameraOffset[0], charData.cameraOffset[1]);
-					ratingsOffset.set(charData.ratingsOffset[0], charData.ratingsOffset[1]);
 				} catch(e) {
 					Logs.print('$curChar offsets not found', WARNING);
 				}
@@ -372,11 +387,6 @@ class Character extends FlxAnimate
 
 		dance();
 	}
-
-	/*public function reloadChar(curChar:String = "bf"):Character
-	{
-		return this;
-	}*/
 
 	private var curDance:Int = 0;
 
@@ -406,7 +416,7 @@ class Character extends FlxAnimate
 			if(animExists(curAnimName + '-loop') && curAnimFinished)
 				playAnim(curAnimName + '-loop');
 	
-			if(specialAnim > 0 && specialAnim != 3 && curAnimFinished)			
+			if(specialAnim > 0 && specialAnim != 3 && curAnimFinished)
 			{
 				specialAnim = 0;
 				dance();
@@ -474,6 +484,13 @@ class Character extends FlxAnimate
 		}
 	}
 
+	public function pauseAnim()
+	{
+		if(spriteType != ATLAS)
+			animation.pause();
+		else
+			anim.pause();
+	}
 
 	public function animExists(animName:String):Bool
 	{
@@ -483,7 +500,7 @@ class Character extends FlxAnimate
 			return anim.getByName(animName) != null;
 	}
 
-	public function get_curAnimFrame():Int	
+	public function get_curAnimFrame():Int
 	{
 		if(spriteType != ATLAS)
 			return animation.curAnim.curFrame;
@@ -491,7 +508,7 @@ class Character extends FlxAnimate
 			return anim.curSymbol.curFrame;
 	}
 
-	public function get_curAnimFinished():Bool	
+	public function get_curAnimFinished():Bool
 	{
 		if(spriteType != ATLAS)
 			return animation.curAnim.finished;

@@ -1,6 +1,5 @@
 package subStates;
 
-import backend.game.GameData.MusicBeatSubState;
 import backend.song.Conductor;
 import flixel.FlxG;
 import flixel.FlxBasic;
@@ -36,10 +35,15 @@ class PauseSubState extends MusicBeatSubState
 	var pauseSong:FlxSound;
 
 	var onCountdown:Bool = false;
+	var delayTween:FlxTween;
+
+	var playstate:PlayState;
 
 	public function new()
 	{
 		super();
+		playstate = PlayState.instance;
+		playstate.setScript("this", this);
 		DiscordIO.changePresence("Paused - Restin' a bit");
 		this.cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 		var banana = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
@@ -49,9 +53,7 @@ class PauseSubState extends MusicBeatSubState
 		FlxTween.tween(banana, {alpha: 0.4}, 0.1);
 
 		if(!PlayState.startedSong)
-		{
 			optionShit.remove("options");
-		}
 
 		optionsGrp = new FlxTypedGroup<AlphabetMenu>();
 		add(optionsGrp);
@@ -61,9 +63,11 @@ class PauseSubState extends MusicBeatSubState
 			var newItem = new AlphabetMenu(0, 0, optionShit[i], true);
 			newItem.ID = i;
 			newItem.focusY = i - curSelected;
+
 			// isn't as accurate to base game
 			newItem.spaceX = 25;
 			newItem.spaceY = 150; // 200
+
 			// but it looks better
 			newItem.updatePos();
 			optionsGrp.add(newItem);
@@ -101,7 +105,7 @@ class PauseSubState extends MusicBeatSubState
 		if(Conductor.songPos > 0)
 		{
 			@:privateAccess
-			pauseSong.loadEmbedded(PlayState.instance.inst._sound, true, false);
+			pauseSong.loadEmbedded(playstate.inst._sound, true, false);
 			
 			pauseSong.play(Conductor.songPos);
 			pauseSong.pitch = 0.9;
@@ -116,16 +120,26 @@ class PauseSubState extends MusicBeatSubState
 	function closePause()
 	{
 		pauseSong.stop();
-		if(SaveData.data.get('Countdown on Unpause'))
-			startCountdown();
+		if(SaveData.data.get('Delay on Unpause') && PlayState.startedSong)
+		{
+			playstate.songSpeed = 0.0;
+			if(delayTween != null) delayTween.cancel();
+			delayTween = FlxTween.tween(playstate, {songSpeed: 1.0}, Conductor.crochet * 1 / 1000, {
+				ease: FlxEase.sineIn
+			});
+		}
 		else
-			close();
+			playstate.songSpeed = 1.0;
+
+		close();
 	}
 	override function close()
 	{
 		pauseSong.stop();
 		PlayState.paused = false;
-		PlayState.instance.updateOption('Song Offset');
+		playstate.updateOption('Song Offset');
+		playstate.callScript('onUnpause');
+		playstate.setScript("this", playstate);
 		super.close();
 	}
 
@@ -179,7 +193,7 @@ class PauseSubState extends MusicBeatSubState
 						//Main.switchState(new states.menu.OptionsState(new LoadSongState()));
 						persistentDraw = false;
 						pauseSong.pause();
-						this.openSubState(new OptionsSubState(PlayState.instance));
+						this.openSubState(new OptionsSubState(playstate));
 
 					case "exit to menu":
 						//Main.switchState(new MenuState());
@@ -197,45 +211,6 @@ class PauseSubState extends MusicBeatSubState
 			for(item in optionsGrp)
 				item.alpha = FlxMath.lerp(item.alpha, 0, elapsed * 12);
 		}
-	}
-
-	function startCountdown()
-	{
-		var labels:Array<String> = ["3", "2", "1", "GO"];
-		var countdownTxt = new Alphabet(FlxG.width / 2, FlxG.height / 2 - 70 / 2,"",true);
-		countdownTxt.align = CENTER;
-		countdownTxt.updateHitbox();
-		add(countdownTxt);
-
-		var barTween:FlxTween = null;
-		var cntBar = new FlxSprite().makeGraphic(180, 8, 0xFFFFFFFF);
-		cntBar.screenCenter(X);
-		cntBar.visible = false;
-		add(cntBar);
-
-		var loops:Int = 0;
-		onCountdown = true;
-		var countTimer = new FlxTimer().start(0.5, function(tmr:FlxTimer)
-		{
-			if(loops == 4)
-				close();
-			else
-			{
-				countdownTxt.text = labels[loops];
-				FlxG.sound.play(Paths.sound('menu/scrollMenu'));
-
-				if(!cntBar.visible)
-				{
-					cntBar.visible = true;
-					cntBar.y = FlxG.height / 2 + 48;
-				}
-				cntBar.scale.x = 1.0;
-				if(barTween != null)
-					barTween.cancel();
-				barTween = FlxTween.tween(cntBar.scale, {x: 0.0}, 0.5);
-			}
-			loops++;
-		}, 5);
 	}
 
 	function changeSelection(change:Int = 0)
