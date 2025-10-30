@@ -56,13 +56,9 @@ class CharacterUtil
 			"gf-pixel",
 			"spooky",
 			"spooky-player",
-			"luano-day",
-			"luano-night",
 			"senpai",
 			"senpai-angry",
 			"spirit",
-			"gemamugen",
-			"zero",
 			"face"
 		];
 	}

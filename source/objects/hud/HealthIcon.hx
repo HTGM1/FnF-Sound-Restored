@@ -28,7 +28,7 @@ class HealthIcon extends FlxSprite
 
 		var iconGraphic = Paths.image("icons/icon-" + curIcon);
 
-		maxFrames = Math.floor(iconGraphic.width / 150);
+		maxFrames = Math.floor(iconGraphic.width / 300);
 
 		loadGraphic(iconGraphic, true, Math.floor(iconGraphic.width / maxFrames), iconGraphic.height);
 
@@ -77,8 +77,6 @@ class HealthIcon extends FlxSprite
 			"dad"		=> 0xFFAF66CE,
 			"pico"		=> 0xFFB7D855,
 			"spooky"	=> 0xFFD57E00,
-			"luano"		=> 0xFFFFC03F,
-			"luano-night"=>0xFFB5A5F0,
 			// pixel guys
 			"bf-pixel"	=> 0xFF7BD6F6,
 			"senpai"	=> 0xFFFFAA6F,

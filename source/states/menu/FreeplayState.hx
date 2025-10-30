@@ -103,6 +103,7 @@ class FreeplayState extends MusicBeatState
 
 			var icon = new HealthIcon();
 			icon.setIcon(songList[i].icon);
+			icon.scale.set(0.5, 0.5);
 			grpItems.add(icon);
 
 			item.icon = icon;
@@ -204,8 +205,8 @@ class FreeplayState extends MusicBeatState
 			if(Std.isOfType(rawItem, AlphabetMenu))
 			{
 				var item = cast(rawItem, AlphabetMenu);
-				item.icon.x = item.x + item.width;
-				item.icon.y = item.y - item.icon.height / 6;
+				item.icon.x = item.x + item.width *.8 ;
+				item.icon.y = item.y - item.icon.height / 3 ;
 				item.icon.alpha = item.alpha;
 			}
 		}

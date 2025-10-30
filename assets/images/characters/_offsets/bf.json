@@ -6,66 +6,62 @@
 	"animOffsets": [
 		[
 			"scared",
-			169,
-			-340
-		],
-		[
-			"singDOWN",
-			-141,
-			-173
+			249,
+			10
 		],
 		[
 			"singRIGHTmiss",
-			170,
-			-339
+			250,
+			11
 		],
 		[
-			"singUP",
-			-132,
-			-76
+			"singDOWN",
+			-61,
+			177
 		],
 		[
 			"singLEFTmiss",
-			166,
-			-342
+			246,
+			8
+		],
+		[
+			"singUP",
+			-52,
+			275
 		],
 		[
 			"hey",
-			172,
-			-338
+			252,
+			12
 		],
 		[
 			"idle",
-			170,
-			-340
-		],
-		[
-			"singRIGHT",
-			174,
-			-336
+			250,
+			10
 		],
 		[
 			"singDOWNmiss",
-			-131,
-			-180
+			-71,
+			180
 		],
 		[
-			"singUPmiss",
-			-135,
-			-80
+			"singRIGHT",
+			254,
+			14
 		],
 		[
 			"singLEFT",
-			166,
-			-338
+			246,
+			9
+		],
+		[
+			"singUPmiss",
+			-55,
+			270
 		]
 	],
-	"ratingsOffset": [
-		0,
-		0
-	],
 	"cameraOffset": [
-		-160,
-		230
+		-170,
+		-110
 	]
 }

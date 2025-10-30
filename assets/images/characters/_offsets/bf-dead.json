@@ -5,27 +5,23 @@
 	],
 	"animOffsets": [
 		[
-			"deathLoop",
-			-50,
-			888
+			"firstDeath",
+			129,
+			1237
 		],
 		[
 			"deathConfirm",
-			-50,
-			887
+			130,
+			1237
 		],
 		[
-			"firstDeath",
-			-51,
-			887
+			"deathLoop",
+			130,
+			1238
 		]
 	],
-	"ratingsOffset": [
-		0,
-		0
-	],
 	"cameraOffset": [
-		-154,
-		240
+		-583,
+		-126
 	]
 }
