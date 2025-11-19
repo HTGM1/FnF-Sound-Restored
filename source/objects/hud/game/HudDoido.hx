@@ -68,7 +68,7 @@ class HudDoido extends HudClass
 		botplayTxt.screenCenter();
 		botplayTxt.visible = false;
 		add(botplayTxt);
-
+		
 		updatePositions();
 		for(i in [
 			infoTxt,
@@ -140,14 +140,14 @@ class HudDoido extends HudClass
 		healthBar.y = (downscroll ? 70 : FlxG.height - healthBar.border.height - 50);
 		
 		updateInfoTxt();
-		infoTxt.x = (downscroll ? 130 : FlxG.width - healthBar.border.width - 85);
-		infoTxt.y = (downscroll ? 40 :healthBar.y + healthBar.border.height + 4);
+		infoTxt.x = (downscroll ? 150 : FlxG.width - healthBar.border.width - 85);
+		infoTxt.y = (downscroll ? 15 :healthBar.y + healthBar.border.height + 15);
 		
 		badScoreTxt.y = healthBar.y - badScoreTxt.height - 4;
 		
 		updateTimeTxt();
-		timeTxt.y = (downscroll ? 90 : FlxG.height - healthBar.border.height - 90);
-		timeTxt.x = (downscroll ? 280 : FlxG.width - healthBar.border.width + 100);
+		timeTxt.y = (downscroll ? 98 : FlxG.height - healthBar.border.height - 108);
+		timeTxt.x = (downscroll ? 300 : FlxG.width - healthBar.border.width + 100);
 	}
 
 	override function update(elapsed:Float)
@@ -166,8 +166,8 @@ class HudDoido extends HudClass
 		for(icon in [iconP1, iconP2])
 		{
 			icon.scale.set(
-				FlxMath.lerp(icon.scale.x, 0.5, FlxG.elapsed * 6),
-				FlxMath.lerp(icon.scale.y, 0.5, FlxG.elapsed * 6)
+				FlxMath.lerp(icon.scale.x, 0.4, FlxG.elapsed * 6),
+				FlxMath.lerp(icon.scale.y, 0.4, FlxG.elapsed * 6)
 			);
 			if(!icon.isPlayer)
 				icon.setAnim(2 - health);
@@ -186,8 +186,8 @@ class HudDoido extends HudClass
 		if(SaveData.data.get("Middlescroll"))
 			daX -= FlxG.width / 4;
 
-		rating.ratingScale = 0.7;
-		rating.numberScale = 0.7;
+		rating.ratingScale = 0.55;
+		rating.numberScale = 0.55;
 		rating.setPos(daX, SaveData.data.get('Downscroll') ? FlxG.height - 100 : 100);
 		rating.playRating();
     }
@@ -209,7 +209,7 @@ class HudDoido extends HudClass
 		{
 			for(icon in [iconP1, iconP2])
 			{
-				icon.scale.set(0.7,0.7);
+				icon.scale.set(0.5,0.5);
 				icon.updateHitbox();
 				updateIconPos();
 			}

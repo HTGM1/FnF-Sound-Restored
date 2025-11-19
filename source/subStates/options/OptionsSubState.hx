@@ -52,6 +52,8 @@ class OptionsSubState extends MusicBeatSubState
 			"Middlescroll",
             #if desktop
             "Framerate Cap",
+            "backboard",
+            "backboard Oppacity",
             #end
             "Hitsounds",
             "Hitsound Volume",

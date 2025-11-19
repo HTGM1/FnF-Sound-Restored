@@ -7,60 +7,56 @@
 		[
 			"singDOWN-loop",
 			-202,
-			-173
+			-123
 		],
 		[
 			"singDOWN",
 			-195,
-			-171
+			-121
 		],
 		[
 			"singUP",
 			-579,
-			-620
+			-570
 		],
 		[
 			"singLEFT-loop",
 			-159,
-			-139
+			-89
 		],
 		[
 			"idle",
 			-580,
-			-620
+			-570
 		],
 		[
 			"singRIGHT-loop",
 			-196,
-			-157
+			-107
 		],
 		[
 			"idle-loop",
 			-580,
-			-620
+			-570
 		],
 		[
 			"singRIGHT",
 			-196,
-			-155
+			-105
 		],
 		[
 			"singLEFT",
 			-160,
-			-140
+			-90
 		],
 		[
 			"singUP-loop",
 			-576,
-			-620
+			-570
 		]
-	],
-	"ratingsOffset": [
-		0,
-		0
 	],
 	"cameraOffset": [
 		0,
-		-80
+		-124
 	]
 }

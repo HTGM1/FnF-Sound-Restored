@@ -137,17 +137,21 @@ class Stage extends FlxGroup
 				
 				var bg = new FlxSprite(-600, -600).loadGraphic(Paths.image("stages/stage/stageback"));
 				bg.scrollFactor.set(0.6,0.6);
+				bg.scale.set(1,1);
 				add(bg);
 				
 				var front = new FlxSprite(-580, 440);
 				front.loadGraphic(Paths.image("stages/stage/stagefront"));
+				front.scale.set(0.8,0.8);
 				add(front);
 				
 				if(!lowQuality) {
 					var curtains = new FlxSprite(-600, -400).loadGraphic(Paths.image("stages/stage/stagecurtains"));
 					curtains.scrollFactor.set(1.4,1.4);
+					curtains.scale.set(0.8,0.8);
 					foreground.add(curtains);
 				}
+				
 				
 			case "school":
 				bfPos.x -= 70;

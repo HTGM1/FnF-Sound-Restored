@@ -1,22 +1,22 @@
 {
 	"globalOffset": [
-		14,
-		31
+		0,
+		0
 	],
 	"animOffsets": [
 		[
-			"firstDeath",
-			129,
-			1237
+			"deathLoop",
+			250,
+			1238
 		],
 		[
 			"deathConfirm",
-			130,
-			1237
+			250,
+			1238
 		],
 		[
-			"deathLoop",
-			130,
+			"firstDeath",
+			250,
 			1238
 		]
 	],

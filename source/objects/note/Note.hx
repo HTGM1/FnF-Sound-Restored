@@ -38,7 +38,7 @@ class Note extends FlxSprite
 		switch(assetModifier)
 		{
 			case "pixel":
-				noteSize = 6;
+				noteSize = 5;
 				hasHoldSplash = true;
 				if(!isHold)
 				{
@@ -64,9 +64,9 @@ class Note extends FlxSprite
 						{
 							case "doido":
 								frames = Paths.getSparrowAtlas("notes/doido/notes");
-								noteSize = 0.95;
+								noteSize = 0.65;
 							default:
-								noteSize = 0.7;
+								noteSize = 0.5;
 								frames = Paths.getSparrowAtlas("notes/base/notes");
 						}
 

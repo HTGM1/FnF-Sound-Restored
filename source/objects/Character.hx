@@ -215,6 +215,7 @@ class Character extends FlxAnimate
 				idleAnims = ["danceLeft", "danceRight"];
 				quickDancer = true;
 				flipX = isPlayer;
+				scale.set(0.8,0.8);
 			
 			case "no-gf":
 				doidoChar.spritesheet += 'gf/no-gf/no-gf';
@@ -238,6 +239,7 @@ class Character extends FlxAnimate
 					['singRIGHT-loop', 	'Dad Sing Note LEFT', 	24, true, [3,4,5,6]],
 					['singDOWN-loop', 	'Dad Sing Note DOWN', 	24, true, [3,4,5,6]],
 				];
+				scale.set(0.8,0.8);
 			
 			default: // case "bf"
 				if(!["bf", "face"].contains(curChar))
@@ -264,6 +266,7 @@ class Character extends FlxAnimate
 					];
 					
 					flipX = true;
+					scale.set(0.8,0.8);
 				}
 				else if(curChar == "face")
 				{
@@ -297,6 +300,7 @@ class Character extends FlxAnimate
 				idleAnims = ['firstDeath'];
 				
 				flipX = true;
+				scale.set(0.8,0.8);
 		}
 
 		if(isPixelSprite) antialiasing = false;
